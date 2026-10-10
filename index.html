@@ -48,6 +48,7 @@ p{margin:0}
 .pad .arrow{flex:none;width:58px}
 
 .dlg:empty{display:none}
+.dlg.top{top:8px!important;bottom:auto!important}
 .stage{position:relative;flex:1;min-height:0;max-height:min(118vw,540px)}
 .stage .dlg{position:absolute;left:8px;right:8px;bottom:8px;min-height:0;font-size:17px;padding:9px 12px}
 .today{font-family:var(--pixel);font-size:16px;text-align:center;color:#cfc4e6;min-height:1.4em}
@@ -280,7 +281,7 @@ h2{font-size:22px;line-height:1.1}
   </section>
   <section id="hello" hidden>
     <div class="djtop"><span>Gute Nacht, Maria</span><button class="btn" id="hlx" aria-label="Text zuklappen">×</button></div>
-    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Jeden Tag gibt es hier etwas Neues zu entdecken! Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs ist alles wieder da.</p><p>Schlaf gut.</p></div>
+    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Mehr gibt es nicht zu tun. Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs ist alles wieder da.</p><p>Schlaf gut.</p></div>
   </section>
   <section id="night" hidden><canvas id="ncv" role="img" aria-label="Schlaf gut :)"></canvas><p id="dream"></p></section>
   <section id="dj" hidden>
@@ -711,6 +712,7 @@ const LEG=[["....PP..PP..","....PP..PP..","....PP..PP..","...WWW.WWW.."],["....P
 const FITS={o_pyjama:{T:'#bfe3f5',P:'#9cc7e6',W:'#fff8e7'},o_jeans:{T:'#fff8e7',P:'#4a5aa8',W:'#e9e4f0'},o_glitzer:{T:'#ff5fa2',P:'#7b2cbf',W:'#f5cb1f'},o_jogger:{T:'#9aa3b5',P:'#8089a0',W:'#fff'}};
 const PAL={H:'#14111c',S:'#f1c9a5',E:'#14111c',L:'#b8344a',T:'#1c1b24',P:'#101018',W:'#e9e4f0'};
 const SPOTS=[
+ {id:'door',x0:-101,x1:-84,at:-87,label:'Tür öffnen',on:()=>save.q===1&&!R.post},
  {id:'ward',x0:-18,x1:-2,at:-15,label:'Umziehen'},
  {id:'bed',x0:0,x1:37,at:26,label:'Schlafen'},
  {id:'plant',x0:38,x1:47,at:42,label:'Pflanze gießen'},
@@ -720,7 +722,7 @@ const SPOTS=[
  {id:'pc',x0:84,x1:120,at:80,label:'Kleinanzeigen'},
  {id:'diary',x0:124,x1:166,at:144,label:'Tagebuch öffnen'}
 ];
-const WW=186,VW=84,WX0=-80,KX=-18; // links von x=0 liegt die Küche
+const WW=186,VW=84,WX0=-104,KX=-18; // links von x=0 liegt die Küche
 const R={cam:0,x:40,tx:null,dir:1,todo:null,hold:0,t:0,sleep:false,raf:0};
 let sayT=0;const say2=t=>{dlg.textContent=t;clearTimeout(sayT);if(t)sayT=setTimeout(()=>dlg.textContent='',4500)};
 const r=(col,x,y,w,h)=>{c.fillStyle=col;c.fillRect(x,y,w,h)};
@@ -758,7 +760,7 @@ function plantRename(){
   $('#pnok').onclick=()=>{const v=$('#pn').value.trim();if(v)save.plant=v;else delete save.plant;persist();say2(v?`Sie heißt jetzt ${v}.`:'Sie heißt wieder einfach die Pflanze.')};
 }
 $('#ren').onclick=plantRename;
-$('#hlx').onclick=()=>{$('#hello').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
+$('#hlx').onclick=()=>{if(!save.q){save.q=1;persist()}$('#hello').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
 function hello(){if(save.hello||R.night||$('#room').hidden)return;save.hello=1;persist();cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#hello').hidden=false}
 $('#ltx').onclick=()=>{$('#letter').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
 // Bettwäsche wechseln: Rosa ist immer da, bestellte Farben kommen nach dem Auspacken dazu
@@ -840,6 +842,12 @@ function doSpot(id){
     dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{if(b.dataset.f)save.fit=b.dataset.f;else delete save.fit;persist();say2('Steht dir.')});
   }
   else if(id==='box'){const it=boxItem();save.items[it.id]=true;persist();say2('Juhu, ausgepackt: '+it.n+'!')}
+  else if(id==='door'){R.post=1;R.dir=-1;clearTimeout(sayT);
+    const bs=['b_salbei','b_honig','b_flieder'].map(i=>CAT.find(x=>x.id===i));
+    dlg.innerHTML='„Guten Abend, Maria! Deine neue Bettwäsche. Nur … der Abendhimmel war so schön, da hab ich die Farbe vergessen. Welche war es?“<div class="swrow">'+bs.map(x=>`<button class="swb" data-i="${x.id}" style="background:${x.col}" aria-label="${x.n}"></button>`).join('')+'</div>';
+    dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{const it=CAT.find(x=>x.id===b.dataset.i);save.items[it.id]=true;save.q=2;persist();R.post=2;R.qt=1;setTimeout(()=>{R.post=0},3200);
+      clearTimeout(sayT);dlg.textContent='„Genau die! Träum was Schönes.“ Du hast die '+it.n+' bekommen. Geh zum Bett und tippe dort auf „Bettwäsche“, um sie aufzuziehen.';sayT=setTimeout(()=>{dlg.textContent='';R.qt=0},12000)});
+  }
   else if(id==='bed')bedAsk();
   else if(id==='plant')plantSay();
   else if(id==='win')say2('Der Fernsehturm blinkt. Berlin ist noch wach, aber ich muss ja nicht.');
@@ -873,9 +881,11 @@ function update(){
     else if(a.st===3){a.f++;a.pose.closed=true;a.pose.cov=ez(Math.min(1,a.f/46));if(a.f>=54){a.st=4;a.f=0}}
     else{a.f++;if(a.f>=190){R.sa=null;R.asleep=a.pose;dreamAnim()}}
     return}
-  if(!R.bd&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
+  if(!R.bd&&save.q!==1&&!R.post&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
   if(isDay()){updateDay();return}
   if(R.day){R.day=false;R.plan=null;act.disabled=false;delete dlg.dataset.day;dlg.textContent=''}
+  if(save.q===1&&!R.post&&!dlg.innerHTML)dlg.textContent='Klopf, klopf … ganz links, neben der Küche, steht jemand vor der Haustür.';
+  {const tp=!!(R.post||R.qt);if(dlg.classList.contains('top')!==tp)dlg.classList.toggle('top',tp)}
   let moving=false;
   if(R.hold){R.x+=R.hold*.6;R.dir=R.hold;R.tx=null;R.todo=null;moving=true}
   else if(R.tx!==null){
@@ -961,6 +971,17 @@ function draw(){
   hl('dj',()=>{r('#1a1326',51,59,9,4);r('#1a1326',66,59,9,4);r('#3a3350',61,60,4,3);
     r('#aeb4c4',53,60,5,2);r('#aeb4c4',68,60,5,2);r('#ff5fa2',53+((t/10|0)%5),60,1,1);r('#7ee0d0',68+((t/10|0)%5),61,1,1)});
   if(save.items.lava){const ly=Math.sin(t/70)*2;r('#aeb4c4',87,54,4,2);r('#aeb4c4',88,45,2,1);r('#7b2cbf',87.5,46,3,8);r('#ff5fa2',88,49+ly,2,2);r('#ff8a3d',88.5,47.5-ly/2,1,1)}
+  // Haustür ganz links: beim ersten Abend klopft der Postbote mit der Bettwäsche
+  hl('door',()=>{r('#3d281f',-101,33,13,39);
+    if(R.post){r('#16122e',-100,34,11,38);r('#fff',-97,37,.5,.5);r('#fff',-92,40,.5,.5);r('#ffd98a',-94,36,1,1);r('#775238',-100,34,1.5,38);
+      const b=Math.round(Math.sin(t/40)*.6)*.5;
+      r('#2c4486',-96,64,2,7);r('#2c4486',-93,64,2,7);r('#2a2433',-96.5,71,2.5,1);r('#2a2433',-93,71,2.5,1);
+      r('#f5cb1f',-97,55+b,7,9);r('#2c4486',-94,55+b,1,9);r('#f0c9a4',-96,51+b,5,4);r('#2a2433',-95,52+b,1,1);r('#2a2433',-93,52+b,1,1);r('#c96b6b',-94.5,54+b,2,.5);
+      r('#3f5fb0',-97,48+b,7,2.5);r('#2c4486',-97,50+b,8,1);r('#f5cb1f',-94,48.5+b,1,1);
+      if(R.post===1){r('#c9a36a',-92,58+b,5,4);r('#e2557f',-90,58+b,1,4);r('#e2557f',-92,59.5+b,5,1);r('#f0c9a4',-93,59+b,1,2)}
+      else r('#f0c9a4',-90,51+((t/10|0)%2),1,3)}
+    else{r('#8a5a3c',-100,34,11,38);r('#775238',-98,37,7,12);r('#775238',-98,53,7,15);r('#ffd98a',-96,39,3,4);r('#f5cb1f',-91,54,1,2);
+      if(save.q===1){const k=(t/12|0)%8;if(k<3)for(let j=0;j<=k;j++)r('rgba(255,236,180,.9)',-87+j*1.5,46-j*2,1.5,.5)}}});
   // Küche links: Fliesen, Regal, Arbeitsplatte mit Herd und Topf, Kühlschrank
   {const cooking=R.day&&R.plan&&R.plan.s==='cook'&&!R.moving;c.save();c.translate(KX,0);
     r('#efe2c4',-58,38,44,16);for(let x=-58;x<-14;x+=4)r('rgba(60,30,40,.10)',x,38,.5,16);for(let y=42;y<54;y+=4)r('rgba(60,30,40,.10)',-58,y,44,.5);
