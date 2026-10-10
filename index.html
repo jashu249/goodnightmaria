@@ -29,6 +29,8 @@ p{margin:0}
 #app::-webkit-scrollbar{display:none}
 #intro{flex:none;height:100%;display:flex;flex-direction:column;justify-content:center;gap:40px;padding-inline:16px;scroll-snap-align:start;overflow:hidden;cursor:pointer}
 #app:has(#room[hidden]) #intro{display:none}
+#app.pre #intro{display:flex!important}
+#app.pre #night{flex:none;height:100%;scroll-snap-align:start}
 .hint{font-family:var(--pixel);font-size:17px;line-height:1.3;text-align:center;color:#cfc4e6;opacity:0;transition:opacity 1s}
 .hint.on{opacity:1}
 .hint{margin-top:70px}
@@ -281,7 +283,7 @@ h2{font-size:22px;line-height:1.1}
   </section>
   <section id="hello" hidden>
     <div class="djtop"><span>Gute Nacht, Maria</span><button class="btn" id="hlx" aria-label="Text zuklappen">×</button></div>
-    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Jeden Tag gibt es hier etwas Neues zu entdecken! Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs ist alles wieder da.</p><p>Schlaf gut.</p></div>
+    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Mehr gibt es nicht zu tun. Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs ist alles wieder da.</p><p>Schlaf gut.</p></div>
   </section>
   <section id="night" hidden><canvas id="ncv" role="img" aria-label="Schlaf gut :)"></canvas><p id="dream"></p></section>
   <section id="dj" hidden>
@@ -768,7 +770,7 @@ $('#bedb').onclick=()=>{
   const have=[['Rosa','#e2557f'],...CAT.filter(x=>x.id.startsWith('b_')&&save.items[x.id]).map(x=>[x.n.replace('Bettwäsche ',''),x.col])];
   if(have.length<2){say2('Nur die rosa Bettwäsche da. Neue kannst du am Computer bestellen.');return}
   clearTimeout(sayT);dlg.innerHTML='Welche Bettwäsche?<div class="swrow">'+have.map(([n,col])=>`<button class="swb" data-c="${col}" style="background:${col}" aria-label="${n}"></button>`).join('')+'</div>';
-  dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{save.bedcol=b.dataset.c;persist();say2('Frisch bezogen.')});
+  dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{save.bedcol=b.dataset.c;if(save.q===2){save.q=3;R.bdw=R.t+200}persist();say2('Frisch bezogen.')});
 };
 // "Schlaf gut :)" als Pixelschrift auf der Nacht-Leinwand
 const GLY={S:['.####','#....','#....','.###.','....#','....#','####.'],c:['.....','.....','.###.','#....','#....','#....','.###.'],h:['#....','#....','#.##.','##..#','#...#','#...#','#...#'],l:['#.','#.','#.','#.','#.','#.','.#'],a:['.....','.....','.###.','....#','.####','#...#','.####'],f:['..##','.#..','.#..','###.','.#..','.#..','.#..'],g:['.....','.....','.####','#...#','#...#','#...#','.####','....#','.###.'],u:['.....','.....','#...#','#...#','#...#','#..##','.##.#'],t:['.#..','.#..','###.','.#..','.#..','.#..','..##'],':':['.','.','#','.','.','#','.'],')':['#..','.#.','..#','..#','..#','.#.','#..'],' ':['..']};
@@ -881,7 +883,7 @@ function update(){
     else if(a.st===3){a.f++;a.pose.closed=true;a.pose.cov=ez(Math.min(1,a.f/46));if(a.f>=54){a.st=4;a.f=0}}
     else{a.f++;if(a.f>=190){R.sa=null;R.asleep=a.pose;dreamAnim()}}
     return}
-  if(!R.bd&&save.q!==1&&!R.post&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
+  if(!R.bd&&(save.q===undefined||save.q===3)&&R.t>(R.bdw||0)&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
   if(isDay()){updateDay();return}
   if(R.day){R.day=false;R.plan=null;act.disabled=false;delete dlg.dataset.day;dlg.textContent=''}
   if(save.q===1&&!R.post&&!dlg.innerHTML)dlg.textContent='Klopf, klopf … ganz links, neben der Küche, steht jemand vor der Haustür.';
@@ -1224,7 +1226,7 @@ $('#shx').onclick=()=>{$('#shop').hidden=true;$('#room').hidden=false;R.away=fal
     let li=0;ls.forEach(l=>l.style.visibility='hidden');
     setTimeout(()=>{const ty=setInterval(()=>{if(li<ls.length)ls[li++].style.visibility='visible';else{clearInterval(ty);setTimeout(()=>$('#hint').classList.add('on'),1500)}},130)},500)}
   else $('#hint').classList.add('on');
-  app.addEventListener('scroll',()=>{if(!intro.hidden&&app.scrollTop>=intro.offsetHeight-2){intro.hidden=true;app.scrollTop=0;hello()}});
+  app.addEventListener('scroll',()=>{if(!intro.hidden&&app.scrollTop>=intro.offsetHeight-2){intro.hidden=true;app.scrollTop=0;if(app.classList.contains('pre')){app.classList.remove('pre');showNight()}else if(!resume())hello()}});
   intro.onclick=()=>app.scrollTo({top:intro.offsetHeight,behavior:'smooth'});}
 /* ---------- Sichern & Wiederherstellen ---------- */
 // Die Nachricht ist für Menschen lesbar (Tagebuch im Klartext) und trägt am Ende den kompletten Spielstand als Code.
@@ -1264,8 +1266,9 @@ fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&cu
   const cd=j.current.weather_code,tx=cd===0?'klar':cd<3?'leicht bewölkt':cd===3?'bedeckt':cd<50?'Nebel':cd<60?'Nieselregen':cd<70?'Regen':cd<80?'Schnee':cd<83?'Schauer':cd<87?'Schneeschauer':'Gewitter';
   td.textContent=`${dstr} · Berlin ${Math.round(j.current.temperature_2m)}°, ${tx}`;
 }).catch(()=>{});
-if(save.sleepUntil&&Date.now()<save.sleepUntil)showNight();
-else if(!resume())loop();
+// Immer erst der Titel: Nacht-Bildschirm oder laufendes Spiel kommen nach dem Runterscrollen
+if(save.sleepUntil&&Date.now()<save.sleepUntil){R.night=true;$('#app').classList.add('pre');$('#room').hidden=true;$('#night').hidden=false}
+else loop();
 </script>
 </body>
 </html>
