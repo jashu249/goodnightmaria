@@ -7,6 +7,7 @@
 <title>goodnightmaria</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap">
 <style>
+*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}input,textarea{-webkit-user-select:text;user-select:text}button{touch-action:manipulation}
 /* Layout: a pixel-art bedroom at night is the hub; the desk computer opens a Win95-style window on a pink-noise wallpaper. One committed retro look, no second theme. */
 :root{
   color-scheme:light;
@@ -182,7 +183,7 @@ h2{font-size:22px;line-height:1.1}
 #ncv{position:absolute;inset:0;width:100%;height:100%}
 #dream{position:absolute;left:50%;top:calc(47% + 46px);transform:translateX(-50%);width:min(30ch,82%);margin:0;text-align:center;font-family:var(--pixel);opacity:0;animation:none;transition:opacity 2.5s}
 #dream.on{opacity:1}
-#letter{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+#letter,#hello{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
 .letter{gap:16px;padding:8px 2px;background:none;border:0;color:var(--accent)}
 .letter p{font-family:var(--pixel);font-size:20px;line-height:1.4}
 .heart{vertical-align:-4px;margin-left:4px}
@@ -277,6 +278,10 @@ h2{font-size:22px;line-height:1.1}
     <div class="djtop"><span>Für Maria</span><button class="btn" id="ltx" aria-label="Brief zuklappen">×</button></div>
     <div class="page letter"><p>Liebe Maria,</p><p>Alles alles liebe zum Geburtstag! Du bist so eine nice, herzliche, lustige und ermutigende Freundin. Ich bin dir so dankbar für all den Quatsch den wir schon gemacht haben und noch machen werden.</p><p>Es war so lieb von euch mich an meinem Geburtstag zum rausgehen zu bringen und ich hoffe wir können bald mal nen Jokerabend ausmachen. Btw, habe 1€ in den Lottoscheinen gewonnen!</p><p>Ich bin immer für dich da. <svg class="heart" viewBox="0 0 7 6" width="28" height="24" shape-rendering="crispEdges" role="img" aria-label="Herz"><path fill="#ff5fa2" d="M1 0h2v1H1zM4 0h2v1H4zM0 1h7v2H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z"/></svg></p><p>~Joshi</p></div>
   </section>
+  <section id="hello" hidden>
+    <div class="djtop"><span>Gute Nacht, Maria</span><button class="btn" id="hlx" aria-label="Text zuklappen">×</button></div>
+    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Mehr gibt es nicht zu tun. Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs ist alles wieder da.</p><p>Schlaf gut.</p></div>
+  </section>
   <section id="night" hidden><canvas id="ncv" role="img" aria-label="Schlaf gut :)"></canvas><p id="dream"></p></section>
   <section id="dj" hidden>
     <div class="djtop"><span>Am Pult</span><button class="btn" id="djx" aria-label="Pult verlassen">×</button></div>
@@ -287,6 +292,7 @@ h2{font-size:22px;line-height:1.1}
   </section>
 </div>
 
+<script>document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});document.addEventListener('selectstart',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});</script>
 <script>
 const $=s=>document.querySelector(s), el=$('#screen'), pill=$('#pill');
 const CATS=['Alles','Party','Festival','Wellness','Basteln & Backen','Sport','Reisen','Wohnen'];
@@ -752,6 +758,8 @@ function plantRename(){
   $('#pnok').onclick=()=>{const v=$('#pn').value.trim();if(v)save.plant=v;else delete save.plant;persist();say2(v?`Sie heißt jetzt ${v}.`:'Sie heißt wieder einfach die Pflanze.')};
 }
 $('#ren').onclick=plantRename;
+$('#hlx').onclick=()=>{$('#hello').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
+function hello(){if(save.hello||R.night||$('#room').hidden)return;save.hello=1;persist();cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#hello').hidden=false}
 $('#ltx').onclick=()=>{$('#letter').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
 // Bettwäsche wechseln: Rosa ist immer da, bestellte Farben kommen nach dem Auspacken dazu
 $('#bedb').onclick=()=>{
@@ -1195,7 +1203,7 @@ $('#shx').onclick=()=>{$('#shop').hidden=true;$('#room').hidden=false;R.away=fal
     let li=0;ls.forEach(l=>l.style.visibility='hidden');
     setTimeout(()=>{const ty=setInterval(()=>{if(li<ls.length)ls[li++].style.visibility='visible';else{clearInterval(ty);setTimeout(()=>$('#hint').classList.add('on'),1500)}},130)},500)}
   else $('#hint').classList.add('on');
-  app.addEventListener('scroll',()=>{if(!intro.hidden&&app.scrollTop>=intro.offsetHeight-2){intro.hidden=true;app.scrollTop=0}});
+  app.addEventListener('scroll',()=>{if(!intro.hidden&&app.scrollTop>=intro.offsetHeight-2){intro.hidden=true;app.scrollTop=0;hello()}});
   intro.onclick=()=>app.scrollTo({top:intro.offsetHeight,behavior:'smooth'});}
 /* ---------- Sichern & Wiederherstellen ---------- */
 // Die Nachricht ist für Menschen lesbar (Tagebuch im Klartext) und trägt am Ende den kompletten Spielstand als Code.
