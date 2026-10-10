@@ -1,0 +1,1300 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{box-sizing:border-box;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>goodnightmaria</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap">
+<style>
+*{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}input,textarea{-webkit-user-select:text;user-select:text}button{touch-action:manipulation}
+/* Layout: a pixel-art bedroom at night is the hub; the desk computer opens a Win95-style window on a pink-noise wallpaper. One committed retro look, no second theme. */
+:root{
+  color-scheme:light;
+  --night:#1d1630; --w95:#C0C0C0; --navy:#000080; --ink:#000; --muted:#4d4d4d; --paper:#fff;
+  --hi:#fff; --lo:#404040; --mid:#808080; --pop:#B5124F; --me:#FFFFCC; --kz:#1f8a5b; --page:#fff8e7; --rule:#e3d6b8; --accent:#F5CB1F; --good:#0A6B3A;
+  --pixel:"Pixelify Sans","Courier New",monospace;
+  --body:Tahoma,Verdana,"Segoe UI",sans-serif;
+}
+html,body{height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;border-radius:0;touch-action:manipulation}
+button:focus-visible,input:focus-visible{outline:2px dotted var(--accent);outline-offset:2px}
+p{margin:0}
+#app{max-width:460px;height:100%;margin:0 auto;display:flex;flex-direction:column}
+
+/* room */
+#app{overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none}
+#app::-webkit-scrollbar{display:none}
+#intro{flex:none;height:100%;display:flex;flex-direction:column;justify-content:center;gap:40px;padding-inline:16px;scroll-snap-align:start;overflow:hidden;cursor:pointer}
+#app:has(#room[hidden]) #intro{display:none}
+#app.pre #intro{display:flex!important}
+#app.pre #night{flex:none;height:100%;scroll-snap-align:start}
+.hint{font-family:var(--pixel);font-size:17px;line-height:1.3;text-align:center;color:#cfc4e6;opacity:0;transition:opacity 1s}
+.hint.on{opacity:1}
+.hint{margin-top:70px}
+.hint svg{display:block;margin:10px auto 0}
+@media (prefers-reduced-motion:no-preference){.hint svg{animation:bob 1.6s ease-in-out infinite}}
+@keyframes bob{50%{transform:translateY(4px)}}
+#room{flex:none;height:100%;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;gap:12px;padding-inline:16px;padding-block:12px;color:#fff}
+.roomtitle{font-family:var(--pixel);font-weight:700;font-size:clamp(48px,21vw,96px);line-height:.9;color:var(--accent);width:100%;transform:skewX(-4deg) scaleY(1.2);background:linear-gradient(90deg,#ffd98a,#ffb3c7,#c9b3ff,#a8e0e0,#c8f0a8,#ffd98a);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 9px rgba(255,214,150,.45))}
+@media (prefers-reduced-motion:no-preference){.roomtitle{animation:shine 30s linear infinite}}
+.roomtitle span{display:flex;justify-content:space-between}
+.roomtitle i{font-style:normal}
+@keyframes shine{to{background-position:300% 0}}
+#cv{width:100%;height:100%;image-rendering:pixelated;image-rendering:crisp-edges;border:3px solid #fff;display:block;touch-action:manipulation;background:#3a2c57}
+.dlg{font-family:var(--pixel);font-size:19px;line-height:1.25;border:3px solid #fff;background:#0d0a1a;padding:12px 14px;min-height:76px}
+.pad{display:flex;gap:8px}
+.pad .btn{flex:1}
+.pad .arrow{flex:none;width:58px}
+
+.dlg:empty{display:none}
+.dlg.top{top:8px!important;bottom:auto!important}
+.stage{position:relative;flex:1;min-height:0;max-height:min(118vw,540px)}
+.stage .dlg{position:absolute;left:8px;right:8px;bottom:8px;min-height:0;font-size:17px;padding:9px 12px}
+.today{font-family:var(--pixel);font-size:16px;text-align:center;color:#cfc4e6;min-height:1.4em}
+/* win95 */
+#pc{flex:1;min-height:0;display:flex;flex-direction:column;padding-inline:16px;padding-block:10px;
+  background:radial-gradient(120% 70% at 15% 10%,#ff5fa2 0,transparent 60%),radial-gradient(90% 60% at 90% 30%,#ff8a3d 0,transparent 60%),radial-gradient(100% 80% at 50% 100%,#7b2cbf 0,transparent 65%),#d81b60}
+.win{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--w95);border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);box-shadow:inset -1px -1px var(--mid);padding:3px}
+.tb{background:var(--navy);color:#fff;font-family:var(--pixel);font-weight:700;font-size:17px;padding:4px 4px 4px 8px;display:flex;align-items:center;gap:8px}
+.tb .grow{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb .pill{font-weight:400;font-size:14px}
+.tb #x{background:var(--w95);color:#000;width:26px;height:24px;border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);font-family:var(--pixel);font-weight:700;line-height:1}
+.screen{flex:1;min-height:0;display:flex;flex-direction:column;gap:9px;padding:9px 7px 6px}
+.scroll{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;gap:9px;background:var(--paper);border:2px solid;border-color:var(--mid) var(--hi) var(--hi) var(--mid);padding:10px}
+h1,h2{font-family:var(--pixel);font-weight:700;margin:0;text-wrap:balance}
+h1{font-size:31px;line-height:1.05}
+h2{font-size:22px;line-height:1.1}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.btn{background:var(--w95);color:#000;font-family:var(--pixel);font-weight:700;font-size:18px;padding:12px 10px;width:100%;border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi);box-shadow:inset -1px -1px var(--mid)}
+.btn.main{outline:1px solid #000}
+.btn:active{border-color:var(--lo) var(--hi) var(--hi) var(--lo);box-shadow:none}
+.stack{display:flex;flex-direction:column;gap:8px}
+.tag{align-self:flex-start;background:var(--pop);color:#fff;font-family:var(--pixel);font-weight:700;font-size:15px;padding:3px 9px}
+.album{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.album span{aspect-ratio:1;display:grid;place-items:center;font-size:21px;background:var(--paper);border:2px solid;border-color:var(--mid) var(--hi) var(--hi) var(--mid)}
+.album span.off{filter:grayscale(1)}
+.album span.off>i{opacity:.25;font-style:normal}
+.who{display:flex;align-items:center;gap:9px;font-weight:700}
+.ava{width:64px;height:64px;background:var(--accent);display:grid;place-items:center;font-size:19px;flex:none;border:2px solid #5a3b2e;box-shadow:0 0 0 1px #000}
+.ava img{width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+.bubble{background:var(--paper);border:1px solid #000;padding:9px 11px;max-width:90%;align-self:flex-start;box-shadow:2px 2px 0 var(--mid)}
+.bubble.me{background:var(--me);align-self:flex-end}
+.bubble.big{font-size:17px;max-width:100%}
+.sys{align-self:center;text-align:center;font-family:var(--pixel);font-size:14px;color:var(--muted)}
+.sys.bad{color:var(--pop)} .sys.ok{color:var(--good)}
+.budget{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;border-top:1px dotted var(--mid);padding-top:8px}
+.price{font-family:var(--pixel);font-weight:700;color:var(--pop);font-variant-numeric:tabular-nums;white-space:nowrap;font-size:18px}
+.search{width:100%;font:inherit;color:#000;background:var(--paper);border:2px solid;border-color:var(--mid) var(--hi) var(--hi) var(--mid);padding:9px 10px;border-radius:0}
+.chips{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;padding:6px 10px;font-size:13px;background:var(--w95);border:2px solid;border-color:var(--hi) var(--lo) var(--lo) var(--hi)}
+.chip.on{background:var(--paper);border-color:var(--lo) var(--hi) var(--hi) var(--lo);font-weight:700}
+.item{display:flex;gap:10px;align-items:center;text-align:left;width:100%;padding-bottom:9px;border-bottom:1px dotted var(--mid)}
+.thumb{width:56px;height:56px;display:grid;place-items:center;font-size:30px;flex:none;border:1px solid #000}
+.item .t{flex:1;min-width:0}
+.item .t b{display:block;line-height:1.25}
+.task{background:var(--me);border:1px solid #000;padding:8px 10px;font-size:13px;text-align:left;width:100%}
+.task b{display:block;font-family:var(--pixel);font-size:14px}
+.task.shut span{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.detail .thumb{width:100%;height:140px;font-size:80px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.chathead{display:flex;align-items:center;gap:9px}
+.chathead .t{flex:1;min-width:0}
+.chathead .t b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mood{letter-spacing:1px;font-size:13px;color:var(--pop)}
+.opts{display:flex;flex-direction:column;gap:5px}
+.opt{background:var(--paper);border:1px solid #000;box-shadow:2px 2px 0 var(--mid);padding:9px 11px;text-align:left;font-size:14px}
+.opt:active{background:var(--me)}
+.stars{font-family:var(--pixel);font-size:40px;letter-spacing:4px;color:var(--pop)}
+.stars .muted{color:var(--w95)}
+.center{text-align:center;align-items:center}
+#night{flex:1;display:grid;place-items:center;font-family:var(--pixel);font-size:32px;color:#fff}
+.wall{font-family:var(--pixel);font-weight:700;font-size:36px;line-height:1;color:#fff;text-align:center;padding:8px 0 14px;letter-spacing:.05em;text-shadow:3px 3px 0 rgba(90,0,60,.35)}
+/* einrichten */
+.mini{position:absolute;top:8px;right:8px;width:auto;font-size:14px;padding:5px 9px}
+#shop{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+.shopnote{font-family:var(--pixel);font-size:16px;color:#cfc4e6}
+.shopitem{display:flex;gap:12px;align-items:center;border:3px solid #fff;background:#0d0a1a;padding:12px}
+.shopitem .ic{font-size:30px;flex:none}
+.shopitem .t{flex:1;min-width:0;font-size:14px}
+.shopitem b{display:block;font-family:var(--pixel);font-size:19px}
+.shopitem .btn{width:auto;font-size:15px;padding:8px 10px;flex:none}
+.shopitem .st{font-family:var(--pixel);font-size:15px;color:var(--accent);text-align:right;flex:none;max-width:40%}
+/* tagebuch */
+#diary{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+.page{background:var(--page);color:var(--ink);border:3px solid #fff;padding:14px;display:flex;flex-direction:column;gap:8px}
+.dydate{font-family:var(--pixel);font-size:15px;color:var(--muted)}
+.dyq{font-family:var(--pixel);font-weight:700;font-size:21px;line-height:1.15}
+#dytext{font:inherit;font-size:16px;line-height:28px;color:var(--ink);border:0;border-radius:0;resize:none;width:100%;min-height:168px;padding:0;background:repeating-linear-gradient(transparent 0 27px,var(--rule) 27px 28px)}
+.old{display:flex;flex-direction:column;gap:8px}
+.old div{border:1px solid var(--mid);background:#0d0a1a;padding:9px 11px;font-size:14px;white-space:pre-wrap}
+.old b{display:block;font-family:var(--pixel);font-weight:400;color:var(--accent)}
+/* dj */
+#dj{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff}
+.djtop{display:flex;justify-content:space-between;align-items:center;font-family:var(--pixel);font-weight:700;font-size:28px;color:var(--accent)}
+.djtop .btn{width:auto;padding:2px 12px}
+.decks{display:flex;flex-direction:column;font-family:var(--pixel);font-size:17px}
+.decks .a{color:#ff7ab0}.decks .b{color:#7ee0d0}
+#djcv{width:100%;aspect-ratio:120/56;image-rendering:pixelated;image-rendering:crisp-edges;border:3px solid #fff;background:#0d0a1a;display:block}
+.ctl{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px}
+.ctl .wide,.ctl p{grid-column:1/-1}
+.ctl p{font-family:var(--pixel);font-size:15px;margin-top:2px}
+/* windows classic: Buttons, Fenster, Taskleiste */
+.btn{font-family:var(--body);font-weight:400;font-size:14px;padding:11px 10px;border:0;box-shadow:inset -1px -1px #0a0a0a,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf}
+.btn.main{outline:1px solid #000;outline-offset:0;font-weight:700}
+.btn:active{border:0;box-shadow:inset 1px 1px #0a0a0a,inset -1px -1px #fff,inset 2px 2px #808080,inset -2px -2px #dfdfdf}
+.win{border:0;padding:4px;box-shadow:inset -1px -1px #0a0a0a,inset 1px 1px #dfdfdf,inset -2px -2px #808080,inset 2px 2px #fff}
+.tb{font-family:var(--body);font-size:14px;font-weight:700;padding:3px 3px 3px 6px}
+.tb .pill{font-size:13px}
+.tb #x,.tb #shx{background:var(--w95);color:#000;width:24px;height:22px;border:0;font-family:var(--body);font-weight:700;font-size:15px;line-height:1;box-shadow:inset -1px -1px #0a0a0a,inset 1px 1px #fff,inset -2px -2px #808080,inset 2px 2px #dfdfdf}
+.pad{gap:6px;padding:7px;border-radius:16px;background:radial-gradient(120% 220% at 8% 0,#f0679a 0,transparent 62%),radial-gradient(110% 220% at 95% 100%,#a868d8 0,transparent 62%),#ef8a5c}
+.pad .btn{flex:1;min-width:0;padding:11px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--pixel);font-size:15px;font-weight:400;color:#fff;background:rgba(50,18,60,.3);border-radius:10px;box-shadow:inset 0 1px rgba(255,255,255,.25)}
+.pad .btn:active{background:rgba(50,18,60,.55);box-shadow:none}
+.pad .btn.main{outline:0;font-weight:700;background:rgba(255,255,255,.22)}
+.pad .arrow{flex:none;width:40px}
+.pad .start{flex:none;width:auto;padding-inline:9px}
+#shop{padding-block:10px;overflow:visible;color:#000}
+.shopitem{border:0;border-bottom:1px dotted var(--mid);background:none;padding:0 0 9px;color:#000}
+.shopitem b{font-family:var(--body);font-size:15px}
+.shopitem .st{font-family:var(--body);font-size:13px;font-weight:700;color:var(--navy)}
+.shopitem .btn{font-size:13px;padding:8px 10px}
+.row2{display:flex;gap:6px}
+.row2 .btn{flex:1}
+#bktext{font:inherit;font-size:16px;width:100%;border:0;border-radius:0;padding:6px;background:#fff;color:#000;box-shadow:inset 1px 1px #808080,inset -1px -1px #fff,inset 2px 2px #0a0a0a}
+.order{position:absolute;top:8px;right:8px;width:auto;padding:7px 11px;font-family:var(--pixel);font-size:14px;font-weight:400;color:#fff;border-radius:10px;box-shadow:inset 0 1px rgba(255,255,255,.25);background:radial-gradient(120% 220% at 8% 0,#f0679a 0,transparent 62%),radial-gradient(110% 220% at 95% 100%,#a868d8 0,transparent 62%),#ef8a5c}
+.order:active{box-shadow:none;filter:brightness(.85)}
+.pad #deco,.pad #ren,.pad #bedb{flex:1}
+.pad #act,.pad #deco,.pad #ren,.pad #bedb{font-size:14px;padding-inline:3px}
+.swb{width:38px;height:38px;border:2px solid #fff;border-radius:8px;flex:none}
+.dlg .swrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.sw{width:30px;height:30px;border:1px solid #000}
+.lnk{font:inherit;color:var(--accent);text-decoration:underline;padding:0}
+.dlg .row2{margin-top:6px}
+.dlg .btn{width:auto;flex:none}
+#pn{font-family:var(--body);font-size:16px;flex:1;min-width:0;padding:6px;border:0;border-radius:0;color:#000;background:#fff}
+.pad .btn:disabled{opacity:.55;font-weight:400}
+.dreaming .pad,.dreaming .today{opacity:0;transition:opacity .8s}
+#night{animation:nightin 2s ease-out;gap:22px;align-content:center;text-align:center;padding-inline:28px}
+#dream{font-size:16px;line-height:1.4;color:#cfc4e6;max-width:30ch;opacity:0;animation:dreamin 2.5s 2.8s ease-out forwards}
+@keyframes dreamin{to{opacity:1}}
+@keyframes nightin{from{opacity:0}}
+#night{position:relative;display:block;padding:0;animation:none}
+#ncv{position:absolute;inset:0;width:100%;height:100%}
+#dream{position:absolute;left:50%;top:calc(47% + 46px);transform:translateX(-50%);width:min(30ch,82%);margin:0;text-align:center;font-family:var(--pixel);opacity:0;animation:none;transition:opacity 2.5s}
+#dream.on{opacity:1}
+#letter,#hello{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+.letter{gap:16px;padding:8px 2px;background:none;border:0;color:var(--accent)}
+.letter p{font-family:var(--pixel);font-size:20px;line-height:1.4}
+.heart{vertical-align:-4px;margin-left:4px}
+.letter p:last-child{text-align:right;font-family:var(--pixel);font-size:20px}
+.ctl .eq{grid-column:1/-1;display:flex;gap:6px}
+.ctl .eq .btn{flex:1;opacity:.55}
+.ctl .eq .btn.on{opacity:1;font-weight:700;box-shadow:inset 1px 1px #0a0a0a,inset -1px -1px #fff,inset 2px 2px #808080,inset -2px -2px #dfdfdf;background:#e9e2f5}
+.mixer{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px;border-radius:14px;background:#2a2340;box-shadow:inset 0 1px 0 #4a4066,0 3px 0 #0d0a1a}
+.strip{min-width:0;display:flex;flex-direction:column;gap:2px;background:#0d0a1a;border:2px solid #3a3350;border-radius:10px;padding:10px 10px 8px}
+.strip h3{margin:0 0 6px;font-family:var(--pixel);font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip.a h3{color:#ff7ab0}.strip.b h3{color:#7ee0d0}
+.strip label{font-family:var(--pixel);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#a99dbb}
+.vol{-webkit-appearance:none;appearance:none;width:100%;height:34px;margin:0;background:transparent}
+.vol::-webkit-slider-runnable-track{height:8px;border-radius:4px;background:#000;box-shadow:inset 0 0 0 1px #3a3350}
+.vol::-moz-range-track{height:8px;border-radius:4px;background:#000;box-shadow:inset 0 0 0 1px #3a3350}
+.vol::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:30px;margin-top:-11px;border-radius:3px;border:1px solid #000;background:linear-gradient(90deg,#d9d3e6 0 42%,#1d1630 42% 58%,#d9d3e6 58%);box-shadow:0 2px 0 #000}
+.vol::-moz-range-thumb{width:18px;height:30px;border-radius:3px;border:1px solid #000;background:linear-gradient(90deg,#d9d3e6 0 42%,#1d1630 42% 58%,#d9d3e6 58%);box-shadow:0 2px 0 #000}
+.strip.a .vol::-webkit-slider-thumb{background:linear-gradient(90deg,#d9d3e6 0 42%,#ff5fa2 42% 58%,#d9d3e6 58%)}
+.strip.b .vol::-webkit-slider-thumb{background:linear-gradient(90deg,#d9d3e6 0 42%,#3fcfb8 42% 58%,#d9d3e6 58%)}
+#dj{overflow-y:auto;justify-content:flex-start}
+#dj .dlg{min-height:0}
+/* Kiezkram im Stil einer Kleinanzeigen-App: helle Karten, grüne Akzente (eigene Marke, eigenes Grün) */
+#pc .screen{background:#f3f3ef;padding:8px;gap:8px}
+#pc .scroll{box-shadow:none;border:0;background:transparent;padding:0 0 2px;gap:8px}
+#pc h1,#pc h2{font-family:var(--body);font-weight:700}
+#pc h2{font-size:18px;line-height:1.25}
+#pc .item{background:#fff;border:0;border-radius:8px;padding:8px;box-shadow:0 1px 2px rgba(0,0,0,.14);align-items:center}
+#pc .item .t{display:flex;flex-direction:column;gap:2px}
+#pc .item .t b{font-weight:400;font-size:15px}
+#pc .thumb{border:0;border-radius:6px;width:74px;height:74px;font-size:40px}
+#pc .detail .thumb{width:100%;height:150px;font-size:84px;border-radius:8px}
+#pc .price{font-family:var(--body);color:var(--kz);font-weight:700;font-size:16px}
+#pc .btn{border-radius:8px;box-shadow:none;background:#fff;border:1.5px solid var(--kz);color:var(--kz);font-weight:700;font-size:15px}
+#pc .btn.main{background:var(--kz);color:#fff;outline:0}
+#pc .btn:active{filter:brightness(.92)}
+#pc .search{border-radius:8px;border:1px solid #cfcfc8;box-shadow:none}
+#pc .chip{border-radius:999px;border:1px solid #cfcfc8;background:#fff;box-shadow:none;padding:6px 12px}
+#pc .chip.on{background:var(--kz);border-color:var(--kz);color:#fff}
+#pc .card{background:#fff;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+#pc .card.who{flex-direction:row;align-items:center;gap:10px}
+#pc .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 16px;font-size:14px}
+#pc .kv span:nth-child(odd){color:var(--muted)}
+#pc .bubble{border:0;border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.14);background:#fff}
+#pc .bubble.me{background:#d6f0e1}
+#pc .opt{border:1.5px solid var(--kz);border-radius:16px;box-shadow:none;background:#fff;color:#0f5c3a}
+#pc .opt:active{background:#d6f0e1}
+#pc .task{border:0;border-radius:8px;background:#fff6cf;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+#pc .task b,#pc .sys,#pc .tag{font-family:var(--body)}
+#pc .tag{border-radius:6px;background:var(--kz)}
+#pc .budget{border-top:0}
+#pc .stars{font-family:var(--body);color:#e8a200}
+#pc .mood{color:var(--kz)}
+#pc .chathead{background:#fff;border-radius:8px;padding:8px;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+/* Pink-Noise-Look überall außer in den Kleinanzeigen */
+:root{--pn:radial-gradient(120% 220% at 8% 0,#f0679a 0,transparent 62%),radial-gradient(110% 220% at 95% 100%,#a868d8 0,transparent 62%),#ef8a5c}
+:where(section:not(#pc)) .btn{background:rgba(255,255,255,.12);color:#fff;font-family:var(--pixel);font-size:15px;font-weight:400;border:0;border-radius:12px;box-shadow:inset 0 1px rgba(255,255,255,.25);outline:0}
+:where(section:not(#pc)) .btn.main{background:var(--pn);font-weight:700;outline:0}
+:where(section:not(#pc)) .btn:active{border:0;box-shadow:none;filter:brightness(.82)}
+.djtop{background:var(--pn);border-radius:16px;padding:7px 7px 7px 14px;color:#fff;font-size:20px}
+.djtop .btn{background:rgba(50,18,60,.3);border-radius:10px;padding:7px 13px;font-size:16px}
+#shop{color:#fff}
+#shop .win{background:#1c1530;box-shadow:none;border:0;border-radius:16px;padding:0;overflow:hidden}
+#shop .tb{background:var(--pn);font-family:var(--pixel);font-size:20px;padding:7px 7px 7px 14px}
+#shop .tb #shx{background:rgba(50,18,60,.3);color:#fff;box-shadow:inset 0 1px rgba(255,255,255,.25);border-radius:10px;width:36px;height:32px;font-family:var(--pixel);font-size:16px}
+#shop .screen{padding:12px}
+#shop .scroll{background:rgba(255,255,255,.06);border:0;border-radius:12px;padding:12px}
+#shop .shopitem{color:#fff;border-bottom:1px dotted rgba(255,255,255,.25)}
+#shop .shopitem b{font-family:var(--pixel);font-size:17px;font-weight:400}
+#shop .shopitem .st{font-family:var(--pixel);font-size:13px;font-weight:400;color:#ffd98a}
+#shop .small{color:#cfc4e6}
+#shop .price{color:#ffd98a}
+#shop .sw{border:2px solid #fff;border-radius:8px}
+#bktext{background:rgba(255,255,255,.1);color:#fff;box-shadow:none;border-radius:10px}
+.page{border-radius:14px;border:0}
+.old div{border:0;border-radius:12px;background:rgba(255,255,255,.07)}
+.dlg{border-radius:14px}
+</style>
+
+</head>
+<body>
+<div id="app">
+  <section id="intro">
+    <div class="roomtitle" role="heading" aria-level="1" aria-label="Good Night Maria"><span><i>G</i><i>O</i><i>O</i><i>D</i></span><span><i>N</i><i>I</i><i>G</i><i>H</i><i>T</i></span><span><i>M</i><i>A</i><i>R</i><i>I</i><i>A</i></span></div>
+    <div class="hint" id="hint">scroll me<svg viewBox="0 0 7 4" width="28" height="16" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M0 0h7v1H0zM1 1h5v1H1zM2 2h3v1H2zM3 3h1v1H3z"/></svg></div>
+  </section>
+  <section id="room">
+    <div class="today" id="today"></div>
+    <div class="stage"><canvas id="cv" width="240" height="180" aria-label="Dein Zimmer bei Nacht"></canvas>
+    <div class="dlg" id="dlg"></div></div>
+    <div class="pad"><button class="btn arrow" id="bl" aria-label="Nach links">◀</button><button class="btn main" id="act">…</button><button class="btn" id="deco" hidden>Bestellen</button><button class="btn" id="ren" hidden>Umbenennen</button><button class="btn" id="bedb" hidden>Bettwäsche</button><button class="btn arrow" id="br" aria-label="Nach rechts">▶</button></div>
+  </section>
+  <section id="pc" hidden>
+    <div class="win">
+      <div class="tb"><span class="grow">Kiezkram 95</span><span class="pill" id="pill"></span><button id="x" aria-label="Computer ausmachen">×</button></div>
+      <div class="screen" id="screen"></div>
+    </div>
+  </section>
+  <section id="diary" hidden>
+    <div class="djtop"><span>Tagebuch</span><button class="btn" id="dyx" aria-label="Tagebuch zuklappen">×</button></div>
+    <div class="page"><p class="dydate" id="dydate"></p><label class="dyq" for="dytext" id="dyq"></label><textarea id="dytext" rows="6" placeholder="Schreib einfach drauflos …"></textarea></div>
+    <div class="stack"><button class="btn main" id="dysave">Speichern</button><button class="btn" id="dybk">Tagebuch sichern &amp; teilen</button></div>
+    <div class="old" id="dyold"></div>
+  </section>
+  <section id="shop" hidden>
+    <div class="win">
+      <div class="tb"><span class="grow">Online bestellen</span><button id="shx" aria-label="Zurück ins Zimmer">×</button></div>
+      <div class="screen"><div class="row"><b>Kontostand</b><span class="price">999.999.999 €</span></div><p class="small" id="shnote"></p><div class="scroll" id="shoplist"></div>
+        <div class="stack"><p class="small">Spielstand: Tagebuch, Album und Einrichtung als Nachricht sichern, zum Beispiel an dich selbst.</p>
+          <div class="row2"><button class="btn main" id="bk">Sichern &amp; teilen</button><button class="btn" id="rs">Wiederherstellen</button></div>
+          <div class="stack" id="rsbox" hidden><textarea id="bktext" rows="4" placeholder="Gesicherte Nachricht hier einfügen"></textarea><button class="btn" id="rsgo">Einspielen</button></div>
+          <p class="small" id="rsmsg"></p></div></div>
+    </div>
+  </section>
+  <section id="letter" hidden>
+    <div class="djtop"><span>Für Maria</span><button class="btn" id="ltx" aria-label="Brief zuklappen">×</button></div>
+    <div class="page letter"><p>Liebe Maria,</p><p>Alles alles liebe zum Geburtstag! Du bist so eine nice, herzliche, lustige und ermutigende Freundin. Ich bin dir so dankbar für all den Quatsch den wir schon gemacht haben und noch machen werden.</p><p>Es war so lieb von euch mich an meinem Geburtstag zum rausgehen zu bringen und ich hoffe wir können bald mal nen Jokerabend ausmachen. Btw, habe 1€ in den Lottoscheinen gewonnen!</p><p>Ich bin immer für dich da. <svg class="heart" viewBox="0 0 7 6" width="28" height="24" shape-rendering="crispEdges" role="img" aria-label="Herz"><path fill="#ff5fa2" d="M1 0h2v1H1zM4 0h2v1H4zM0 1h7v2H0zM1 3h5v1H1zM2 4h3v1H2zM3 5h1v1H3z"/></svg></p><p>~Joshi</p></div>
+  </section>
+  <section id="hello" hidden>
+    <div class="djtop"><span>Gute Nacht, Maria</span><button class="btn" id="hlx" aria-label="Text zuklappen">×</button></div>
+    <div class="page letter"><p>Das hier ist dein kleines Zimmer für die letzten fünf Minuten des Tages. Draußen wird Berlin leise, drinnen leuchtet die Lichterkette.</p><p>Jeden Abend wartet eine Kleinigkeit auf dich: am Computer ein paar Kleinanzeigen oder ein Set am DJ-Pult, im Schaukelstuhl ein Satz fürs Tagebuch, und eine Pflanze, die Durst hat.</p><p>Jeden Tag gibt es hier etwas Neues zu entdecken! Was du bestellst, steht am nächsten Tag vor der Tür.</p><p>Wenn du müde bist, leg dich ins Bett – dann ist für heute Schluss, und morgen ab sechs wacht e-Maria wieder auf.</p><p>Schlaf gut.</p></div>
+  </section>
+  <section id="night" hidden><canvas id="ncv" role="img" aria-label="Schlaf gut :)"></canvas><p id="dream"></p></section>
+  <section id="dj" hidden>
+    <div class="djtop"><span>Am Pult</span><button class="btn" id="djx" aria-label="Pult verlassen">×</button></div>
+    <div class="decks"><span class="a" id="la"></span><span class="b" id="lb"></span></div>
+    <canvas id="djcv" width="120" height="56" aria-label="Beat-Anzeige der beiden Decks"></canvas>
+    <div class="dlg" id="djdlg"></div>
+    <div class="ctl" id="djctl"></div>
+  </section>
+</div>
+
+<script>document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});document.addEventListener('selectstart',e=>{if(!e.target.closest('input,textarea'))e.preventDefault()});</script>
+<script>
+const $=s=>document.querySelector(s), el=$('#screen'), pill=$('#pill');
+const CATS=['Alles','Party','Festival','Wellness','Basteln & Backen','Sport','Reisen','Wohnen'];
+const L=[
+ {id:'disco',e:'🪩',h:270,t:'Discokugel, 30 cm, dreht sich noch',p:25,k:'Friedrichshain',c:'Party',s:'hipster',flaw:'drei Spiegelchen fehlen',d:'Hing fünf Jahre über meinem Bett. Jetzt ziehe ich mit jemandem zusammen, der „Ruhe" mag. Drei Spiegelchen fehlen, fällt im Dunkeln nicht auf.'},
+ {id:'zelt',e:'⛺',h:150,t:'Wurfzelt, 1x Fusion überlebt',p:30,k:'Neukölln',c:'Festival',s:'hippie',flaw:'riecht noch nach Lagerfeuer',d:'Baut sich in 2 Sekunden auf. Abbau dauert 45 Minuten und eine Freundschaft. Riecht noch nach Lagerfeuer.'},
+ {id:'saunahut',e:'🎩',h:25,t:'Saunahut aus Filz, kaum geschwitzt',p:8,k:'Prenzlauer Berg',c:'Wellness',s:'grantler',flaw:'ein kleiner Fleck am Rand',d:'Schützt den Kopf beim Aufguss. Ich war einmal im Vabali damit und alle haben geguckt. Kleiner Fleck am Rand.'},
+ {id:'bastel',e:'✂️',h:330,t:'Bastelkiste: Heißkleber, Glitzer, Washi-Tape',p:12,k:'Wedding',c:'Basteln & Backen',s:'hippie',flaw:'Glitzer ist überall',d:'Alles, was man für Geburtstagskarten braucht. Glitzer ist überall, auch außen an der Kiste. Und an mir.'},
+ {id:'yoga',e:'🧘',h:190,t:'Yogamatte, 2x benutzt (Vorsätze)',p:10,k:'Charlottenburg',c:'Sport',s:'hipster',flaw:'leicht eingerollte Ecke',d:'Januar war ich motiviert. Jetzt ist Oktober. Ecke rollt sich leicht ein.'},
+ {id:'koffer',e:'🧳',h:215,t:'Handgepäckkoffer, ein Rad eiert',p:15,k:'Kreuzberg',c:'Reisen',s:'eilig',flaw:'ein Rad eiert',d:'War in Lissabon, Tiflis und einmal aus Versehen in Hannover. Vier Rollen, eine davon hat eine eigene Meinung.'},
+ {id:'bauch',e:'👝',h:300,t:'Glitzer-Bauchtasche mit Schnalle',p:7,k:'Friedrichshain',c:'Festival',s:'hippie',flaw:'Reißverschluss hakt',d:'Passt genau rein: Handy, Lippenbalsam, zerknüllter Fünfer. Reißverschluss hakt manchmal.'},
+ {id:'spring',e:'🎂',h:35,t:'Springform 26 cm, aufklappbar',p:5,k:'Steglitz',c:'Basteln & Backen',s:'grantler',flaw:'ein Kratzer im Boden',d:'Rund, mit Schnalle an der Seite. Hat 30 Jahre Käsekuchen gebacken. Ein Kratzer im Boden.'},
+ {id:'shaker',e:'🍸',h:345,t:'Cocktailshaker-Set, Aperol nicht dabei',p:14,k:'Schöneberg',c:'Party',s:'hipster',flaw:'Sieb fehlt',d:'Shaker, Messbecher, Stößel. Das Sieb ist bei einer WG-Party verschwunden.'},
+ {id:'roll',e:'🛼',h:320,t:'Rollschuhe Gr. 39, vier Rollen pro Fuß',p:35,k:'Tempelhof',c:'Sport',s:'eilig',flaw:'Stopper vorne abgefahren',d:'Retro, mit Regenbogenstreifen. Auf dem Tempelhofer Feld eingefahren. Stopper vorne sind abgefahren.'},
+ {id:'matte',e:'🌴',h:130,t:'Reisehängematte, federleicht',p:18,k:'Treptow',c:'Reisen',s:'hippie',flaw:'ein Gurt ist ausgefranst',d:'Passt in jeden Rucksack, hängt zwischen zwei Bäumen. Ein Gurt ist etwas ausgefranst, hält aber.'},
+ {id:'monstera',e:'🪴',h:140,t:'Monstera-Ableger, heißt Günther',p:4,k:'Moabit',c:'Wohnen',s:'hippie',flaw:'ein Blatt ist gelb',d:'Günther mag Halbschatten und Deutschlandfunk. Ein Blatt ist gelb, er war beleidigt.'},
+ {id:'rad',e:'🚲',h:200,t:'Hollandrad, quietscht charmant',p:60,k:'Pankow',c:'Sport',s:'grantler',flaw:'Licht geht nicht',d:'Zwei Räder, eine Klingel, null Gänge. Licht geht nicht.'},
+ {id:'licht',e:'✨',h:50,t:'Lichterkette 10 m, warmweiß',p:9,k:'Lichtenberg',c:'Wohnen',s:'eilig',flaw:'zwei Lämpchen sind aus',d:'Macht jeden Balkon zum Biergarten. Zwei Lämpchen sind aus.'},
+ {id:'boller',e:'🛒',h:15,t:'Bollerwagen, klappbar, mit Deichsel',p:40,k:'Köpenick',c:'Festival',s:'grantler',flaw:'Deichsel klemmt',d:'Trägt 80 Kilo. Erprobt mit zwei Kästen und einem schlafenden Schwager. Die Deichsel klemmt ein bisschen.'},
+ {id:'fuss',e:'🫧',h:180,t:'Fußsprudelbad mit Massagenoppen',p:12,k:'Spandau',c:'Wellness',s:'eilig',flaw:'Kabel ist kurz',d:'Whirlpool, nur eben für zwei Füße. Blubbert laut und ehrlich. Kabel ist kurz.'},
+ {id:'globus',e:'🌍',h:210,t:'Globus, leuchtet von innen',p:11,k:'Mitte',c:'Reisen',s:'hipster',flaw:'Jugoslawien gibt es noch',d:'Rund, dreht sich, leuchtet. Stand von 1989, Jugoslawien gibt es darauf noch.'},
+ {id:'sofa',e:'🛋️',h:20,t:'Sofa zu verschenken, steht schon unten',p:0,k:'Neukölln',c:'Wohnen',s:'eilig',flaw:'es regnet gerade',d:'Steht Ecke Weserstraße auf dem Gehweg. Wer zuerst kommt. Es regnet gerade.'}
+];
+// Drei feste Aufträge. d = eigener Dialog: seq ist die einzige richtige Reihenfolge, good die Antwort nach jedem richtigen Schritt,
+// early = richtig, aber zu früh, bad = [Laune, Aufpreis in €, Antwort].
+const A=[
+ {id:'spring',n:'Brudi',a:'🧁',b:3,m:'Du machst mir jedes Jahr was Süßes zum Geburtstag. Jetzt will ich das auch mal können. Ich brauche was Rundes mit Schnalle, das man am Ende einfach aufklappt.',hints:['Die Schnalle sitzt an der Seite, nicht am Bauch. Und es kommt in den Ofen.','Da kommt Teig rein. 26 Zentimeter.'],
+  d:{open:'Ja ist noch da. KEINE PREISVORSCHLÄGE. Und grüßen kann heutzutage auch keiner mehr.',
+   opts:{gruss:'Guten Abend, Herr Manfred! Ist die Springform noch zu haben?',termin:'Ich könnte morgen direkt um 10 da sein. Bar und passend.',kratzer:'In der Anzeige steht „ein Kratzer im Boden". Da bleibt doch der Käsekuchen hängen. Geht da noch was?',
+    letzte:'Was letzte Preis?',bruder:'Sie ist für meinen Bruder. Der hat noch nie gebacken.',zwei:'Für 2 € nehme ich sie sofort.',versand:'Können Sie die auch verschicken?'},
+   seq:['gruss','termin','kratzer'],
+   good:['Na also, geht doch. Aber ich sag es gleich: Ich warte hier nicht den ganzen Tag. Ständig kommt einer nicht.','Um zehn, bar und passend. Das lob ich mir. Am Preis ändert das nichts, die Form ist tipptopp, da gibt es nichts zu meckern.','Hm. Das steht da, ja. Ich bin ein ehrlicher Mann. {p} €. Sagen Sie es keinem.'],
+   early:{termin:'Wer sind Sie überhaupt? Erst mal Guten Abend sagen.',kratzer:'Kaum da und schon am Meckern. So nicht.'},
+   bad:{letzte:[-2,2,'Ich hab gesagt KEINE PREISVORSCHLÄGE. Jetzt kostet sie 2 € mehr. Aus Prinzip.'],bruder:[-1,0,'Dann soll er es auch lassen. Meine Form ist nichts für Anfänger.'],zwei:[-2,0,'Zwei Euro?! Dafür kriegen Sie bei mir nicht mal die Schnalle.'],versand:[-1,0,'NUR ABHOLUNG. Steht da. Dreimal.']}}},
+ {id:'fuss',n:'Tantchen',a:'💃',b:8,m:'Nach dem Tanzen bis sechs Uhr früh brauchen meine zwei treuesten Begleiter ein Whirlpool-Wochenende. Kleiner als eine Wanne, bitte.',hints:['Meine zwei Begleiter stecken tagsüber in Schuhen.','Es blubbert. Man stellt es vor den Sessel.'],
+  d:{open:'Omg ja, ist noch da!! Sorry, ich zieh morgen um und hab noch NICHTS gepackt. Warte, welche Anzeige war das? Das Fußbad, oder?? Wann könntest du kommen?',
+   opts:{termin:'Morgen direkt um 10. Dann ist es weg, bevor dein Transporter kommt.',tante:'Für mein Tantchen. Sie tanzt immer bis sechs Uhr früh und braucht danach ein Whirlpool-Wochenende für die Füße.',hilfe:'Kein Stress. Was fehlt, suchen wir morgen zusammen. Ich helf dir beim Karton-Wühlen.',
+    letzte:'Was letzte Preis?',test:'Kann ich es vorher einmal mit Wasser ausprobieren?',reserv:'Kannst du es mir bis nächste Woche zurücklegen?',druck:'Du musst es doch eh loswerden. Gib es mir für 3 €.'},
+   seq:['termin','tante','hilfe'],
+   good:['Um 10, perfekt, du rettest mich!! Sorry, ich bin so verpeilt gerade, ich hab eben meinen Schlüssel in einen Karton gepackt. Für wen ist das eigentlich, für dich?','STOPP. Dein Tantchen tanzt bis SECHS?? Ich liebe sie. Ich will so werden wie sie. Dafür geh ich runter mit dem Preis, safe. Oh nein, ich finde gerade das Kabel nicht …','Du bist ein Schatz, ehrlich. {p} €, und grüß dein Tantchen von mir!!'],
+   early:{tante:'Warte warte, ich kann gerade nicht zuhören. Sag erst: WANN kannst du kommen? Sonst vergess ich es wieder.',hilfe:'Hä, was fehlt denn?? Sag mir erst mal, wann du kommst, sonst dreh ich durch.'},
+   bad:{letzte:[-1,0,'Uff. Nicht heute, bitte. Ich hab 40 Kartons und null Nerven.'],test:[-1,0,'Mit Wasser?? Meine Töpfe sind in Karton 12. Oder 17. Ich weiß es nicht mehr.'],reserv:[-1,1,'Nächste Woche wohne ich in Bielefeld!! Sorry, dafür 1 € Nervenzuschlag.'],druck:[-2,0,'Wow, okay. Ich bin gestresst, nicht verzweifelt.']}}},
+ {id:'disco',n:'Mimi',a:'🪩',b:18,m:'Ich suche etwas Rundes, das tausend kleine Sonnen an meine Decke wirft, sobald es sich dreht. Mein Flur soll endlich ein Club sein.',hints:['Nee, die soll nicht selbst leuchten. Die wirft nur zurück, was man draufstrahlt.','Denk an Studio 54. Lauter kleine Spiegel.'],
+  d:{open:'Hi. Noch verfügbar. Ist ein Vintage-Piece, absolut makellos. Der Preis ist fair.',
+   opts:{macke:'Makellos? In der Anzeige steht „drei Spiegelchen fehlen".',termin:'Ich hole sie morgen um 10 ab. Dann bist du pünktlich beim Tasting.',frech:'15 €. Nimm oder lass.',
+    nett:'Hi! Die sieht ja wunderschön aus. Ist sie noch da? 😊',letzte:'Was letzte Preis?',flur:'Sie ist für Mimis Flur. Der soll ein Club werden.',motor:'Ist ein Motor dabei?'},
+   seq:['macke','termin','frech'],
+   good:['Hm. Fair point, die Stelle hab ich im Foto weggedreht. Aber morgen um elf hab ich ein Sauerteig-Tasting, lange diskutieren kann ich nicht.','Okay, praktisch. Dann mach mir ein Angebot. Aber bitte mit Haltung, ich respektiere nur Leute, die wissen, was sie wollen.','Wow. Mutig. 15 nicht, aber {p} €. Respekt.'],
+   early:{termin:'Chill. Wir haben uns noch gar nicht geeinigt. Und woher weißt du, was ich morgen mache?',frech:'Wow. Nein. So redet man nicht über ein makelloses Piece.'},
+   bad:{nett:[-1,0,'Danke. Ich weiß. Sonst noch was?'],letzte:[-2,0,'Sorry, auf dem Niveau verhandle ich nicht.'],flur:[-1,0,'Cute. Ein Flur ist kein Club. Ändert nichts.'],motor:[-1,2,'Der Motor ist ein separates Piece. Die Beratung kostet 2 € extra.']}}},
+ {id:'saunahut',n:'Otis',a:'🧖',b:5,m:'Ich brauche eine Kopfbedeckung für einen Ort, an dem man sonst gar nichts trägt. Bei 90 Grad.',hints:['Falsch. Da, wo ich hingehe, gibt es einen Aufguss.','Es ist aus Filz und sieht albern aus. Genau das will ich.'],
+  d:{sn:'Aufguss_Uwe',sa:'🔥',open:'Moin. Der Hut ist noch da. Ich verkaufe aber nur an Leute, die wissen, was ein Aufguss ist.',
+   opts:{wissen:'Aufguss kenne ich: 90 Grad, Birke, und danach schweigen alle andächtig.',fleck:'In der Anzeige steht „ein kleiner Fleck am Rand". Ist das Schweiß oder Geschichte?',abholen:'Ich hole ihn morgen um 10 ab, noch vor dem ersten Aufguss.',letzte:'Was letzte Preis?',onkel:'Er ist für einen Kumpel, der friert schnell am Kopf.',anprobe:'Kann ich ihn vorher mal aufsetzen?',versand:'Geht auch Versand?'},
+   seq:['wissen','fleck','abholen'],
+   good:['Sehr gut. Sie sind vom Fach. Aber ehrlich muss ich sein: Der Hut hat schon was erlebt.','Ha! Geschichte, sag ich doch. Dafür geh ich runter. Ich bin aber nur vormittags da, ab elf sitze ich in der Sauna.','Vor dem ersten Aufguss, perfekt. {p} € und ein gutes Schwitzen.'],
+   early:{fleck:'Erst mal sehen, ob Sie überhaupt wissen, wovon wir reden.',abholen:'Langsam. Erst klären wir, ob der Hut zu Ihnen passt.'},
+   bad:{letzte:[-2,1,'So redet man nicht in der Sauna. Und auch nicht mit mir. 1 € Aufschlag.'],onkel:[-1,0,'Dann soll der Kumpel selbst schreiben.'],anprobe:[-1,0,'Aufsetzen? Der ist frisch gelüftet, den fasst mir keiner zur Probe an.'],versand:[-1,0,'Ein Saunahut reist nicht mit der Post. Der wird übergeben.']}}},
+ {id:'boller',n:'Jule',a:'🍻',b:30,m:'Vier Räder, kein Motor, und am Ende zieht immer die Person, die noch am nüchternsten ist. Muss zwei Kästen und einen müden Menschen tragen.',hints:['Nee, da passt kein Kasten rein. Man zieht es hinter sich her, an einer Stange.','Vatertag. Festivalgelände. Du weißt, was ich meine.'],
+  d:{sn:'Schwager_Bernd',sa:'🧔',open:'Ja, den Bollerwagen gibt es noch. Hat mich durch zwölf Vatertage gezogen. Oder ich ihn. Ich gebe ihn nur in gute Hände.',
+   opts:{festival:'Er kommt in gute Hände: Er fährt aufs Festival und trägt Zelt, Kästen und müde Freunde.',deichsel:'In der Anzeige steht „Deichsel klemmt". Das muss ich dann ja erst reparieren.',kasten:'Ich bringe morgen um 10 einen Kasten mit, und wir stoßen auf ihn an.',letzte:'Was letzte Preis?',halb:'20 €, mehr ist ein alter Bollerwagen nicht wert.',lieferung:'Kannst du ihn mir vorbeibringen?',schwager:'Ist der schlafende Schwager im Preis mit drin?'},
+   seq:['festival','deichsel','kasten'],
+   good:['Festival! Da gehört er hin. Aber ich will ehrlich sein, ganz neu ist er nicht mehr.','Stimmt, die klemmt. Da komme ich dir entgegen. Weißt du, es fällt mir schwer, mich von ihm zu trennen …','Ein Abschiedsbier für den Wagen! Du verstehst mich. {p} €, und pass gut auf ihn auf.'],
+   early:{deichsel:'Moment, ich weiß doch noch gar nicht, wo er hinkommt.',kasten:'Bier? Erst will ich wissen, wem ich ihn gebe.'},
+   bad:{letzte:[-1,0,'Das ist kein Preis, das ist ein Lebensgefährte auf vier Rädern.'],halb:[-2,2,'Nicht mehr wert?! Jetzt kostet er 2 € mehr. Für die Ehre.'],lieferung:[-1,0,'Wie denn? Im Bollerwagen?'],schwager:[-1,0,'Den Schwager behalte ich. Leider.']}}},
+ {id:'matte',n:'Suki',a:'🌿',b:12,m:'Ich möchte zwischen zwei Bäumen wohnen. Es soll in den Rucksack passen, und sobald man drin liegt, hat man keine Termine mehr.',hints:['Kein Boden, keine Stangen. Man schwebt.','Zwei Gurte, zwei Bäume, ich dazwischen.'],
+  d:{open:'Heyyy ✨ Die Hängematte ist noch da. Sie hat schon unter Sternen in drei Ländern gehangen. Wohin soll sie denn als Nächstes?',
+   opts:{reise:'Zwischen zwei Bäume an einen See, mit Buch und ohne Termine.',gurt:'In der Anzeige steht „ein Gurt ist ausgefranst". Hält der mich wirklich?',tee:'Ich bringe morgen um 10 eine Kanne Tee mit, und du erzählst mir von den drei Ländern.',letzte:'Was letzte Preis?',eilig:'Kann ich sie sofort haben? Ich hab es eilig.',neu:'Neu kostet die 25 €, das weißt du schon?',waschen:'Ist sie gewaschen?'},
+   seq:['reise','gurt','tee'],
+   good:['Ein See, ein Buch, keine Termine. Ja. Genau da will sie hin. Hast du denn noch Fragen zu ihr? Ich bin ganz offen.','Er hält, aber du hast recht, perfekt ist er nicht. Dafür geb ich nach. Und sag mal, hast du morgen ein bisschen Zeit mitgebracht?','Tee und Geschichten. Du bist ein Geschenk. {p} € und sie gehört dir.'],
+   early:{gurt:'Warte, erst will ich wissen, wohin sie reist.',tee:'Süß, aber wir kennen uns doch noch gar nicht. Wohin soll sie denn?'},
+   bad:{letzte:[-1,0,'Uff. Das Wort „Preis" macht ihre Energie ganz eng.'],eilig:[-1,0,'Eile? In einer Hängematte? Du brauchst sie dringender, als du denkst.'],neu:[-2,1,'Neu hat sie aber keine Seele. Seele kostet 1 € extra.'],waschen:[-1,0,'Sie riecht nach Lagerfeuer und Meer. Das wäscht man nicht raus.']}}},
+ {id:'roll',n:'Kiki',a:'🌈',b:25,m:'Tanzen, aber auf acht Rädern. Ich will sonntags über das alte Flugfeld gleiten und so tun, als wäre 1979.',hints:['Zu wenige Räder. Ich brauche vier pro Fuß.','Man schnürt sie. Größe 39.'],
+  d:{sn:'Rollergirl_79',sa:'🛼',open:'Hi! Ja, die Rollschuhe sind noch da. Ich hab mir leider das Steißbein geprellt und trau mich nicht mehr. Fährst du denn schon?',
+   opts:{mut:'Sie sind für eine Freundin. Die tanzt auf allem, was Rollen hat, und fällt mit Stil.',stopper:'In der Anzeige steht „Stopper vorne abgefahren". Neue kosten ja auch nochmal was.',abholen:'Ich hole sie morgen um 10 am Tempelhofer Feld ab, dann siehst du sie noch einmal rollen.',letzte:'Was letzte Preis?',steiss:'Steißbein? Dann sind die ja quasi ein Unfallwagen.',groesse:'Gibt es die auch in 41?',tausch:'Tausche gegen ein Skateboard.'},
+   seq:['mut','stopper','abholen'],
+   good:['Mit Stil fallen, das konnte ich nie. Schön, dass sie zu jemandem kommen, der sich traut. Schau sie dir aber genau an, ja?','Stimmt, die Stopper sind durch. Da geh ich runter. Am liebsten würde ich mich richtig von ihnen verabschieden …','Ein letztes Mal übers Feld, das ist so lieb. {p} €, abgemacht!'],
+   early:{stopper:'Erst mal: Für wen sind sie denn? Ich will nicht, dass sich noch jemand wehtut.',abholen:'Gern, aber wer fährt sie denn überhaupt?'},
+   bad:{letzte:[-1,0,'Autsch. Das tut fast so weh wie mein Steißbein.'],steiss:[-2,1,'Unfallwagen?! Die Schuhe können nichts dafür. 1 € Schmerzensgeld.'],groesse:[-1,0,'Nein. Es sind genau diese zwei Schuhe. Größe 39.'],tausch:[-1,0,'Skateboard? Ich hab doch gesagt, ich trau mich nicht mehr.']}}},
+ {id:'zelt',n:'Chad',a:'⛺',b:22,m:'Ich brauche ein Dach über dem Kopf, das man wirft statt baut. Es soll in zwei Sekunden stehen, denn in drei Sekunden will ich schon tanzen.',hints:['Kein Dach aus Stein. Eins aus Stoff, das man zusammenfaltet.','Man wirft es in die Luft und es steht. Festival-Klassiker.'],
+  d:{sn:'Fusion_Frieda',sa:'🏕️',open:'Hey du! Das Zelt ist noch da. Es hat eine Fusion überlebt und ich fast auch. Kennst du dich mit Wurfzelten aus?',
+   opts:{abbau:'Aufbau zwei Sekunden, Abbau eine Dreiviertelstunde und zwei Tutorials. Ich weiß, worauf ich mich einlasse.',geruch:'In der Anzeige steht „riecht noch nach Lagerfeuer". Geht das wieder raus?',hilfe:'Ich komme morgen um 10 und wir falten es zusammen. Zu zweit, mit Video.',letzte:'Was letzte Preis?',regen:'Ist es wasserdicht? Mit Garantie?',neu:'Neu gibt es das für 35 €.',platz:'Passen da auch acht Leute rein?'},
+   seq:['abbau','geruch','hilfe'],
+   good:['Haha, endlich jemand, der die Wahrheit kennt! Ich sag dir aber gleich: Es hat Charakter. Auch für die Nase.','Nein, das geht nie wieder raus. Ehrlich. Dafür geh ich runter. Mein eigentliches Problem ist: Ich kriege es allein nicht mehr in die Tasche.','Zu zweit falten! Du rettest meinen Flur. {p} € und es gehört dir.'],
+   early:{geruch:'Erst mal: Weißt du überhaupt, was ein Wurfzelt mit einem macht?',hilfe:'Lieb, aber weißt du, worauf du dich einlässt?'},
+   bad:{letzte:[-1,0,'Das Zelt hört mit. Sei bitte netter.'],regen:[-1,0,'Garantie? Auf einem Festival gibt es keine Garantien.'],neu:[-2,1,'Neu hat es aber keine Fusion überlebt. 1 € Erfahrungszuschlag.'],platz:[-1,0,'Acht? Zwei. Und die müssen sich sehr mögen.']}}},
+ {id:'bastel',n:'Lotta',a:'🎨',b:8,m:'Ich will Oma eine Karte machen, die so funkelt, dass sie eine Sonnenbrille braucht. Mir fehlt alles: was klebt, was glänzt und was bunte Streifen macht.',hints:['Nicht eine Sache. Eine ganze Kiste voll.','Heißkleber, Glitzer, Washi-Tape.'],
+  d:{sn:'Glitzer_Gabi',sa:'✨',open:'Hallo! Die Bastelkiste ist noch da. Ich höre mit dem Basteln auf, mein Mann findet überall Glitzer. Wofür brauchst du sie denn?',
+   opts:{karte:'Für eine Geburtstagskarte an eine Oma. Sie soll funkeln wie eine Discokugel.',glitzer:'In der Anzeige steht „Glitzer ist überall". Dann ist ja gar nicht mehr viel in den Döschen, oder?',rest:'Ich nehme morgen um 10 alles mit, auch den Glitzer aus dem Flur. Ich bringe einen Handfeger mit.',letzte:'Was letzte Preis?',einzeln:'Verkaufst du auch nur das Washi-Tape einzeln?',mann:'Dein Mann hat recht, Glitzer ist die Pest.',kleber:'Ist der Heißkleber noch heiß?'},
+   seq:['karte','glitzer','rest'],
+   good:['Eine Karte für die Oma! Da lacht mein Herz. Aber ich muss dir was gestehen …','Erwischt. Die Hälfte klebt in meinem Teppich. Dafür wird es billiger. Wenn ich nur wüsste, wie ich den Rest jemals loswerde …','Du nimmst den Glitzer aus dem Flur mit?! Mein Mann wird dich lieben. {p} €, und alles gehört dir.'],
+   early:{glitzer:'Sag mir erst, was du damit vorhast. Ich gebe sie nicht an jeden.',rest:'Sehr gründlich! Aber was willst du denn überhaupt basteln?'},
+   bad:{letzte:[-1,0,'Beim Basteln redet man nicht über Geld. Man redet über Farben.'],einzeln:[-1,0,'Nein, die Kiste bleibt zusammen. Die kennen sich seit Jahren.'],mann:[-2,1,'Die Pest?! Glitzer ist Freude in Pulverform. 1 € Strafe.'],kleber:[-1,0,'Nur, wenn man die Pistole einsteckt. Das weißt du hoffentlich.']}}},
+ {id:'yoga',n:'Brix',a:'🧘',b:6,m:'Mein Rücken hat gekündigt. Ich brauche etwas Langes, Weiches zum Ausrollen, auf dem ich so tun kann, als wäre ich ein herabschauender Hund.',hints:['Kein Teppich. Dünner, und man rollt sie nach dem Sport wieder ein.','Namaste. Zwei Mal benutzt.'],
+  d:{open:'Hi. Ja, die Matte ist noch da. Premium-Kork-Optik, praktisch unbenutzt. Ich mache jetzt Pilates am Gerät.',
+   opts:{vorsatz:'„2x benutzt (Vorsätze)" steht da. Der Januar war hart, oder?',ecke:'In der Anzeige steht auch „leicht eingerollte Ecke". Über die stolpert man doch im Krieger.',abholen:'Ich hole sie morgen um 10 ab, vor deinem Kurs.',letzte:'Was letzte Preis?',nett:'Wow, Pilates am Gerät! Erzähl mir alles darüber.',kork:'Ist das echter Kork?',probe:'Kann ich einmal probeliegen?'},
+   seq:['vorsatz','ecke','abholen'],
+   good:['Okay, ja. Der Januar und ich, das war nichts. Touché. Aber sonst ist sie wirklich wie neu.','Stimmt, die Ecke nervt. Fair. Ich geh runter. Aber schnell bitte, ich hab morgen um elf Reformer-Kurs.','Vor dem Kurs, perfekt. {p} €. Namaste oder so.'],
+   early:{ecke:'Die Matte ist makellos. Fast. Worauf willst du hinaus?',abholen:'Welcher Kurs? Und wir haben uns doch noch gar nicht geeinigt.'},
+   bad:{letzte:[-2,0,'Auf dem Niveau verhandle ich nicht. Auch nicht im Schneidersitz.'],nett:[-1,0,'Das würdest du nicht verstehen. Es ist sehr fortgeschritten.'],kork:[-1,1,'Kork-OPTIK. Lies genauer. 1 € Lesegebühr.'],probe:[-1,0,'Probeliegen? Das ist eine Matte, kein Hotel.']}}},
+ {id:'koffer',n:'Pia',a:'✈️',b:10,m:'Nächste Woche fliege ich weg und darf nur ein kleines Gepäckstück mitnehmen. Ich suche etwas mit Griff zum Ausziehen, das neben mir herrollt wie ein treuer Hund.',hints:['Zu groß gedacht. Es muss ins Gepäckfach über dem Sitz.','Vier Rollen. Eine davon hat eine eigene Meinung.'],
+  d:{sn:'Weltenbummler_Kai',sa:'🌍',open:'Hallo! Der Koffer ist noch da. Er war mit mir in Lissabon, Tiflis und aus Versehen in Hannover. Wohin soll er denn mit dir?',
+   opts:{ziel:'Er darf mit nach Portugal. Ans Meer, wo er schon mal war.',rad:'In der Anzeige steht „ein Rad eiert". Auf Kopfsteinpflaster wird das laut.',postkarte:'Ich hole ihn morgen um 10 und schicke dir aus Portugal eine Postkarte von ihm.',letzte:'Was letzte Preis?',hannover:'Hannover? Dann bringt er ja Unglück.',schloss:'Hat er ein Zahlenschloss? Wie ist der Code?',gross:'Passt da auch ein Zelt rein?'},
+   seq:['ziel','rad','postkarte'],
+   good:['Zurück nach Portugal! Das wird ihm gefallen. Ich will aber ehrlich sein: Ganz fit ist er nicht mehr.','Ja, das Rad. Es singt. Dafür lass ich nach. Weißt du, ich würde so gern wissen, wie es ihm dann geht …','Eine Postkarte vom Koffer! Abgemacht. {p} €, und gute Reise euch beiden.'],
+   early:{rad:'Erst mal: Wohin soll er denn? Das ist mir wichtig.',postkarte:'Postkarte woher denn? Du hast noch gar nicht gesagt, wohin es geht.'},
+   bad:{letzte:[-1,0,'So spricht man nicht über einen Reisegefährten.'],hannover:[-2,1,'Hannover war ein Versehen, kein Unglück! 1 € für die Beleidigung.'],schloss:[-1,0,'Den Code verrate ich doch nicht im Chat.'],gross:[-1,0,'Es ist Handgepäck. Da passt eine Zahnbürste rein und Hoffnung.']}}},
+ {id:'bauch',n:'Nele',a:'🎪',b:4,m:'Ich brauche etwas, das ich mir umschnalle und das glitzert. Es muss genau drei Dinge halten: Handy, Lippenbalsam und einen zerknüllten Fünfer.',hints:['Nicht für den Rücken. Für vorne, um die Hüfte.','Sie glitzert und hat eine Schnalle.'],
+  d:{sn:'Disco_Dörte',sa:'💖',open:'Huhu! Die Bauchtasche ist noch da. Sie war auf jedem Festival seit 2016 dabei. Tanzt du denn auch?',
+   opts:{tanzen:'Bis die Sonne aufgeht. Und dann noch ein bisschen.',reiss:'In der Anzeige steht „Reißverschluss hakt". Kommt man da im Dunkeln noch an sein Geld?',glitzer:'Ich hole sie morgen um 10 und bringe dir zum Tausch ein Döschen Glitzer fürs Gesicht mit.',letzte:'Was letzte Preis?',praktisch:'Ich brauche sie nur zum Joggen.',alt:'Seit 2016? Dann ist sie ja uralt.',fuenfer:'Ist der zerknüllte Fünfer noch drin?'},
+   seq:['tanzen','reiss','glitzer'],
+   good:['Jaaa! Dann versteht ihr euch. Aber ich muss dich warnen, sie hat eine kleine Macke.','Er hakt, ja. Man braucht Geduld und zwei Hände. Dafür geb ich nach. Ach, ich werde sie vermissen, und ihren Glitzer erst …','Glitzer gegen Glitzer! So macht man Geschäfte. {p} € und viel Spaß beim Tanzen.'],
+   early:{reiss:'Erst sag mir: Tanzt du überhaupt?',glitzer:'Uiii, aber erst will ich wissen, ob du tanzt.'},
+   bad:{letzte:[-1,0,'Das hat sie jetzt gehört. Sie ist beleidigt.'],praktisch:[-2,0,'Zum JOGGEN? Diese Tasche? Niemals.'],alt:[-1,1,'Uralt? Vintage! 1 € Aufschlag fürs Vokabular.'],fuenfer:[-1,0,'Den hab ich 2019 gegen eine Falafel getauscht.']}}},
+ {id:'shaker',n:'Jo',a:'🍹',b:9,m:'Samstag kommen alle zu mir. Ich brauche etwas aus Metall, in das man Flüssiges und Eis füllt und dann so lange schüttelt, bis alle klatschen.',hints:['Kein Mixer mit Stecker. Man schüttelt mit den Händen.','Messbecher und Stößel sind auch dabei.'],
+  d:{sn:'bar.mitte',sa:'🍸',open:'Hi. Das Set ist noch verfügbar. Barkeeper-Qualität, komplett. Ich steige auf alkoholfreie Fermente um.',
+   opts:{sieb:'Komplett? In der Anzeige steht „Sieb fehlt".',rezept:'Verrätst du mir dein bestes Rezept? Dann lohnt sich das Set auch ohne Sieb.',abholen:'Ich hole es morgen um 10 ab. Dann hast du Platz für deine Fermente.',letzte:'Was letzte Preis?',aperol:'Ist der Aperol wirklich nicht dabei?',ferment:'Fermente? Klingt eklig.',spuelen:'Ist das spülmaschinenfest?'},
+   seq:['sieb','rezept','abholen'],
+   good:['Okay. Erwischt. Das Sieb ist auf einer WG-Party verschwunden. Aber den Rest kann ich im Schlaf bedienen.','Endlich fragt mal jemand! Zwei Teile Gin, einer Zitrone, einer Zucker, ein Eiweiß. Für die Frage geh ich runter. Mein Regal platzt übrigens aus allen Nähten.','Platz für die Fermente. Du denkst mit. {p} €, cheers.'],
+   early:{rezept:'Rezepte gibt es nur für Leute, die genau lesen.',abholen:'Wir sind uns doch noch gar nicht einig.'},
+   bad:{letzte:[-2,0,'Auf dem Niveau mixe ich nicht.'],aperol:[-1,0,'Steht im Titel. Nicht dabei. Ich wiederhole mich ungern.'],ferment:[-2,1,'Eklig?! Das ist Kultur. Lebende sogar. 1 € Ignoranzzuschlag.'],spuelen:[-1,0,'Edelstahl wird von Hand poliert. Mit Liebe.']}}},
+ {id:'rad',n:'Papa',a:'🚲',b:45,m:'Mein Auto bleibt jetzt öfter stehen. Ich suche etwas mit zwei Rädern und einer Klingel, auf dem man aufrecht sitzt wie ein König und nie schneller fährt, als man denken kann.',hints:['Kein Roller. Man tritt in die Pedale und sitzt sehr gerade.','Es kommt aus dem Land der Tulpen. Null Gänge.'],
+  d:{sn:'Rad_Rüdiger',sa:'🔧',open:'Tach. Das Rad ist noch da. Hab ich 1987 gekauft, läuft wie am ersten Tag. Nur an Leute, die es pflegen.',
+   opts:{pflege:'Es bekommt jede Woche Öl auf die Kette und im Winter einen Platz im Keller.',licht:'In der Anzeige steht „Licht geht nicht". Das muss ich dann ja erst machen lassen.',abholen:'Ich komme morgen um 10, zahle bar und fahre direkt damit nach Hause.',letzte:'Was letzte Preis?',quietsch:'Es quietscht? Dann ist es ja kaputt.',ebike:'Kann man da einen Motor dranbauen?',probe:'Ich würde erst mal eine Woche Probe fahren.'},
+   seq:['pflege','licht','abholen'],
+   good:['Öl und Keller. So gehört sich das. Sie scheinen in Ordnung zu sein. Fragen zum Rad?','Hm. Das Licht. Ja. Das hätte ich längst machen sollen. Dafür lass ich nach. Aber ich reserviere nichts, damit das klar ist.','Bar und gleich mitnehmen. So macht man das. {p} €. Und nicht im Regen stehen lassen!'],
+   early:{licht:'Erst will ich wissen, ob Sie es überhaupt pflegen.',abholen:'Nicht so schnell. Wem gebe ich es denn?'},
+   bad:{letzte:[-2,2,'Für die Frage kostet es 2 € mehr.'],quietsch:[-2,0,'Das Quietschen ist die Klingel für Fortgeschrittene.'],ebike:[-3,0,'Einen MOTOR? An dieses Rad? Gespräch beendet.'],probe:[-1,0,'Eine Woche? Ich bin doch kein Verleih.']}}},
+ {id:'licht',n:'Bea',a:'🌙',b:6,m:'Mein Balkon ist abends ein schwarzes Loch. Ich suche zehn Meter warmes Glück an einer Schnur, das aus jedem Geländer einen Biergarten macht.',hints:['Keine einzelne Lampe. Viele kleine, hintereinander.','Zehn Meter, warmweiß, zwei Lämpchen sind aus.'],
+  d:{sn:'Auszug_Ole',sa:'📦',open:'JA NOCH DA!! Ich ziehe am Wochenende aus und hab noch 40 Sachen online. Welche Anzeige war das? Die Lichterkette? Die hängt noch am Balkon!!',
+   opts:{abnehmen:'Kein Problem, ich bringe morgen um 10 eine Leiter mit und nehme sie selbst ab.',lampen:'In der Anzeige steht „zwei Lämpchen sind aus". Bei zehn Metern fällt das auf.',sofort:'Ich nehme sie so, wie sie ist, zahle passend und bin in fünf Minuten wieder weg.',letzte:'Was letzte Preis?',nett:'Oh, ein Umzug! Wohin geht es denn? Erzähl mal.',reserv:'Kannst du sie mir bis nächsten Monat reservieren?',farbe:'Gibt es die auch in bunt?'},
+   seq:['abnehmen','lampen','sofort'],
+   good:['DU NIMMST SIE SELBST AB?? Ein Problem weniger!! Schau sie dir aber vorher an, nicht dass du meckerst.','Ja stimmt, zwei sind aus. Egal, dann billiger. Ich hab nur keine Zeit für langes Hin und Her!!','FÜNF MINUTEN. Du bist die beste Käuferin der Woche. {p} €!!'],
+   early:{lampen:'Erst mal muss das Ding vom Balkon runter!! Wer macht das??',sofort:'Schnell ist gut, aber sie hängt noch DRAUSSEN!!'},
+   bad:{letzte:[-1,0,'KEINE ZEIT FÜR RÄTSEL!!'],nett:[-1,0,'Keine Zeit zum Erzählen, ich packe!!'],reserv:[-2,1,'NÄCHSTEN MONAT wohne ich woanders!! 1 € Nervenzuschlag.'],farbe:[-1,0,'Es gibt genau DIESE. Warmweiß.']}}}
+];
+const S={grantler:{n:'Manfred_1958',a:'👴'},hippie:{n:'Luna_Mondkind',a:'🌙'},hipster:{n:'studio.mitte',a:'🕶️'},eilig:{n:'Umzug_morgen!!',a:'📦'}};
+let save={found:[]};
+// Zum Testen: Adresse mit #neu am Ende löscht den Spielstand auf diesem Gerät
+if(location.hash==='#neu'){try{localStorage.removeItem('kiezkram');localStorage.removeItem('kiezkram-ses')}catch(e){}try{history.replaceState(null,'',location.pathname)}catch(e){try{location.hash=''}catch(e2){}}}
+// Wird #neu oder #morgen nur an die Adresse gehängt (ohne Neuladen), lädt die Seite selbst neu
+addEventListener('hashchange',()=>{if(/^#(neu|morgen\d*)$/.test(location.hash))location.reload()});
+try{save=JSON.parse(localStorage.getItem('kiezkram'))||save}catch(e){}
+save.found=(save.found||[]).filter(id=>A.some(a=>a.id===id));
+save.wall=save.wall||'lila';save.items=save.items||{};save.orders=save.orders||{};
+// Testhilfe: #morgen = so tun, als wäre morgen; #morgen10 = morgen um 10 Uhr
+const TEST=location.hash.match(/^#morgen(\d*)$/);
+let SIM=null;
+// Marias Geburtstag: 11. Oktober, jedes Jahr. Kuchen mit Brief in der Küche, den ganzen Tag steuerbar, beliebig viele Spiele.
+const isBday=()=>{const d=new Date(Date.now()+(TEST||SIM!==null?864e5:0));return d.getMonth()===9&&d.getDate()===11};
+const dayNum=()=>Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5)+(TEST||SIM!==null?1:0);
+const hourNow=()=>SIM!==null?SIM:TEST&&TEST[1]?+TEST[1]:new Date().getHours()+new Date().getMinutes()/60;
+const WALLS={lila:['Aubergine','#3a2c57'],rosa:['Altrosa','#7d4257'],terra:['Terrakotta','#8a4636'],honig:['Honig','#8f6a34'],pfirsich:['Pfirsich','#a8644f']};
+const wallCol=id=>(WALLS[id]||WALLS.lila)[1];
+// Streichen: am Tag nach der Bestellung 8–12 Uhr weiß grundieren, 12–16 Uhr neue Farbe. Liefert Fortschritt 0..1 für beides.
+function paintState(){
+  const p=save.paint;if(!p)return null;const d=dayNum()-p.day,cl=v=>Math.max(0,Math.min(1,v));
+  if(d<=0)return{w:0,c:0};
+  const h=hourNow(),st={w:d>1?1:cl((h-8)/4),c:d>1?1:cl((h-12)/4)};
+  if(st.c>=1){save.wall=p.to;delete save.paint;persist();return null}
+  return st;
+}
+const playedToday=()=>save.played===dayNum()&&!isBday(); // am Geburtstag gibt es keine Tagessperre
+const persist=()=>{try{localStorage.setItem('kiezkram',JSON.stringify(save))}catch(e){}};
+persist();
+// Pixel-Porträts wie in Dialogboxen alter Farmspiele: 16x16, aus Hautton, Frisur, Kleidung und Extras zusammengesetzt
+const SK={l:'#f1c9a5',t:'#dba77c',b:'#a9693f',d:'#7a4a2b',r:'#eab59a'};
+const FACE={
+ 'Brudi':{s:SK.l,h:'#6b4226',st:'short',c:'#3bb061',bg:'#ffe9a8'},
+ 'Tantchen':{s:SK.l,h:'#c4452d',st:'curly',c:'#7b2cbf',bg:'#ffd0e0',ear:1,blush:1,lip:'#d81b60'},
+ 'Mimi':{s:SK.t,h:'#14111c',st:'long',c:'#ff5fa2',bg:'#d9ccff',blush:1},
+ 'Otis':{s:SK.r,h:'#b9b4c4',st:'bald',c:'#8fc3e8',bg:'#c8f0e0',b:2},
+ 'Jule':{s:SK.l,h:'#e8c15a',st:'bun',c:'#ff8a3d',bg:'#cfe8ff',blush:1},
+ 'Suki':{s:SK.t,h:'#3d281f',st:'long',c:'#8fb39a',bg:'#e9f5c9',band:'#3bb061'},
+ 'Kiki':{s:SK.b,h:'#ff5fa2',st:'curly',c:'#3fcfb8',bg:'#fff0a8',ear:1},
+ 'Chad':{s:SK.t,h:'#3d281f',st:'cap',hat:'#e2557f',c:'#f5cb1f',bg:'#bfe3f5',b:1},
+ 'Lotta':{s:SK.l,h:'#e8c15a',st:'buns',c:'#ff7ab0',bg:'#e0d0ff',blush:1},
+ 'Brix':{s:SK.l,h:'#8a5a3a',st:'long',c:'#9aa3b5',bg:'#ffe0c8',g:1},
+ 'Pia':{s:SK.d,h:'#14111c',st:'curlylong',c:'#f5cb1f',bg:'#ffd0d8',ear:1},
+ 'Nele':{s:SK.l,h:'#5a8fe8',st:'buns',c:'#c9b3ff',bg:'#ffe9a8',blush:1},
+ 'Jo':{s:SK.b,h:'#14111c',st:'short',c:'#d8452d',bg:'#c8f0c8',b:1},
+ 'Papa':{s:SK.l,h:'#b9b4c4',st:'short',c:'#4a5aa8',bg:'#e8e3d5',g:1,b:2},
+ 'Bea':{s:SK.d,h:'#14111c',st:'bun',c:'#3fcfb8',bg:'#d9ccff',ear:1,blush:1},
+ 'Manfred_1958':{s:SK.r,h:'#d8d4e0',st:'sides',c:'#775238',bg:'#d8d0c0',g:1},
+ 'Luna_Mondkind':{s:SK.l,h:'#c9b3ff',st:'long',c:'#fff8e7',bg:'#2a2140',band:'#f5cb1f',blush:1},
+ 'studio.mitte':{s:SK.l,h:'#14111c',st:'beanie',hat:'#14111c',c:'#14111c',bg:'#e8e3d5',g:2},
+ 'Umzug_morgen!!':{s:SK.t,h:'#6b4226',st:'bun',c:'#9aa3b5',bg:'#ffe0c8',blush:1},
+ 'Aufguss_Uwe':{s:'#f0a48a',h:'#b9b4c4',st:'bald',c:'#fff8e7',bg:'#ffb38a'},
+ 'Schwager_Bernd':{s:SK.r,h:'#6b4226',st:'short',c:'#4a7a3a',bg:'#e9f5c9',b:1},
+ 'Rollergirl_79':{s:SK.t,h:'#e8813a',st:'curly',c:'#3fcfb8',bg:'#ffd0e0',band:'#fff'},
+ 'Fusion_Frieda':{s:SK.l,h:'#4a9a6a',st:'long',c:'#7b2cbf',bg:'#ffe9a8',band:'#ff8a3d'},
+ 'Glitzer_Gabi':{s:SK.l,h:'#f0d98a',st:'curly',c:'#ff5fa2',bg:'#e0d0ff',g:1,blush:1},
+ 'Weltenbummler_Kai':{s:SK.t,h:'#8a5a3a',st:'cap',hat:'#4a5aa8',c:'#efe2c4',bg:'#bfe3f5',b:1},
+ 'Disco_Dörte':{s:SK.l,h:'#ff7ab0',st:'long',c:'#f5cb1f',bg:'#7b2cbf',ear:1,blush:1},
+ 'bar.mitte':{s:SK.l,h:'#14111c',st:'short',c:'#fff',bg:'#3a3350',b:2},
+ 'Rad_Rüdiger':{s:SK.r,h:'#b9b4c4',st:'cap',hat:'#5a3b2e',c:'#8fc3e8',bg:'#d8e8c8',b:2},
+ 'Auszug_Ole':{s:SK.l,h:'#e8c15a',st:'short',c:'#ff8a3d',bg:'#ffe0c8'}
+};
+const FACEURL={};
+// Porträt in 32x32 mit Schattierung und Mimik. mood: happy, neutral, annoyed, angry, sad
+function faceURL(name,mood='neutral'){
+  const key=name+'|'+mood;if(FACEURL[key])return FACEURL[key];const f=FACE[name];if(!f)return null;
+  const cvs=document.createElement('canvas');cvs.width=cvs.height=32;const g=cvs.getContext('2d'),P=(col,x,y,w,h)=>{g.fillStyle=col;g.fillRect(x,y,w,h)};
+  const H=f.h,D='#241a33',SH='rgba(40,10,50,.22)',HI='rgba(255,255,255,.32)',lg=f.st==='long'||f.st==='curlylong',lip=f.lip||'#c2415a';
+  P(f.bg,0,0,32,32);for(let y=0;y<4;y++)for(let x=0;x<4;x++)if((x+y)%2)P('rgba(255,255,255,.22)',x*8,y*8,8,8);
+  if(lg){P(H,5,8,22,22);P(SH,5,24,22,6)}
+  P(f.c,6,26,20,6);P(f.c,4,28,24,4);P(SH,4,31,24,1);P(HI,7,26,5,1);P(f.s,14,23,4,4);P(SH,14,23,4,1);
+  P(f.s,8,8,16,15);P(f.s,9,7,14,1);P(f.s,9,23,14,1);P(f.s,11,24,10,1);P(f.s,7,14,1,3);P(f.s,24,14,1,3);P(SH,8,22,1,1);P(SH,23,22,1,1);
+  const top=()=>{P(H,8,4,16,4);P(H,7,6,2,6);P(H,23,6,2,6);P(HI,11,5,5,1)};
+  if(f.st==='short'){top();P(H,8,8,5,2);P(H,20,8,4,2);P(H,13,8,3,1)}
+  else if(f.st==='long'){top();P(H,6,6,2,22);P(H,24,6,2,22);P(H,8,8,6,2);P(H,19,8,5,2);P(H,8,10,2,3);P(HI,6,12,1,8)}
+  else if(f.st==='curly'||f.st==='curlylong'){P(H,6,4,20,6);[7,11,15,19,23].forEach(x=>P(H,x,2,3,2));P(H,4,6,3,8);P(H,25,6,3,8);P(H,8,10,3,1);P(H,20,10,4,1);P(HI,10,4,4,1);P(HI,18,5,3,1);if(lg){P(H,4,14,4,13);P(H,24,14,4,13);P(H,3,18,1,5);P(H,28,18,1,5)}}
+  else if(f.st==='bun'){top();P(H,12,0,8,4);P(HI,14,1,3,1);P(H,8,8,5,2);P(H,20,8,4,1)}
+  else if(f.st==='buns'){top();P(H,4,2,6,6);P(H,22,2,6,6);P(HI,5,3,2,1);P(HI,23,3,2,1);P(H,8,8,7,2);P(H,20,8,4,1)}
+  else if(f.st==='sides'){P(H,6,8,2,8);P(H,24,8,2,8);P(H,8,6,2,2);P(H,22,6,2,2);P(HI,12,7,6,1)}
+  else if(f.st==='cap'){P(f.hat,8,2,16,6);P(f.hat,6,8,22,2);P(HI,10,3,6,1);P(SH,6,9,22,1);P(H,6,10,2,4);P(H,24,10,2,4)}
+  else if(f.st==='beanie'){P(f.hat,8,2,16,4);P(f.hat,6,6,20,4);P(HI,10,3,5,1);P(SH,6,9,20,1)}
+  else P(HI,12,8,6,1);
+  if(f.band){P(f.band,8,6,16,2)}
+  P(SH,8,10,16,1);
+  // Augenbrauen je nach Stimmung
+  const bc=f.st==='bald'||f.st==='sides'?'#8a8296':H;
+  if(mood==='angry'||mood==='annoyed'){P(bc,10,11,2,1);P(bc,12,12,2,1);P(bc,20,11,2,1);P(bc,18,12,2,1)}
+  else if(mood==='sad'){P(bc,10,12,2,1);P(bc,12,11,2,1);P(bc,20,12,2,1);P(bc,18,11,2,1)}
+  else{P(bc,10,11,4,1);P(bc,18,11,4,1)}
+  // Augen
+  if(f.g!==2){
+    if(mood==='happy'){[[10,0],[18,0]].forEach(([x])=>{P(D,x,15,1,1);P(D,x+1,14,2,1);P(D,x+3,15,1,1)})}
+    else{[10,18].forEach(x=>{P('#fff',x,14,4,4);P(D,x+1,14,3,4);P(f.eye||'#5a3b2e',x+1,16,2,2);P('#fff',x+1,14,1,1);P(D,x,13,4,1)});
+      if(mood==='annoyed'||mood==='angry'){P(f.s,10,14,4,1);P(D,10,14,4,1);P(f.s,18,14,4,1);P(D,18,14,4,1)}}
+  }
+  P('rgba(60,20,40,.2)',15,18,2,1);
+  if(f.blush||mood==='happy'){P('rgba(255,95,140,.45)',9,18,3,2);P('rgba(255,95,140,.45)',20,18,3,2)}
+  // Bart
+  if(f.b===1){P(H,8,18,16,6);P(H,10,24,12,1);P(H,12,25,8,1);P(f.s,13,19,6,3);P(SH,8,23,16,1)}
+  if(f.b===2){P(H,12,19,8,1);P(H,11,20,3,1);P(H,18,20,3,1)}
+  // Mund
+  const my=f.b===2?21:20;
+  if(mood==='happy'){P(D,13,my,6,1);P(lip,13,my+1,6,1);P(lip,14,my+2,4,1);P('#fff',14,my,4,1)}
+  else if(mood==='neutral'){P(lip,14,my+1,4,1)}
+  else if(mood==='annoyed'){P(lip,14,my+1,4,1);P(lip,18,my,1,1)}
+  else{P(lip,14,my,4,1);P(lip,13,my+1,1,1);P(lip,18,my+1,1,1)}
+  if(mood==='angry'){P('#ff5f5f',25,5,1,3);P('#ff5f5f',24,6,3,1)}
+  if(mood==='sad'){P('#9fd6ff',23,16,1,2)}
+  if(f.g===1){P(D,9,13,6,1);P(D,9,18,6,1);P(D,9,13,1,6);P(D,14,13,1,6);P(D,17,13,6,1);P(D,17,18,6,1);P(D,17,13,1,6);P(D,22,13,1,6);P(D,15,15,2,1);P(HI,10,14,2,1);P(HI,18,14,2,1)}
+  if(f.g===2){P('#0d0a1a',9,13,6,5);P('#0d0a1a',17,13,6,5);P('#0d0a1a',15,14,2,1);P(HI,10,14,2,1);P(HI,18,14,2,1)}
+  if(f.ear){P('#f5cb1f',6,17,2,2);P('#f5cb1f',24,17,2,2)}
+  return FACEURL[key]=cvs.toDataURL();
+}
+const ava=(o,mood)=>{const u=faceURL(o.n,mood);return `<div class="ava">${u?`<img src="${u}" alt="">`:o.a}</div>`};
+const PLZ={Friedrichshain:'10245',Neukölln:'12047','Prenzlauer Berg':'10437',Wedding:'13353',Charlottenburg:'10627',Kreuzberg:'10997',Steglitz:'12163',Schöneberg:'10827',Tempelhof:'12101',Treptow:'12435',Moabit:'10551',Pankow:'13187',Lichtenberg:'10365',Köpenick:'12555',Spandau:'13597',Mitte:'10115'};
+const when=i=>['Heute, 20:14','Heute, 18:02','Gestern, 22:47','Gestern, 09:15'][L.indexOf(i)%4];
+let G=null;
+const sellerOf=i=>{const j=A.find(a=>a.id===i.id);return j&&j.d.sn?{n:j.d.sn,a:j.d.sa}:S[i.s]};
+// Spielstand der laufenden Runde: übersteht Neuladen, Bildschirmsperre und Updates der Seite.
+const snap=stage=>{try{localStorage.setItem('kiezkram-ses',JSON.stringify(stage==='home'||!G?{stage:'home'}:{stage,i:G.i,stars:G.stars,tries:G.tries,hint:G.hint,n:G.n&&{...G.n,i:G.n.i.id}}))}catch(e){}};
+const unsnap=()=>{try{localStorage.removeItem('kiezkram-ses')}catch(e){}};
+const shuffle=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const byId=id=>L.find(x=>x.id===id);
+const thumb=i=>`<div class="thumb" style="background:hsl(${i.h} 80% 86%)">${i.e}</div>`;
+const eur=p=>p===0?'Geschenkt':p+' €';
+const set=(html,cls='')=>{el.className='screen '+cls;el.innerHTML=html};
+const album=()=>`<div class="album" style="width:100%">${A.map(a=>`<span class="${save.found.includes(a.id)?'':'off'}"><i style="font-style:normal">${byId(a.id).e}</i></span>`).join('')}</div>`;
+
+// Wie viele Aufträge heute schon erledigt sind (drei pro Abend, dann ist Schluss)
+const today=()=>{if(!save.today||save.today.d!==dayNum())save.today={d:dayNum(),n:0,s:0};return save.today};
+// Jeden Abend teilt das Spiel die nächsten drei Aufträge zu (fünf feste Dreiergruppen, der Reihe nach)
+const grp=()=>3*((save.kg||0)%Math.floor(A.length/3));
+function home(){
+  pill.textContent=save.found.length+'/'+A.length;save.stars=save.stars||{};const gs=grp();
+  set(`<div class="stack">${isBday()?'<span class="tag">Alles Gute zum Geburtstag!</span>':''}<h2>Jemand sucht was. Du findest es.</h2>
+    <p class="small">Heute haben dir diese drei geschrieben:</p></div>
+  <div class="scroll" id="joblist">${A.slice(gs,gs+3).map(a=>{const st=save.stars[a.id];return `<div class="item">${ava(a,st?'happy':'neutral')}<div class="t"><b>${a.n}</b><span class="small muted">Budget ${a.b} €</span></div><span class="price">${st?'★'.repeat(st):'neu'}</span></div>`}).join('')}</div>
+  <button class="btn main" id="go">Nachrichten lesen</button>`);
+  $('#go').onclick=()=>{save.today={d:dayNum(),n:0,s:0};start(gs)};
+  snap('home');
+}
+function start(i){
+  G={jobs:A,i,stars:[],list:shuffle(L)};
+  job();
+}
+function job(){
+  const j=G.jobs[G.i]; G.tries=0; G.cat='Alles'; G.q=''; G.open=false; G.hint=null;
+  pill.textContent='Auftrag '+(G.i-grp()+1)+'/3';
+  set(`<div class="scroll">
+    <div class="who">${ava(j)}${j.n} schreibt dir</div>
+    <div class="bubble big">${j.m}</div>
+    <div class="budget"><span>Budget</span><span class="price" style="font-size:24px">${j.b} €</span></div>
+  </div>
+  <button class="btn main" id="go">Anzeigen durchstöbern</button>`);
+  $('#go').onclick=browse;
+  snap('job');
+}
+function browse(){
+  const j=G.jobs[G.i];
+  set(`<input class="search" id="q" type="search" placeholder="Suchen in Berlin" value="${G.q.replace(/"/g,'&quot;')}" autocomplete="off">
+  <div class="chips">${CATS.map(c=>`<button class="chip ${c===G.cat?'on':''}" data-c="${c}">${c}</button>`).join('')}</div>
+  <div class="scroll" id="list"></div>
+  <button class="task ${G.open?'':'shut'}" id="task"><b>${j.n} sucht · Budget ${j.b} €</b><span>${G.hint||j.m}</span></button>`);
+  const draw=()=>{
+    const q=G.q.trim().toLowerCase();
+    const r=G.list.filter(i=>(G.cat==='Alles'||i.c===G.cat)&&(!q||(i.t+' '+i.d+' '+i.k).toLowerCase().includes(q)));
+    $('#list').innerHTML=r.length?r.map(i=>`<button class="item" data-id="${i.id}">${thumb(i)}<div class="t"><span class="small muted">${PLZ[i.k]} ${i.k} · ${when(i)}</span><b>${i.t}</b><span class="price">${eur(i.p)}${i.p?' VB':''}</span></div></button>`).join(''):'<p class="muted">Nichts gefunden. Probier ein anderes Wort.</p>';
+  };
+  draw();
+  $('#q').oninput=e=>{G.q=e.target.value;draw()};
+  el.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{G.cat=b.dataset.c;browse()});
+  $('#list').onclick=e=>{const b=e.target.closest('.item');if(b)detail(byId(b.dataset.id))};
+  $('#task').onclick=()=>{G.open=!G.open;$('#task').classList.toggle('shut',!G.open)};
+  snap('browse');
+}
+function detail(i){
+  const s=sellerOf(i);
+  set(`<div class="scroll detail">
+    ${thumb(i)}
+    <div class="card"><h2>${i.t}</h2><span class="price" style="font-size:22px">${eur(i.p)}${i.p?' VB':''}</span><p class="small muted">${PLZ[i.k]} Berlin - ${i.k} · ${when(i)}</p></div>
+    <div class="card"><b>Details</b><div class="kv"><span>Art</span><span>${i.c}</span><span>Zustand</span><span>Gebraucht</span><span>Versand</span><span>Nur Abholung</span></div></div>
+    <div class="card"><b>Beschreibung</b><p>${i.d}</p></div>
+    <div class="card who">${ava(s)}<div><div>${s.n}</div><div class="small muted" style="font-weight:400">Privater Nutzer · Aktiv seit ${2015+i.h%9}</div><div class="small" style="font-weight:400;color:var(--kz)">TOP Zufriedenheit · Sehr freundlich</div></div></div>
+  </div>
+  <div class="stack"><button class="btn main" id="yes">Das ist es! Nachricht schreiben</button><button class="btn" id="back">Zurück</button></div>`);
+  $('#back').onclick=browse;
+  $('#yes').onclick=()=>{
+    const j=G.jobs[G.i];
+    if(i.id===j.id)haggle(i);
+    else{ G.hint=j.hints[Math.min(G.tries,j.hints.length-1)]; G.tries++; G.open=true;
+      set(`<div class="scroll"><div class="sys">Du schickst ${j.n} die Anzeige „${i.t}"</div>
+        <div class="who">${ava(j,'sad')}${j.n}</div><div class="bubble big">${G.hint}</div></div>
+        <button class="btn main" id="go">Weitersuchen</button>`);
+      $('#go').onclick=browse; }
+  };
+}
+function haggle(i){
+  G.n={i,step:0,mood:3,pen:0,miss:0,gone:[],log:[{w:'s',t:G.jobs[G.i].d.open}]};
+  chat();
+}
+function priceAt(n){
+  const j=G.jobs[G.i], f=Math.max(1,j.b-1);
+  return Math.round(n.i.p-(n.i.p-f)*n.step/3)+n.pen;
+}
+function chat(){
+  const n=G.n,i=n.i,s=sellerOf(i),j=G.jobs[G.i],d=j.d,p=priceAt(n),m=Math.max(0,Math.min(5,n.mood));
+  let opts='',head='';
+  if(n.mood<=0) opts=`<button class="btn main" id="again">Neu anschreiben</button>`;
+  else if(n.step>=3){ head=`${j.n}s Budget: ${j.b} €`; opts=`<button class="btn main" id="deal">Deal für ${p} € 🤝</button>` }
+  else{
+    const rest=d.seq.slice(n.step), wrong=shuffle(Object.keys(d.bad).filter(k=>!n.gone.includes(k))).slice(0,4-rest.length);
+    head=`Antwort ${n.step+1} von 3 · Lies genau, was ${s.n} schreibt.`;
+    opts=shuffle([...rest,...wrong]).map(k=>`<button class="opt" data-k="${k}">${d.opts[k]}</button>`).join('');
+  }
+  set(`<div class="chathead">${ava(s,n.step>=3||n.mood>=4?'happy':n.mood===3?'neutral':n.mood===2?'annoyed':'angry')}<div class="t"><b>${s.n}</b><span class="small muted">${i.t}</span></div>
+    <div style="text-align:right"><div class="price" style="font-size:21px">${p} €</div><div class="mood" title="Laune">${'♥'.repeat(m)}${'♡'.repeat(5-m)}</div></div></div>
+  <div class="scroll" id="log">${n.log.map(x=>x.w==='x'?`<div class="sys ${x.c||''}">${x.t}</div>`:`<div class="bubble ${x.w==='m'?'me':''}">${x.t}</div>`).join('')}</div>
+  <div class="opts">${head?`<p class="small">${head}</p>`:''}${opts}</div>`);
+  const lg=$('#log'); lg.scrollTop=lg.scrollHeight;
+  el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>say(b.dataset.k));
+  if($('#again'))$('#again').onclick=()=>haggle(i);
+  if($('#deal'))$('#deal').onclick=result;
+  snap('chat');
+}
+function say(k){
+  const n=G.n,i=n.i,s=G.jobs[G.i].d,before=priceAt(n);
+  n.log.push({w:'m',t:s.opts[k]});
+  if(k===s.seq[n.step]){
+    n.step++; const now=priceAt(n);
+    n.log.push({w:'s',t:s.good[n.step-1].replace('{p}',now)});
+    n.log.push({w:'x',c:'ok',t:`Preis sinkt: ${before} € → ${now} €`});
+  }else if(s.seq.includes(k)){
+    n.miss++; n.mood--;
+    n.log.push({w:'s',t:s.early[k]});
+    n.log.push({w:'x',c:'bad',t:'Gute Idee, falscher Moment. Laune sinkt.'});
+  }else{
+    const b=s.bad[k]; n.miss++; n.mood+=b[0]; n.pen+=b[1]; n.gone.push(k);
+    n.log.push({w:'s',t:b[2]});
+    n.log.push({w:'x',c:'bad',t:b[1]?`Preis steigt: ${before} € → ${before+b[1]} €. Laune sinkt.`:'Das kam nicht gut an. Laune sinkt.'});
+  }
+  if(n.mood<=0) n.log.push({w:'x',c:'bad',t:'Du wurdest blockiert. Zum Glück vergisst hier jeder alles.'});
+  chat();
+}
+function result(){
+  const n=G.n,j=G.jobs[G.i],p=priceAt(n);
+  const st=p>j.b?1:n.miss===0?3:2;
+  G.stars.push(st);
+  if(!save.found.includes(j.id)){save.found.push(j.id);persist()}
+  const msg=st===3?`${p} € und kein einziger Fehltritt?! Du bist eine Legende. Vom Rest gehen wir was trinken.`:st===2?`Im Budget geblieben. Du bist die Beste, danke!`:`Hm, ${p-j.b} € drüber. Ich leg was drauf. Hauptsache, ich hab es!`;
+  save.stars=save.stars||{};save.stars[j.id]=Math.max(save.stars[j.id]||0,st);const td=today();td.n++;td.s+=st;persist();
+  const last=G.i>=grp()+2;
+  set(`<div class="scroll center" style="justify-content:center">
+    <div style="font-size:76px;line-height:1">${n.i.e}</div>
+    <div class="stars">${'★'.repeat(st)}<span class="muted">${'★'.repeat(3-st)}</span></div>
+    <h2>Gekauft für ${p} €</h2>
+    <p class="muted small">Anzeigenpreis ${n.i.p} € · Budget ${j.b} € · ${n.miss} Fehltritt${n.miss===1?'':'e'}</p>
+    <div class="who" style="align-self:flex-start;margin-top:8px">${ava(j,st===1?'neutral':'happy')}${j.n}</div>
+    <div class="bubble" style="text-align:left">${msg}</div>
+  </div><button class="btn main" id="go">${last?'Feierabend':'Nächster Auftrag'}</button>`);
+  $('#go').onclick=()=>{ if(last)end(); else{G.i++;job()} };
+  snap('result');
+}
+function end(){
+  const sum=today().s;
+  pill.textContent=save.found.length+'/'+A.length;
+  set(`<div class="scroll center" style="justify-content:center">
+    <div class="stars">${sum} ★</div>
+    <h2>${sum>=8?'Königin des Kleinkrams':sum>=6?'Solide Schnäppchenjägerin':'Großzügige Seele'}</h2>
+    <p>Drei Leute sind heute glücklicher. Das war dein Spiel für heute.</p>
+    ${album()}
+  </div><div class="stack">${isBday()?'<button class="btn main" id="more">Noch drei Aufträge</button>':''}<button class="btn ${isBday()?'':'main'}" id="off">Computer ausmachen</button></div>`);
+  $('#off').onclick=closePC;if($('#more'))$('#more').onclick=home;save.kg=((save.kg||0)+1)%Math.floor(A.length/3);save.played=dayNum();persist();
+  snap('home');
+}
+
+/* ---------- Zimmer ---------- */
+const cv=$('#cv'), c=cv.getContext('2d'), dlg=$('#dlg'), act=$('#act');
+const SPR=["...HHHHHH...","..HHHHHHHH..",".HHHHHHHHHH.",".HHHSSSSSSH.",".HHSSSSSSS..",".HHSSESSES..",".HHSSSSSSS..",".HHSSSLLSS..",".HHHSSSSS...",".HHH.SSS....",".HHTTTTTTT..",".HHTTTTTTTS.",".HHSSSSSS.S.",".HH.PPPPPP..","..H.PPPPPP..","....PPPPPP.."];
+const LEG=[["....PP..PP..","....PP..PP..","....PP..PP..","...WWW.WWW.."],["....PPPPP...",".....PPPP...",".....PPP....","....WWWW...."]];
+// Outfits färben Oberteil (T), Hose (P) und Schuhe (W) um; Schwarz ist immer im Schrank
+const FITS={o_pyjama:{T:'#bfe3f5',P:'#9cc7e6',W:'#fff8e7'},o_jeans:{T:'#fff8e7',P:'#4a5aa8',W:'#e9e4f0'},o_glitzer:{T:'#ff5fa2',P:'#7b2cbf',W:'#f5cb1f'},o_jogger:{T:'#9aa3b5',P:'#8089a0',W:'#fff'}};
+const PAL={H:'#14111c',S:'#f1c9a5',E:'#14111c',L:'#b8344a',T:'#1c1b24',P:'#101018',W:'#e9e4f0'};
+const SPOTS=[
+ {id:'door',x0:-101,x1:-84,at:-87,label:'Tür öffnen',on:()=>save.q===1&&!R.post},
+ {id:'ward',x0:-18,x1:-2,at:-15,label:'Umziehen'},
+ {id:'bed',x0:0,x1:37,at:26,label:'Schlafen'},
+ {id:'plant',x0:38,x1:47,at:42,label:'Pflanze gießen'},
+ {id:'box',x0:98,x1:111,y0:70,at:99,label:'Paket auspacken',on:()=>!!boxItem()},
+ {id:'cake',x0:-54,x1:-32,at:-63,label:'Brief lesen',on:()=>isBday()},
+ {id:'dj',x0:50,x1:75,y0:55,at:56,label:'Auflegen'},
+ {id:'pc',x0:84,x1:120,at:80,label:'Kleinanzeigen'},
+ {id:'diary',x0:124,x1:166,at:144,label:'Tagebuch öffnen'}
+];
+const WW=186,VW=84,WX0=-104,KX=-18; // links von x=0 liegt die Küche
+const R={cam:0,x:40,tx:null,dir:1,todo:null,hold:0,t:0,sleep:false,raf:0};
+let sayT=0;const say2=t=>{dlg.textContent=t;clearTimeout(sayT);if(t)sayT=setTimeout(()=>dlg.textContent='',4500)};
+const r=(col,x,y,w,h)=>{c.fillStyle=col;c.fillRect(x,y,w,h)};
+// Figur wird einmal in Originalgröße vorgezeichnet und dann als Ganzes skaliert, damit keine Fugen zwischen den Pixeln entstehen
+const SPC={};
+function spriteCv(dir,frame,noArm,closed){
+  const fit=FITS[save.fit]||{},key=dir+'_'+frame+'_'+(save.fit||'')+(noArm?'_n':'')+(closed?'_c':'');let o=SPC[key];
+  if(!o){o=SPC[key]=document.createElement('canvas');o.width=12;o.height=20;const g=o.getContext('2d');
+    SPR.concat(LEG[frame]).forEach((row,ry)=>{for(let cx=0;cx<12;cx++){let ch=noArm&&cx===10&&(ry===11||ry===12)?'.':row[cx];if(ch==='.')continue;
+      g.fillStyle=closed&&ch==='E'?'#b98a6c':fit[ch]||PAL[ch];g.fillRect(dir>0?cx:11-cx,ry,1,1)}})}
+  return o;
+}
+function sprite(x,y,dir,frame,S=1.15,noArm){
+  const o=spriteCv(dir,frame,noArm),sc=R.s||2,q=v=>Math.round(v*sc)/sc,w=q(12*S),h=q(20*S);
+  c.imageSmoothingEnabled=false;c.drawImage(o,q(x+6-w/2),q(72-h-(R.jy||0)),w,h);
+}
+const DG=['111101101101111','010110010010111','111001111100111','111001111001111','101101111001001','111100111001111','111100111101111','111001001001001','111101111101111','111101111001111'];
+function digit(n,x,y){const d=DG[n];for(let i=0;i<15;i++)if(d[i]==='1')r('#ffb347',x+(i%3)/2,y+(i/3|0)/2,.5,.5)}
+// Bettvorderseite (Matratze, Decke) nochmal über die Figur zeichnen, wenn sie hinter dem Bett ist; lift hebt die Decke an
+function bedFront(l,flapOnly){
+  const bc=save.bedcol||'#e2557f';
+  if(!flapOnly){r('#efe6da',3,57,34,5);r('#fff',4,54,9,4)}
+  c.fillStyle=bc;c.beginPath();c.moveTo(13,63);c.lineTo(37,63);c.lineTo(37,56);c.lineTo(31,56);c.lineTo(25,56-6*l);c.lineTo(13,56-3.5*l);c.closePath();c.fill();
+  if(!l)r('rgba(255,255,255,.28)',13,57,24,1);
+}
+// in Reichweite ist ein Objekt, sobald die Figur irgendwo davor steht (ganze Breite plus etwas Rand)
+function near(){const m=R.x+6;return SPOTS.find(s=>(!s.on||s.on())&&m>=s.x0-4&&m<=s.x1+4)}
+function plantSay(){
+  say2(`Du hast ${save.plant||'die Pflanze'} gegossen! Sie scheint sich zu freuen.`);
+}
+function plantRename(){
+  clearTimeout(sayT);
+  dlg.innerHTML='<label for="pn">Wie soll sie heißen?</label><div class="row2"><input id="pn" maxlength="16" autocomplete="off"><button class="btn" id="pnok">OK</button></div>';
+  $('#pn').value=save.plant||'';$('#pn').focus();
+  $('#pnok').onclick=()=>{const v=$('#pn').value.trim();if(v)save.plant=v;else delete save.plant;persist();say2(v?`Sie heißt jetzt ${v}.`:'Sie heißt wieder einfach die Pflanze.')};
+}
+$('#ren').onclick=plantRename;
+$('#hlx').onclick=()=>{if(!save.q){save.q=1;persist()}$('#hello').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
+function hello(){if(save.hello||R.night||$('#room').hidden)return;save.hello=1;persist();cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#hello').hidden=false}
+$('#ltx').onclick=()=>{$('#letter').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
+// Bettwäsche wechseln: Rosa ist immer da, bestellte Farben kommen nach dem Auspacken dazu
+$('#bedb').onclick=()=>{
+  const have=[['Rosa','#e2557f'],...CAT.filter(x=>x.id.startsWith('b_')&&save.items[x.id]).map(x=>[x.n.replace('Bettwäsche ',''),x.col])];
+  if(have.length<2){say2('Nur die rosa Bettwäsche da. Neue kannst du am Computer bestellen.');return}
+  clearTimeout(sayT);dlg.innerHTML='Welche Bettwäsche?<div class="swrow">'+have.map(([n,col])=>`<button class="swb" data-c="${col}" style="background:${col}" aria-label="${n}"></button>`).join('')+'</div>';
+  dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{save.bedcol=b.dataset.c;if(save.q===2){save.q=3;R.bdw=R.t+200}persist();say2('Frisch bezogen.')});
+};
+// "Schlaf gut :)" als Pixelschrift auf der Nacht-Leinwand
+const GLY={S:['.####','#....','#....','.###.','....#','....#','####.'],c:['.....','.....','.###.','#....','#....','#....','.###.'],h:['#....','#....','#.##.','##..#','#...#','#...#','#...#'],l:['#.','#.','#.','#.','#.','#.','.#'],a:['.....','.....','.###.','....#','.####','#...#','.####'],f:['..##','.#..','.#..','###.','.#..','.#..','.#..'],g:['.....','.....','.####','#...#','#...#','#...#','.####','....#','.###.'],u:['.....','.....','#...#','#...#','#...#','#..##','.##.#'],t:['.#..','.#..','###.','.#..','.#..','.#..','..##'],':':['.','.','#','.','.','#','.'],')':['#..','.#.','..#','..#','..#','.#.','#..'],' ':['..']};
+function nightCanvas(){const n=$('#ncv'),d=window.devicePixelRatio||1;n.width=Math.round(n.clientWidth*d);n.height=Math.round(n.clientHeight*d);return n}
+function textCells(n){
+  const pos=[];let x=0;for(const ch of 'Schlaf gut :)'){const gl=GLY[ch];gl.forEach((row,y)=>{for(let i=0;i<row.length;i++)if(row[i]==='#')pos.push([x+i,y])});x+=gl[0].length+1}
+  const tw=x-1,T=Math.max(2,Math.floor(n.width*.8/tw)),ox=Math.round((n.width-tw*T)/2),oy=Math.round(n.height*.47-4*T);
+  return{T,cells:pos.map(p=>[ox+p[0]*T,oy+p[1]*T])};
+}
+function drawNightText(){const n=nightCanvas(),g=n.getContext('2d'),tc=textCells(n);g.fillStyle='#fff';tc.cells.forEach(c=>g.fillRect(c[0],c[1],tc.T,tc.T))}
+// Einschlaf-Animation: das Zimmerbild wogt wie im Traum und zieht sich zu einer runden Pixel-Wolke zusammen; am Ende laufen ihre weißen Pixel los und schreiben "Schlaf gut :)"
+function dreamAnim(){
+  const rs=cv.getBoundingClientRect(),mk=()=>document.createElement('canvas');
+  const snapc=mk();snapc.width=cv.width;snapc.height=cv.height;snapc.getContext('2d').drawImage(cv,0,0);
+  showNight(true);
+  const n=nightCanvas(),ng=n.getContext('2d'),ar=n.getBoundingClientRect(),d=n.width/ar.width,ox=Math.round((rs.left-ar.left)*d),oy=Math.round((rs.top-ar.top)*d),W=Math.round(rs.width*d),H=Math.round(rs.height*d);
+  const tmp=mk();tmp.width=W;tmp.height=H;const g=tmp.getContext('2d'),tc=textCells(n);
+  const GW=30,cell=W/GW,rows=Math.ceil(H/cell),cx=GW/2,cy=rows*.44,X=v=>Math.round(v*cell);
+  const PUFF=[[0,0,6.6],[-5.6,1,4.6],[5.6,1,4.6],[-3,-3.6,4.3],[3.2,-3.2,4.6],[-1.5,3.6,4],[3,3.6,3.8]],BUB=[[-6,10.2,1.5,.28],[-9,14,1,.34],[-11,16.8,.6,.4]];
+  const ease=v=>v*v*(3-2*v),cl=v=>Math.max(0,Math.min(1,v)),t0=performance.now(),D=4000,GO=.48;let parts=null;
+  (function fr(now){
+    const p=cl((now-t0)/D),a=1-(1-cl(p/.5))**2,k=1+2*(1-a),sh=Math.max(2,Math.round(cell/3)),amp=cell*.45*ease(cl(p/.25));
+    const inC=(x,y)=>PUFF.some(c=>Math.hypot(x+.5-cx-c[0]*k,y+.5-cy-c[1]*k)<c[2]*k),whites=[];
+    g.clearRect(0,0,W,H);
+    for(let y=0;y<H;y+=sh)g.drawImage(snapc,0,y*snapc.height/H,snapc.width,sh*snapc.height/H,Math.sin(y/(cell*3.2)+now/900)*amp,y,W,sh);
+    g.fillStyle=`rgba(255,226,238,${.5*a})`;g.fillRect(0,0,W,H);
+    for(let y=-1;y<=rows;y++)for(let x=-1;x<=GW;x++){if(inC(x,y))continue;
+      g.clearRect(X(x),X(y),X(x+1)-X(x),X(y+1)-X(y));
+      if(inC(x+1,y)||inC(x-1,y)||inC(x,y+1)||inC(x,y-1))whites.push([X(x),X(y)])}
+    BUB.forEach((bb,i)=>{if(p<bb[3])return;const by=cy+bb[1]+Math.sin(now/300+i)*.3,rr=bb[2]*cl((p-bb[3])/.05);
+      for(let y=Math.floor(by-rr-1);y<=by+rr+1;y++)for(let x=Math.floor(cx+bb[0]-rr-1);x<=cx+bb[0]+rr+1;x++)if(Math.hypot(x+.5-cx-bb[0],y+.5-by)<rr+.3)whites.push([X(x),X(y)])});
+    ng.clearRect(0,0,n.width,n.height);
+    ng.globalAlpha=1-ease(cl((p-.4)/.32));ng.drawImage(tmp,ox,oy);ng.globalAlpha=1;ng.fillStyle='#fff';
+    const cs=Math.ceil(cell);
+    if(p<GO)whites.forEach(w=>ng.fillRect(ox+w[0],oy+w[1],cs,cs));
+    else{
+      if(!parts){const src=whites.map(w=>[ox+w[0],oy+w[1]]).sort((u,v)=>u[0]-v[0]),tg=[...tc.cells].sort((u,v)=>u[0]-v[0]),N=Math.max(src.length,tg.length);
+        parts=[];for(let i=0;i<N;i++){const s0=src[Math.floor(i*src.length/N)],t1=tg[Math.floor(i*tg.length/N)];parts.push([s0[0],s0[1],t1[0],t1[1],Math.random()*.15])}}
+      const q=(p-GO)/(1-GO);
+      parts.forEach(P=>{const u=ease(cl((q-P[4])/.7)),sz=cs+(tc.T-cs)*u;
+        ng.fillRect(Math.round(P[0]+(P[2]-P[0])*u),Math.round(P[1]+(P[3]-P[1])*u-Math.sin(u*Math.PI)*cell*.6),Math.ceil(sz),Math.ceil(sz))});
+    }
+    if(p<1)requestAnimationFrame(fr);else{cv.style.visibility='';drawNightText();setTimeout(()=>$('#dream').classList.add('on'),2500)}
+  })(t0);
+}
+// Schlafen beendet den Abend bis 6 Uhr früh, deshalb vorher nachfragen
+function bedAsk(){
+  clearTimeout(sayT);
+  dlg.innerHTML='Wirklich schlafen gehen? Dann bis morgen um 6 und schöne Träume!<div class="swrow"><button class="btn" id="slno">Noch nicht</button><button class="btn" id="slyes">Ja, gute Nacht</button></div>';
+  $('#slno').onclick=()=>say2('');
+  $('#slyes').onclick=()=>{const w=new Date();if(w.getHours()>=6)w.setDate(w.getDate()+1);w.setHours(6,0,0,0);save.sleepUntil=w.getTime();persist();unsnap();
+    dlg.textContent='';
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){showNight();return}
+    $('#room').classList.add('dreaming');R.tx=null;R.todo=null;R.hold=0;R.sa={st:0,f:0};return;
+    // das Zimmer wird zur Gedankenwolke, schrumpft und verblasst
+    dreamAnim()};
+}
+const DREAMS=['einem Haus am Meer, in dem alle Platz haben, die sie mag','dem Geruch von Kuchen in einer Küche von früher','einem Zug, der nirgends ankommen muss','allen Versionen von sich, die sie schon war','einem Garten, der nachts weiterwächst','einem Festival, auf dem die Zeit stehen bleibt','Menschen, die sie noch gar nicht kennt','einem Brief an ihr jüngeres Ich','der Stille nach dem letzten Lied','einer Stadt, in der jede Straße nach Hause führt','Sternen, die zurückwinken','dem ersten warmen Tag im Frühling','einem Ort, an dem nichts fertig sein muss','Händen, die ihr etwas gebastelt haben'];
+function showNight(anim){const dn=Math.floor(((save.sleepUntil||Date.now())-new Date().getTimezoneOffset()*6e4)/864e5);$('#dream').textContent='Maria schläft bis 6 Uhr. Sie träumt von '+DREAMS[dn%DREAMS.length]+'.';R.night=true;$('#intro').hidden=true;$('#room').hidden=true;$('#night').hidden=false;if(!anim){drawNightText();setTimeout(()=>$('#dream').classList.add('on'),2500)}}
+addEventListener('resize',()=>{if(R.night&&$('#dream').classList.contains('on'))drawNightText()});
+function doSpot(id){
+  R.todo=null;
+  if(id==='pc')openPC();
+  else if(id==='dj')openDJ();
+  else if(id==='cake'){cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#letter').hidden=false}
+  else if(id==='diary')openDiary();
+  else if(id==='ward'){
+    const have=[['','Schwarz',PAL.T,PAL.P],...CAT.filter(x=>x.id.startsWith('o_')&&save.items[x.id]).map(x=>[x.id,x.n.replace('Outfit ',''),FITS[x.id].T,FITS[x.id].P])];
+    if(have.length<2){say2('Im Schrank hängt nur das schwarze Outfit. Neue kannst du am Computer bestellen.');return}
+    clearTimeout(sayT);dlg.innerHTML='Was ziehst du an?<div class="swrow">'+have.map(h=>`<button class="swb" data-f="${h[0]}" style="background:linear-gradient(${h[2]} 50%,${h[3]} 50%)" aria-label="${h[1]}"></button>`).join('')+'</div>';
+    dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{if(b.dataset.f)save.fit=b.dataset.f;else delete save.fit;persist();say2('Steht dir.')});
+  }
+  else if(id==='box'){const it=boxItem();save.items[it.id]=true;persist();say2('Juhu, ausgepackt: '+it.n+'!')}
+  else if(id==='door'){R.post=1;R.dir=-1;clearTimeout(sayT);
+    const bs=['b_salbei','b_honig','b_flieder'].map(i=>CAT.find(x=>x.id===i));
+    dlg.innerHTML='„Guten Abend, Maria! Deine neue Bettwäsche. Nur … der Abendhimmel war so schön, da hab ich die Farbe vergessen. Welche war es?“<div class="swrow">'+bs.map(x=>`<button class="swb" data-i="${x.id}" style="background:${x.col}" aria-label="${x.n}"></button>`).join('')+'</div>';
+    dlg.querySelectorAll('.swb').forEach(b=>b.onclick=()=>{const it=CAT.find(x=>x.id===b.dataset.i);save.items[it.id]=true;save.q=2;persist();R.post=2;R.qt=1;setTimeout(()=>{R.post=0},3200);
+      clearTimeout(sayT);dlg.textContent='„Genau die! Träum was Schönes.“ Du hast die '+it.n+' bekommen. Geh zum Bett und tippe dort auf „Bettwäsche“, um sie aufzuziehen.';sayT=setTimeout(()=>{dlg.textContent='';R.qt=0},12000)});
+  }
+  else if(id==='bed')bedAsk();
+  else if(id==='plant')plantSay();
+  else if(id==='win')say2('Der Fernsehturm blinkt. Berlin ist noch wach, aber ich muss ja nicht.');
+}
+// Tagsüber (7–19 Uhr) läuft Maria von allein: streichen, kochen, gemütlich machen oder unterwegs. Steuern geht erst abends.
+const isDay=()=>{if(isBday())return false;const h=hourNow();return h>=7&&h<19};
+function dayPlan(){
+  const ps=paintState();if(ps&&ps.w>0)return{s:'paint',txt:'Maria streicht gerade die Wand.',x:WX0+(WW-WX0)*(ps.w<1?ps.w:ps.c)-14,dir:1};
+  const h=hourNow(),d=dayNum(),wd=new Date(Date.now()+(TEST||SIM!==null?864e5:0)).getDay(),rnd=n=>((d*7919+n*104729)>>>0)%100;
+  const cook=txt=>({s:'cook',txt,x:-59,dir:-1}),away=txt=>({s:'away',txt}),chill={s:'chill',txt:'Maria macht es sich gemütlich.',x:140,dir:1};
+  if(h<9)return cook('Maria macht Frühstück.');
+  if(h<17){if(wd>=1&&wd<=5)return away('Maria ist bei der Arbeit.');const k=rnd(h/3|0);return k<40?away('Maria trifft eine Freundin.'):k<65?cook('Maria kocht etwas Leckeres.'):chill}
+  const k=rnd(9);return k<35?away('Maria ist auf ein Bier draußen.'):k<75?cook('Maria kocht Abendessen.'):chill;
+}
+function updateDay(){
+  const pl=R.plan=dayPlan();
+  if(!R.day){R.day=true;R.pan=0;R.tx=null;R.todo=null;if(pl.x!==undefined)R.x=pl.x;act.disabled=true;$('#deco').hidden=true;$('#ren').hidden=true;$('#bedb').hidden=true}
+  R.pan=Math.max(-WW,Math.min(WW,(R.pan||0)+R.hold*.9));
+  R.moving=false;
+  if(pl.x!==undefined){const d=pl.x-R.x;if(Math.abs(d)>.7){R.dir=d>0?1:-1;R.x+=R.dir*.6;R.moving=true}else{R.x=pl.x;R.dir=pl.dir}}
+  if(dlg.dataset.day!==pl.txt){clearTimeout(sayT);dlg.textContent=pl.txt;dlg.dataset.day=pl.txt}
+  if(act.textContent!=='Ab 19 Uhr bist du dran')act.textContent='Ab 19 Uhr bist du dran';
+}
+function update(){
+  R.t++;
+  // Einschlafen von vorn: ans Bett gehen, auf die Matratze steigen, sich hinlegen (Kopf aufs Kissen), Decke hochziehen, Schlafblase, Traumwolke
+  if(R.sa){const a=R.sa,ez=u=>u*u*(3-2*u),S=1.15,H=20*S;
+    if(a.st===0){const d=17-R.x;if(Math.abs(d)>.7){R.dir=d>0?1:-1;R.x+=R.dir*.6;R.moving=true}else{R.x=17;R.moving=false;R.dir=1;a.st=1;a.f=0}}
+    else if(a.st===1){a.f++;const u=ez(Math.min(1,a.f/26));a.pose={x:R.x+6,y:72-H/2-13*u-Math.sin(u*Math.PI)*3,r:0,cov:0};if(a.f>=30){a.st=2;a.f=0}}
+    else if(a.st===2){a.f++;const u=ez(Math.min(1,a.f/44));a.pose={x:23+(20.5-23)*u,y:(59-H/2)+((57-6*S)-(59-H/2))*u,r:-Math.PI/2*u,cov:0,closed:u>.8};if(a.f>=50){a.st=3;a.f=0}}
+    else if(a.st===3){a.f++;a.pose.closed=true;a.pose.cov=ez(Math.min(1,a.f/46));if(a.f>=54){a.st=4;a.f=0}}
+    else{a.f++;if(a.f>=190){R.sa=null;R.asleep=a.pose;dreamAnim()}}
+    return}
+  if(!R.bd&&(save.q===undefined||save.q===3)&&R.t>(R.bdw||0)&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
+  if(isDay()){updateDay();return}
+  if(R.day){R.day=false;R.plan=null;act.disabled=false;delete dlg.dataset.day;dlg.textContent=''}
+  if(save.q===1&&!R.post&&!dlg.innerHTML)dlg.textContent='Klopf, klopf … ganz links, neben der Küche, steht jemand vor der Haustür.';
+  {const tp=!!(R.post||R.qt);if(dlg.classList.contains('top')!==tp)dlg.classList.toggle('top',tp)}
+  let moving=false;
+  if(R.hold){R.x+=R.hold*.6;R.dir=R.hold;R.tx=null;R.todo=null;moving=true}
+  else if(R.tx!==null){
+    const d=R.tx-R.x;
+    if(Math.abs(d)<.7){R.x=R.tx;R.tx=null;if(R.todo)doSpot(R.todo)}
+    else{R.dir=d>0?1:-1;R.x+=R.dir*.6;moving=true}
+  }
+  R.x=Math.max(WX0+2,Math.min(WW-14,R.x));
+  R.moving=moving;
+  const n=near(), lab=R.sleep?'Aufwachen':n?(n.id==='plant'?'Gießen':n.label):'· · ·';{const ds=!n&&!R.sleep;if(act.disabled!==ds)act.disabled=ds}
+  if(act.textContent!==lab)act.textContent=lab;
+  const od=$('#deco'),hide=!(n&&n.id==='pc');if(od.hidden!==hide)od.hidden=hide;
+  const rn=$('#ren'),hr=!(n&&n.id==='plant');if(rn.hidden!==hr)rn.hidden=hr;
+  const bb=$('#bedb'),hb=!(n&&n.id==='bed');if(bb.hidden!==hb)bb.hidden=hb;
+}
+function draw(){
+  const t=R.t,VH=Math.max(84,Math.min(150,Math.round(VW*cv.clientHeight/(cv.clientWidth||1))))||120,YO=R.yo=Math.max(0,VH-85),cam=R.cam=Math.round(Math.max(WX0,Math.min(WW-VW,(R.day?(R.plan&&R.plan.s==='away'?44:R.x)+(R.pan||0):R.x)+6-VW/2)));
+  const sc=Math.max(2,2*Math.floor(cv.clientWidth*(window.devicePixelRatio||1)/(2*VW)));
+  if(sc!==R.s||VH!==R.vh){R.s=sc;R.vh=VH;cv.width=VW*sc;cv.height=VH*sc}
+  c.setTransform(sc,0,0,sc,-cam*sc,YO*sc);
+  // Objekt in der Nähe leuchtet warm auf, genau entlang seiner Form
+  const hot=R.day||R.sa||R.lying?null:(near()||{}).id,hl=(id,fn)=>{if(hot===id){c.save();c.shadowColor='rgba(255,214,130,.75)';c.shadowBlur=sc*(1.6+Math.sin(t/28)*.4);fn();c.restore()}fn()};
+  const ps=paintState(),WC=wallCol(save.wall),CE=Math.round(YO*.75);
+  const WL=WW-WX0;r(WC,WX0,-YO,WL,72+YO);
+  if(ps){if(ps.w>0)r('#f3efe6',WX0,-YO,WL*ps.w,72+YO);if(ps.c>0)r(wallCol(save.paint.to),WX0,-YO,WL*ps.c,72+YO)}
+  r('rgba(10,5,25,.16)',WX0,-YO,WL,YO-CE+4);
+  // Fenster mit Fernsehturm
+  r('#d9c9a8',47,13,30,32);
+  for(let y=0;y<28;y++)r(`rgb(${22+y},${22+y*.6|0},${70+y*1.6|0})`,49,15+y,26,1);
+  [[52,18],[57,21],[71,25],[65,17],[54,27],[73,19]].forEach((s,k)=>r(`rgba(255,255,255,${.7+.25*Math.sin(t/120+k*2.1)})`,s[0],s[1],1,1));
+  // ab und zu zieht etwas durch den Himmel: Satellit, Flugzeug oder Drohne
+  {const tt=t+900,cy=tt/1500|0,p=(tt%1500)/650;if(p<1){const kind=cy%3,dir=cy%2?1:-1,fx=dir>0?49+24.5*p:73.5-24.5*p,fy=17+(cy*7)%8+(kind===2?Math.sin(t/25)*.5:p*1.5);
+    if(kind===0)r('rgba(255,255,255,.6)',fx,fy,.5,.5);
+    else if(kind===1){r('#fff',fx,fy,1,.5);if((t/22|0)%2)r('#ff4d4d',fx+(dir>0?-.5:1),fy,.5,.5)}
+    else{r('#9aa3b5',fx,fy,1,.5);if((t/18|0)%2)r('#5fd38a',fx,fy+.5,.5,.5)}}}
+  // ganz selten: ein kleines Feuerwerk weit weg über der Stadt (etwa alle paar Minuten, wenige Sekunden)
+  {const ft=(t+5000)%12000;if(ft<560)for(let k=0;k<4;k++){const age=ft-k*130;if(age<0||age>170)continue;
+    const sd=(t/12000|0)*7+k*13,cx=54+(sd*5)%16,cy=26+(sd*3)%7,col=['#ffd98a','#ffb3c7','#c9b3ff','#a8e0e0'][sd%4];
+    if(age<30){r('rgba(255,255,255,.7)',cx,cy+(30-age)/5,.5,.5);continue}
+    const a=age-30,rad=Math.min(4,a/14),al=Math.max(0,1-a/140);c.globalAlpha=al;
+    for(let j=0;j<10;j++){const an=j*Math.PI/5;r(col,cx+Math.cos(an)*rad,cy+Math.sin(an)*rad+a*a/9000,.5,.5)}
+    r('#fff',cx,cy,.5,.5);c.globalAlpha=1}}
+  r('#fff3c4',68,18,3,3);
+  r('#0d0c1c',60,20,1,23); r('#0d0c1c',59,26,3,3); r('#0d0c1c',59,36,3,7);
+  if((t/40|0)%2)r('#ff4d4d',60,19,1,1);
+  [[49,38,5],[54,40,4],[63,39,6],[69,37,6]].forEach(b=>r('#0d0c1c',b[0],b[1],b[2],43-b[1]));
+  [[50,40],[65,41],[71,39],[72,41],[55,41]].forEach((w,k)=>{if((t/90+k)%5>1)r('#f5cb1f',w[0],w[1],1,1)});
+  r('#efe2c4',45,45,34,2);
+  // Lichterkette
+  for(let i=Math.ceil(WX0/6);i<WW/6-1;i++){const x=3+i*6,y=6-CE+Math.round(2*Math.sin(i*.9));r('#1a1326',x-3,y-1,6,1);
+    r(`hsl(${(t/6+i*8)%360} 65% 74%)`,x,y,2,2)}
+  // Poster
+  r('#fff',139,20,14,18);['#ff5fa2','#ff8a3d','#d81b60','#7b2cbf'].forEach((col,k)=>r(col,140,21+k*4,12,4));
+  // Discokugel
+  // Mobile zum Einschlafen: Mond, Stern, Wolke
+  const sw=Math.round(Math.sin(t/70));
+  r('#1a1326',26,4-CE,1,8+CE);r('#d9c9a8',20,12,13,1);
+  r('#1a1326',21,13,1,4);r('#fff3c4',20+sw,17,3,3);r(WC,22+sw,17,1,1);
+  r('#1a1326',26,13,1,7);r('#fff',25-sw,21,3,1);r('#fff',26-sw,20,1,3);
+  r('#1a1326',32,13,1,5);r('#bfe3f5',30+sw,18,5,2);r('#bfe3f5',31+sw,17,3,1);
+  // Boden
+  r('#241a38',WX0,70,WL,2); r('#7a5540',WX0,72,WL,VH-YO-72);
+  for(let y=77;y<VH-YO;y+=6)r('#694735',WX0,y,WL,1);
+  // Wecker über dem Computer, zeigt die echte Uhrzeit
+  {const now=new Date(),hh=now.getHours(),mi=now.getMinutes();
+    r('#c9a36a',96,27,2,1);r('#c9a36a',104,27,2,1);r('#efe2c4',95,28,12,5);r('#2a1a14',95.5,28.5,11,4);
+    digit(hh/10|0,96.5,29.25);digit(hh%10,98.5,29.25);digit(mi/10|0,101.5,29.25);digit(mi%10,103.5,29.25);
+    if((t/30|0)%2){r('#ffb347',100.5,29.75,.5,.5);r('#ffb347',100.5,30.75,.5,.5)}}
+  // Leseecke: Stehlampe, Schaukelstuhl, Beistelltisch mit Tagebuch
+  r('#aeb4c4',174,40,1,31);r('#aeb4c4',171,71,7,1);r('#f5cb1f',170,34,9,6);r('#ffe680',171,35,7,1);
+  const k=Math.round(Math.sin(t/55)*2)/2,ch=(col,x,y,w,h)=>r(col,x+Math.round(k*(71-y-h/2)/26*2)/2,y,w,h);
+  ch('#8a6246',128,45,2,6);ch('#8a6246',128,51,2,6);ch('#8a6246',128,57,2,5);ch('#775238',130,47,2,6);ch('#775238',130,53,2,7);
+  ch('#8a6246',128,60,14,2);ch('#e2557f',131,58,9,2);ch('#775238',131,55,11,1);ch('#775238',141,55,1,5);
+  ch('#5a3b2e',131,62,1,8);ch('#5a3b2e',139,62,1,8);r('#5a3b2e',126,70,18,1);r('#5a3b2e',125,69-Math.max(0,k)/2,2,1);r('#5a3b2e',143,69-Math.max(0,-k)/2,2,1);
+  r('#8a6246',149,60,18,2);r('#5a3b2e',157,62,2,9);r('#5a3b2e',154,71,8,1);
+  hl('diary',()=>{
+  r('#c44a7a',151,57,7,1);r('#fff8e7',151,58,7,1);r('#c44a7a',151,59,7,1);r('#f5cb1f',159,59,2,1);
+  });
+  r('#fff',162,57,3,3);r('#fff',165,58,1,1);r('#c9a36a',162,57,3,.5);
+  for(let j=0;j<2;j++)for(let h=0;h<11;h+=.5){const x=162.8+j*1.2+Math.sin(h*.55-t/38+j*2.4)*(.3+h*.07),al=.36*Math.sin(Math.PI*h/11)*(.55+.45*Math.sin(h*.7-t/26+j*3));r(`rgba(255,255,255,${al})`,x,56-h,.5,.5)}
+  // DJ-Pult
+  r('#5a3b2e',50,63,26,2);r('#3d281f',51,65,2,7);r('#3d281f',73,65,2,7);
+  hl('dj',()=>{r('#1a1326',51,59,9,4);r('#1a1326',66,59,9,4);r('#3a3350',61,60,4,3);
+    r('#aeb4c4',53,60,5,2);r('#aeb4c4',68,60,5,2);r('#ff5fa2',53+((t/10|0)%5),60,1,1);r('#7ee0d0',68+((t/10|0)%5),61,1,1)});
+  if(save.items.lava){const ly=Math.sin(t/70)*2;r('#aeb4c4',87,54,4,2);r('#aeb4c4',88,45,2,1);r('#7b2cbf',87.5,46,3,8);r('#ff5fa2',88,49+ly,2,2);r('#ff8a3d',88.5,47.5-ly/2,1,1)}
+  // Haustür ganz links: beim ersten Abend klopft der Postbote mit der Bettwäsche
+  hl('door',()=>{r('#3d281f',-101,33,13,39);
+    if(R.post){r('#16122e',-100,34,11,38);r('#fff',-97,37,.5,.5);r('#fff',-92,40,.5,.5);r('#ffd98a',-94,36,1,1);r('#775238',-100,34,1.5,38);
+      const b=Math.round(Math.sin(t/40)*.6)*.5;
+      r('#2c4486',-96,64,2,7);r('#2c4486',-93,64,2,7);r('#2a2433',-96.5,71,2.5,1);r('#2a2433',-93,71,2.5,1);
+      r('#f5cb1f',-97,55+b,7,9);r('#2c4486',-94,55+b,1,9);r('#f0c9a4',-96,51+b,5,4);r('#2a2433',-95,52+b,1,1);r('#2a2433',-93,52+b,1,1);r('#c96b6b',-94.5,54+b,2,.5);
+      r('#3f5fb0',-97,48+b,7,2.5);r('#2c4486',-97,50+b,8,1);r('#f5cb1f',-94,48.5+b,1,1);
+      if(R.post===1){r('#c9a36a',-92,58+b,5,4);r('#e2557f',-90,58+b,1,4);r('#e2557f',-92,59.5+b,5,1);r('#f0c9a4',-93,59+b,1,2)}
+      else r('#f0c9a4',-90,51+((t/10|0)%2),1,3)}
+    else{r('#8a5a3c',-100,34,11,38);r('#775238',-98,37,7,12);r('#775238',-98,53,7,15);r('#ffd98a',-96,39,3,4);r('#f5cb1f',-91,54,1,2);
+      if(save.q===1){const k=(t/12|0)%8;if(k<3)for(let j=0;j<=k;j++)r('rgba(255,236,180,.9)',-87+j*1.5,46-j*2,1.5,.5)}}});
+  // Küche links: Fliesen, Regal, Arbeitsplatte mit Herd und Topf, Kühlschrank
+  {const cooking=R.day&&R.plan&&R.plan.s==='cook'&&!R.moving;c.save();c.translate(KX,0);
+    r('#efe2c4',-58,38,44,16);for(let x=-58;x<-14;x+=4)r('rgba(60,30,40,.10)',x,38,.5,16);for(let y=42;y<54;y+=4)r('rgba(60,30,40,.10)',-58,y,44,.5);
+    r('#8a6246',-56,28,32,2);r('#fff',-54,24,3,4);r('#c96b3c',-49,23,3,5);r('#7ee0d0',-44,25,3,3);r('#f5cb1f',-39,24,2,4);r('#e2557f',-34,23,3,5);r('#fff',-29,25,3,3);
+    r('#8a6246',-58,56,44,16);r('#efe2c4',-59,54,46,2);[-47,-36,-25].forEach(x=>r('#775238',x,57,1,14));[-52,-41,-30,-19].forEach(x=>r('#f5cb1f',x,62,1,1));
+    r('#2a2433',-46,53,16,1);r('#e2557f',-56,49,5,5);r('#c44a7a',-57,50,1,2);r('#fff',-22,50,5,4);
+    r('#aeb4c4',-43,48,9,5);r('#8d93a3',-44,49,1,1);r('#8d93a3',-34,49,1,1);r('#8d93a3',-43,47,9,1);r('#5a3b2e',-39,46,1,1);
+    if(cooking){r('#ff8a3d',-42,53,7,.5);for(let j=0;j<2;j++)for(let h=0;h<10;h+=.5){const x=-40+j*2.5+Math.sin(h*.55-t/38+j*2.4)*(.3+h*.07),al=.4*Math.sin(Math.PI*h/10)*(.55+.45*Math.sin(h*.7-t/26+j*3));r(`rgba(255,255,255,${al})`,x,46-h,.5,.5)}}
+    if(isBday())hl('cake',()=>{r('#e8e3d5',-33,53.5,11,.5);r('#fff8e7',-32,49,9,4.5);r('#e2557f',-32,49,9,1.5);r('#e2557f',-30,50.5,1,1);r('#e2557f',-26,50.5,1,1.5);
+      [-30,-28,-26].forEach((x,i)=>{r('#f5cb1f',x,46.5,.5,2.5);r((t/9+i|0)%2?'#ff8a3d':'#ffd98a',x-.25,45.5+((t/13+i|0)%2)*.25,1,1)});r('#e2557f',-20,51.5,1,1)});
+    r('#e8e3d5',-12,32,11,40);r('#b5ae9c',-12,45,11,1);r('#8d93a3',-10,36,1,6);r('#8d93a3',-10,48,1,7);r('#e2557f',-6,38,2,2);r('#f5cb1f',-4,41,1,1);c.restore()}
+  // Kleiderschrank zwischen Küche und Bett
+  hl('ward',()=>{r('#5a3b2e',-17,70,2,2);r('#5a3b2e',-5,70,2,2);r('#8a6246',-18,30,16,40);r('#775238',-18,30,16,2);r('#775238',-10.5,32,1,38);r('#f5cb1f',-12.5,50,1,2);r('#f5cb1f',-8.5,50,1,2);r('rgba(255,255,255,.08)',-17,33,5.5,35);r('rgba(255,255,255,.08)',-8.5,33,5.5,35)});
+  // Bett
+  hl('bed',()=>{
+  r('#5a3b2e',1,48,3,24);r('#5a3b2e',2,62,36,6);r('#3d281f',3,68,2,4);r('#3d281f',35,68,2,4);
+  r('#efe6da',3,57,34,5);r('#fff',4,54,9,4);r(save.bedcol||'#e2557f',13,56,24,7);r('rgba(255,255,255,.28)',13,57,24,1);
+  });
+  // Günther
+  hl('plant',()=>{
+  r('#c96b3c',40,66,5,6);r('#2f8f4e',41,60,3,6);r('#3bb061',39,58,2,3);r('#3bb061',44,57,2,4);r('#2f8f4e',42,55,2,3);
+  });
+  // Schreibtisch + Computer
+  r('#8a6246',86,56,32,2);r('#5a3b2e',87,58,2,14);r('#5a3b2e',115,58,2,14);r('#775238',104,58,11,8);r('#f5cb1f',109,61,2,1);
+  hl('pc',()=>{
+  r('#cfc9b8',92,39,17,14);r('#d81b60',94,41,13,9);r('#ff5fa2',94,41,13,3);r('#ff8a3d',94,44,13,2);r('#7b2cbf',94,48,13,2);
+  r('#c0c0c0',96,43,8,5);r('#000080',96,43,8,1);if((t/30|0)%2)r('#f5cb1f',99,45,2,2);
+  r('#b5ae9c',98,53,5,3);r('#e8e3d5',93,55,12,1);
+  });r('#fff',111,52,3,4);
+  // Malerzeug an der Farbkante, solange gestrichen wird
+  if(ps&&ps.w>0){const first=ps.w<1,ex=WX0+WL*(first?ps.w:ps.c),col=first?'#f3efe6':wallCol(save.paint.to),ry=28+Math.sin(t/45)*20;
+    if(ex>WX0+2&&ex<WW-2){r('#aeb4c4',ex+5,66,6,6);r(col,ex+5.5,66,5,1.5)}}
+  // Figur
+  const pose=R.sa&&R.sa.pose;
+  if(pose){const S=1.15,o=spriteCv(1,0,false,pose.closed),bc=save.bedcol||'#e2557f';
+    c.save();c.translate(pose.x,pose.y);c.rotate(pose.r);c.imageSmoothingEnabled=false;c.drawImage(o,-6*S,-10*S,12*S,20*S);c.restore();
+    if(pose.cov>0){const bx=37-15.5*pose.cov;r(bc,bx+1,44.5,34-bx,1);r(bc,bx,45.5,36-bx,1);r(bc,bx,46.5,37-bx,16.5);r('rgba(255,255,255,.28)',bx,47.5,37-bx,1);r('rgba(40,10,50,.15)',bx,46.5,1,16.5)}
+    // Comic-Schlafblase an der Nase, bläht sich langsam auf und ab
+    if(R.sa.st===4&&R.sa.f>14){const f=R.sa.f-14,rad=.6+2.4*(.5-.5*Math.cos(f/38)),bx=14.5,by=43-rad;
+      for(let y=-rad-1;y<=rad+1;y+=.5)for(let x=-rad-1;x<=rad+1;x+=.5){const dd=Math.hypot(x+.25,y+.25);if(dd<rad)r(dd>rad-.6?'#fff':'rgba(180,220,255,.7)',bx+x,by+y,.5,.5)}
+      r('#fff',bx-rad*.4,by-rad*.4,.5,.5)}}
+  if(pose){}
+  else if(R.day&&R.plan&&R.plan.s==='paint'&&!R.moving&&ps){
+    // Streichen: Arm mit Rolle nach oben strecken, langsam nach unten ziehen, wiederholen; nach fünf Zügen kurz verschnaufen
+    const col=ps.w<1?'#f3efe6':wallCol(save.paint.to),cyc=t%600,rest=cyc>=450,u=(cyc%90)/90,lift=u<.3?u/.3:1-(u-.3)/.7,S=1.15,x0=Math.round(R.x)+6-6*S,y0=72-20*S;
+    R.jy=rest?Math.sin(t/16)*.4:0;sprite(Math.round(R.x),0,1,0,S,!rest);R.jy=0;
+    if(!rest){const shx=x0+9.6*S,shy=y0+11.2*S,hx=shx+3.2,hy=shy+2.5-lift*13;
+      for(let i=0;i<=5;i++)r('#f1c9a5',shx+(hx-shx)*i/5,shy+(hy-shy)*i/5,1.2,1.2);
+      r('#c9a36a',hx+.4,hy-3,.6,3.6);r('#fff',hx-1.2,hy-5.6,4.4,2.6);r(col,hx-1.2,hy-5.1,4.4,1.6)}
+    else{r('#c9a36a',x0+11.2*S,y0+12.5*S,.6,5);r('#fff',x0+11.2*S-1.8,y0+12.5*S+5,4.4,2.6);r(col,x0+11.2*S-1.8,y0+12.5*S+5.5,4.4,1.6);
+      const pf=(t/22|0)%4;if(pf<2)r('rgba(255,255,255,.55)',x0+11*S+1+pf,y0+7.6*S-pf*.5,1,.5)}}
+  else if(!R.sleep&&!R.lying&&!(R.day&&R.plan&&R.plan.s==='away'))sprite(Math.round(R.x),0,R.dir,R.moving?(t/8|0)%2:0);
+  // Marker
+  if(boxItem())hl('box',()=>{r('#c9a36a',100,74,10,8);r('#a8834f',100,74,10,1);r('#efe2c4',104,74,2,8)});
+  if(R.sleep)r('rgba(8,6,26,.6)',0,0,120,90);
+}
+function loop(){if(R.night||R.away)return;update();if(R.night||R.away)return;draw();R.raf=requestAnimationFrame(loop)}
+cv.addEventListener('pointerdown',e=>{
+  if(R.day)return;
+  if(R.sleep){R.sleep=false;say2('Doch noch nicht müde. Was mache ich noch?');return}
+  const b=cv.getBoundingClientRect(), x=(e.clientX-b.left)/b.width*VW+R.cam, y=(e.clientY-b.top)/b.height*(R.vh||120)-(R.yo||0);
+  const s=SPOTS.find(s=>(!s.on||s.on())&&x>=s.x0&&x<=s.x1&&(!s.y0||y>=s.y0));
+  if(s){R.tx=s.at;R.todo=s.id}else{R.tx=Math.max(WX0+2,Math.min(WW-14,x-6));R.todo=null}
+});
+[['#bl',-1],['#br',1]].forEach(([id,d])=>{const b=$(id);
+  b.addEventListener('pointerdown',e=>{e.preventDefault();if(R.sleep)return;R.hold=d});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>{if(R.hold===d)R.hold=0}));
+});
+act.onclick=()=>{ if(R.day)return; if(R.sleep){R.sleep=false;say2('Doch noch nicht müde. Was mache ich noch?');return} const n=near(); if(n)doSpot(n.id) };
+
+/* ---------- DJ-Pult ---------- */
+// Ruhige Variante: beide Tracks laufen im selben Tempo. Der neue Track ist nur ein bis drei Tipper versetzt.
+// Danach wird über Höhen, Mitten und Bass umgeblendet. Sind alle drei vom alten Track raus, lädt der nächste.
+const dcv=$('#djcv'),dc=dcv.getContext('2d'),ddlg=$('#djdlg'),dctl=$('#djctl');
+// Alle vier Tracks stehen in a-Moll (Pentatonik A C D E G), gleiches Tempo, gleicher Grundton: jede Mischung klingt stimmig.
+// Sie unterscheiden sich in Hi-Hat-Muster, Bassfigur und einer kleinen Melodie, damit man das Umblenden deutlich hört.
+const TR=[
+ {n:'Pfandflasche',bpm:118,root:110,bass:[0,,,0,,,3,,0,,,0,,7,,],hat:1,clap:1,lead:[12,,,,15,,,,12,,,,10,,,]},
+ {n:'Späti Love',bpm:118,root:110,bass:[0,,0,,,,0,,5,,5,,,,3,],hat:2,clap:0,stab:[2,10],lead:[,,19,,,,17,,,,15,,,,12,]},
+ {n:'Ringbahn 6 Uhr',bpm:118,root:110,bass:[,,0,,,,0,,,,0,,,,0,3],hat:1,clap:1,stab:[6],lead:[24,,,22,,,19,,,,,,17,,,]},
+ {n:'Günthers Groove',bpm:118,root:110,bass:[0,0,,0,,7,,0,0,,,10,,7,,],hat:2,clap:1,lead:[,,,,12,,15,,,,17,,,,15,]}
+];
+const BANDS=[['h','Höhen'],['m','Mitten'],['l','Bass']];
+let AC=null,master,nbuf,D=null,djT=0,djRaf=0,djLast=0;
+const dr=(col,x,y,w,h)=>{dc.fillStyle=col;dc.fillRect(x,y,w,h)};
+const phErr=(a,b)=>{const d=((b-a)%1+1)%1;return Math.min(d,1-d)};
+function openDJ(){
+  if(playedToday()){say2('Genug gespielt für heute. Morgen wartet wieder was Schönes.');return}
+  cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#dj').hidden=false;D=null;
+  $('#la').textContent='';$('#lb').textContent='';dr('#0d0a1a',0,0,120,56);
+  ddlg.textContent='Drei Übergänge, ein Set. Ton an! (iPhone: Stummschalter an der Seite ausmachen.)';
+  dctl.innerHTML='<button class="btn main wide" data-a="again">Kopfhörer auf</button>';
+}
+function closeDJ(){clearInterval(djT);cancelAnimationFrame(djRaf);D=null;if(AC)AC.suspend();$('#dj').hidden=true;$('#room').hidden=false;say2('Die Ohren klingeln noch ein bisschen. Und jetzt?');R.away=false;cancelAnimationFrame(R.raf);loop()}
+$('#djx').onclick=closeDJ;
+function mkDeck(tr,on){
+  const d={tr,bpm:tr.bpm,pos:0,next:0,lv:{h:on?1:0,m:on?1:0,l:on?1:0},g:AC.createGain()};d.g.connect(master);
+  BANDS.forEach(([k])=>{const n=d['g'+k]=AC.createGain();n.gain.value=d.lv[k];n.connect(d.g)});return d;
+}
+function setBand(d,k,v){d.lv[k]=v;d['g'+k].gain.setTargetAtTime(v,AC.currentTime,.07)}
+function djStart(){
+  if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();master=AC.createDynamicsCompressor();const mg=AC.createGain();mg.gain.value=.6;master.connect(mg);mg.connect(AC.destination);
+    nbuf=AC.createBuffer(1,AC.sampleRate*.3,AC.sampleRate);const ch=nbuf.getChannelData(0);for(let i=0;i<ch.length;i++)ch[i]=Math.random()*2-1}
+  AC.resume();
+  if(D){D.A.g.disconnect();if(D.B)D.B.g.disconnect()}
+  const order=shuffle([0,1,2,3]);
+  D={order,round:0,stars:[],A:mkDeck(TR[order[0]],true),B:null};
+  newB();djLast=AC.currentTime;clearInterval(djT);djT=setInterval(djTick,25);cancelAnimationFrame(djRaf);djLoop();
+}
+function newB(){
+  const tr=TR[D.order[D.round+1]],b=mkDeck(tr,false);
+  b.pos=D.A.pos;b.next=Math.ceil(b.pos*4);
+  D.B=b;D.phase='mix';
+  $('#la').textContent='A läuft: '+D.A.tr.n;$('#lb').textContent='B kommt: '+tr.n;
+  ddlg.textContent='B langsam hochziehen, A runter. Sind alle drei Regler von A unten, lädt der nächste Track.';
+  djControls();
+}
+function djControls(){
+  const strip=(key,cls)=>`<div class="strip ${cls}"><h3>${key} · ${D[key].tr.n}</h3>${BANDS.map(([k,lab])=>`<label for="f${key}${k}">${lab}</label><input class="vol" id="f${key}${k}" type="range" min="0" max="100" value="${Math.round(D[key].lv[k]*100)}" data-d="${key}" data-k="${k}">`).join('')}</div>`;
+  dctl.innerHTML='<div class="mixer">'+strip('A','a')+strip('B','b')+'</div>';
+}
+const aOut=()=>BANDS.every(([k])=>D.A.lv[k]<.03);
+dctl.onclick=e=>{const b=e.target.closest('[data-a]');if(!b)return;if(b.dataset.a==='again')djStart();else if(b.dataset.a==='out')closeDJ()};
+dctl.oninput=e=>{const v=e.target.closest('.vol');if(v&&D&&D.phase==='mix')setBand(D[v.dataset.d],v.dataset.k,v.value/100)};
+dctl.onchange=e=>{if(e.target.closest('.vol')&&D&&D.phase==='mix'&&aOut())djDone()};
+function tone(node,t,type,f0,f1,dur,vol,lp){
+  const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.setValueAtTime(f0,t);
+  if(f1)o.frequency.exponentialRampToValueAtTime(f1,t+dur*.5);
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  let n=o;if(lp){const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=lp;o.connect(f);n=f}
+  n.connect(g);g.connect(node);o.start(t);o.stop(t+dur+.02);
+}
+function noise(node,t,type,freq,dur,vol){
+  const s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=nbuf;f.type=type;f.frequency.value=freq;
+  g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(g);g.connect(node);s.start(t);s.stop(t+dur+.02);
+}
+function hit(d,step,t){
+  const s=step%16,tr=d.tr;
+  if(s%4===0)tone(d.gl,t,'triangle',200,50,.3,.9);
+  if(tr.hat===1?s%4===2:s%2===1)noise(d.gh,t,'highpass',7000,.05,tr.hat===1?.2:.1);
+  if(tr.clap&&(s===4||s===12))noise(d.gm,t,'bandpass',1600,.14,.3);
+  const n=tr.bass[s];if(n!==undefined)tone(d.gm,t,'sawtooth',tr.root*2**(n/12),0,.18,.26,650);
+  if(tr.stab&&tr.stab.includes(s))[1,1.189,1.498].forEach(m=>tone(d.gm,t,'triangle',tr.root*2*m,0,.22,.1));
+  const ld=tr.lead[s];if(ld!==undefined)tone(d.gm,t,'sine',tr.root*2*2**(ld/12),0,.32,.11);
+}
+function djTick(){
+  if(!D)return;const now=AC.currentTime,dt=now-djLast;djLast=now;
+  [D.A,D.B].forEach(d=>{ if(!d)return; d.pos+=dt*d.bpm/60; const spb=60/d.bpm;
+    if(dt>.5||d.next/4<d.pos-1){d.next=Math.ceil(d.pos*4);return}
+    while(d.next/4<d.pos+.12/spb){hit(d,d.next,Math.max(now+(d.next/4-d.pos)*spb,now));d.next++} });
+}
+function lane(p,y,col,bars){
+  for(let k=Math.floor(p)-3;k<Math.floor(p)+6;k++){const x=Math.round(40+(k-p)*16);if(x<0||x>118)continue;
+    const m=((k%16)+16)%16,big=bars&&m%4===0;dr(col,x,y+(big?0:4),2,big?16:8)}
+}
+function djLoop(){
+  djRaf=requestAnimationFrame(djLoop);if(!D)return;
+  const ex=AC.currentTime-djLast,pa=D.A.pos+ex*D.A.bpm/60,pb=D.B.pos+ex*D.B.bpm/60;
+  dr('#0d0a1a',0,0,120,56);lane(pa,5,'#ff5fa2',true);lane(pb,25,'#7ee0d0',false);
+  dr('#5fd38a',40,2,1,40);
+  if(D.phase==='load'){const n=((performance.now()/160)|0)%16;for(let i=0;i<16;i++)dr(i<=n?'#f5cb1f':'#3a3350',5+i*7,47,5,5)}
+  else{const k=((Math.floor(pa)%16)+16)%16;for(let i=0;i<16;i++)dr(i===k?'#fff':'#3a3350',5+i*7,47,5,5)}
+}
+function djDone(){
+  const bl=BANDS.reduce((a,[k])=>a+D.B.lv[k],0)/3,st=bl<.15?1:bl>=.6?3:2,run=D;D.phase='load';D.stars.push(st);
+  BANDS.forEach(([k])=>setBand(D.B,k,1));
+  ddlg.textContent='LOADING:::';dctl.innerHTML='';
+  setTimeout(()=>{
+    if(D!==run)return;const last=D.round>=2,sum=D.stars.reduce((a,b)=>a+b,0);
+    const msg='★'.repeat(st)+'☆'.repeat(3-st)+' '+(st===3?'Butterweich.':st===2?'B war noch etwas dünn, hat aber keiner gemerkt.':'Kurz war Stille. Passiert den Besten.');
+    D.A.g.disconnect();D.A=D.B;D.round++;
+    if(last){D.B=mkDeck(TR[D.order[0]],false);D.B.pos=D.A.pos;D.B.next=Math.ceil(D.B.pos*4);D.phase='end';
+      if(!isBday()){save.played=dayNum();persist()}
+      ddlg.textContent=msg+` Set vorbei: ${sum} von 9 Sternen.`+(isBday()?'':' Das war dein Spiel für heute.');
+      dctl.innerHTML=(isBday()?'<button class="btn main wide" data-a="again">Noch ein Set</button>':'')+'<button class="btn wide" data-a="out">Feierabend</button>';
+    }else{newB();ddlg.textContent=msg+' Nächster Track: '+D.B.tr.n+'.'}
+  },1700);
+}
+function openPC(){if(playedToday()){say2('Genug gespielt für heute. Morgen wartet wieder was Schönes.');return}cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#pc').hidden=false;home()}
+function closePC(){unsnap();$('#pc').hidden=true;$('#room').hidden=false;say2('Rechner aus. Und jetzt?');R.away=false;cancelAnimationFrame(R.raf);loop()}
+$('#x').onclick=closePC;
+function resume(){
+  let s;try{s=JSON.parse(localStorage.getItem('kiezkram-ses'))}catch(e){}
+  if(!s)return false;
+  if(playedToday()){unsnap();return false}
+  $('#intro').hidden=true;
+  openPC();
+  if(s.stage==='home'||!(s.i>=0&&s.i<A.length))return true;
+  G={jobs:A,i:s.i,stars:s.stars||[],list:shuffle(L),tries:s.tries||0,hint:s.hint||null,cat:'Alles',q:'',open:false};
+  pill.textContent='Auftrag '+(G.i+1)+'/'+A.length;
+  if(s.stage==='chat'&&s.n&&byId(s.n.i)){G.n={...s.n,i:byId(s.n.i)};chat()}
+  else if(s.stage==='browse')browse();
+  else if(s.stage==='result'){if(G.i>=grp()+2)end();else{G.i++;job()}}
+  else job();
+  return true;
+}
+/* ---------- Tagebuch ---------- */
+const QS=['Eine Sache, die mich heute zum Lachen gebracht hat', 'Eine Sache, die ich heute neu gelernt habe', 'Eine Sache, die mich heute stolz gemacht hat', 'Eine Sache, die ich heute genossen habe', 'Eine Sache, die mich heute überrascht hat', 'Eine Sache, die ich heute geschafft habe', 'Eine Sache, die mich heute berührt hat', 'Eine Sache, die ich heute für jemanden getan habe', 'Eine Sache, die mich heute entspannt hat', 'Eine Sache, die mich heute neugierig gemacht hat', 'Eine Sache, für die ich heute dankbar bin', 'Eine Sache, die mich heute inspiriert hat', 'Eine Sache, die ich heute richtig lecker fand', 'Eine Sache, auf die ich mich morgen freue'];
+let dyQ=0;
+const esc=s=>s.replace(/[&<>]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
+const dyDay=()=>new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+const dyKey=()=>new Date().toDateString();
+const dyMine=x=>x.k===dyKey()&&x.q===QS[dyQ];
+function dyShow(){
+  const all=save.diary||[],e=all.find(dyMine);
+  $('#dydate').textContent=dyDay();$('#dyq').textContent=QS[dyQ];$('#dytext').value=e?e.t:'';
+  $('#dyold').innerHTML=all.filter(x=>!dyMine(x)).reverse().map(x=>`<div><b>${x.d} · ${x.q}</b>${esc(x.t)}</div>`).join('');
+}
+function dyKeep(){
+  const t=$('#dytext').value.trim();save.diary=(save.diary||[]).filter(x=>!dyMine(x));
+  if(t)save.diary.push({k:dyKey(),d:dyDay(),q:QS[dyQ],t});persist();
+}
+function openDiary(){cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#diary').hidden=false;dyQ=dayNum()%QS.length;dyShow()}
+$('#dysave').onclick=()=>{dyKeep();const b=$('#dysave');b.textContent='Gespeichert';setTimeout(()=>b.textContent='Speichern',1500)};
+$('#dyx').onclick=()=>{dyKeep();$('#diary').hidden=true;$('#room').hidden=false;say2('Tagebuch zugeklappt. Das tat gut.');R.away=false;cancelAnimationFrame(R.raf);loop()};
+/* ---------- Online bestellen ---------- */
+const CAT=[{id:'lava',n:'Lavalampe',e:'🫧',d:'Blubbert langsam vor sich hin. Kommt auf den Schreibtisch.'},
+  {id:'o_pyjama',n:'Outfit Pyjama',col:'#bfe3f5',d:'Anziehen geht dann am Kleiderschrank.'},{id:'o_jeans',n:'Outfit Jeans & Weiß',col:'#4a5aa8',d:'Anziehen geht dann am Kleiderschrank.'},
+  {id:'o_glitzer',n:'Outfit Festival-Glitzer',col:'#ff5fa2',d:'Anziehen geht dann am Kleiderschrank.'},{id:'o_jogger',n:'Outfit Jogginganzug',col:'#9aa3b5',d:'Anziehen geht dann am Kleiderschrank.'},
+  {id:'b_salbei',n:'Bettwäsche Salbei',col:'#8fb39a',d:'Wechseln geht dann direkt am Bett.'},{id:'b_honig',n:'Bettwäsche Honig',col:'#e3b55a',d:'Wechseln geht dann direkt am Bett.'},
+  {id:'b_flieder',n:'Bettwäsche Flieder',col:'#b9a2e8',d:'Wechseln geht dann direkt am Bett.'},{id:'b_nacht',n:'Bettwäsche Nachtblau',col:'#4a5aa8',d:'Wechseln geht dann direkt am Bett.'}];
+function boxItem(){return CAT.find(x=>save.orders[x.id]!==undefined&&!save.items[x.id]&&dayNum()>save.orders[x.id])}
+const orderedToday=()=>Object.values(save.orders||{}).includes(dayNum())||!!(save.paint&&save.paint.day===dayNum());
+function shopShow(){
+  const row=x=>{
+    const o=save.orders[x.id],st=x.soon?'Bald bestellbar':save.items[x.id]?(x.id.startsWith('o_')?'Hängt schon in deinem Schrank':x.col?'Kuschelt schon im Bett':'Wohnt schon bei dir'):o===undefined?'':dayNum()>o?'Wartet im Zimmer auf dich':'Ist schon unterwegs zu dir';
+    return `<div class="shopitem">${x.col?`<span class="ic sw" style="background:${x.col}"></span>`:`<span class="ic">${x.e}</span>`}<div class="t"><b>${x.n.replace(/^(Outfit|Bettwäsche) /,'')}</b>${x.id.startsWith('o_')||x.id.startsWith('b_')?'':x.d}</div>${st?`<span class="st">${st}</span>`:`<button class="btn main" data-o="${x.id}">Bestellen</button>`}</div>`},grp=p=>CAT.filter(x=>x.id.startsWith(p)).map(row).join('');
+  $('#shoplist').innerHTML=CAT.filter(x=>!/^[ob]_/.test(x.id)).map(row).join('')
+   +'<p class="small"><i>(Kleiderschrank)</i></p>'+grp('o_')+'<p class="small"><i>(Bett)</i></p>'+grp('b_')
+   +'<p class="small"><i>(Wandfarbe)</i></p>'
+   +Object.entries(WALLS).map(([id,[n,col]])=>{
+    const p=save.paint,st=p&&p.to===id?(dayNum()>p.day?'Heute wird gepinselt':'Morgen greift sie zum Pinsel'):!p&&save.wall===id?'Schmückt gerade deine Wand':p?'Eine Farbe nach der anderen':'';
+    return `<div class="shopitem"><span class="ic sw" style="background:${col}"></span><div class="t"><b>${n}</b></div>${st?`<span class="st">${st}</span>`:`<button class="btn main" data-o="wall:${id}">Bestellen</button>`}</div>`}).join('');
+  const ot=orderedToday();if(ot)$('#shoplist').querySelectorAll('[data-o]').forEach(b=>{const d=document.createElement('span');d.className='st';d.style.opacity='.5';d.textContent='–';b.replaceWith(d)});
+  $('#shnote').textContent=ot?'Für heute ist bestellt. Morgen darfst du dir wieder etwas aussuchen.':'Eine Sache pro Tag: heute ausgesucht, morgen klopft das Paket an.';
+}
+$('#shoplist').onclick=e=>{const b=e.target.closest('[data-o]');if(!b||orderedToday())return;const id=b.dataset.o;if(id.startsWith('wall:'))save.paint={to:id.slice(5),day:dayNum()};else save.orders[id]=dayNum();persist();shopShow()};
+$('#deco').onclick=()=>{cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#shop').hidden=false;shopShow()};
+$('#shx').onclick=()=>{$('#shop').hidden=true;$('#room').hidden=false;R.away=false;cancelAnimationFrame(R.raf);loop()};
+/* ---------- Startseite: Titel wird eingetippt, dann runterscrollen ---------- */
+{const intro=$('#intro'),app=$('#app'),ls=[...intro.querySelectorAll('i')];ls.forEach((l,i)=>l.style.setProperty('--i',i));
+  if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let li=0;ls.forEach(l=>l.style.visibility='hidden');
+    setTimeout(()=>{const ty=setInterval(()=>{if(li<ls.length)ls[li++].style.visibility='visible';else{clearInterval(ty);setTimeout(()=>$('#hint').classList.add('on'),1500)}},130)},500)}
+  else $('#hint').classList.add('on');
+  app.addEventListener('scroll',()=>{if(!intro.hidden&&app.scrollTop>=intro.offsetHeight-2){intro.hidden=true;app.scrollTop=0;if(app.classList.contains('pre')){app.classList.remove('pre');showNight()}else if(!resume())hello()}});
+  intro.onclick=()=>app.scrollTo({top:intro.offsetHeight,behavior:'smooth'});}
+/* ---------- Sichern & Wiederherstellen ---------- */
+// Die Nachricht ist für Menschen lesbar (Tagebuch im Klartext) und trägt am Ende den kompletten Spielstand als Code.
+function backupText(){
+  const d=save.diary||[],code=btoa(unescape(encodeURIComponent(JSON.stringify(save))));
+  return `goodnightmaria · Sicherung vom ${dyDay()}\n\nTAGEBUCH (${d.length} Einträge)\n\n${d.map(x=>`${x.d}\n${x.q}:\n${x.t}`).join('\n\n')||'Noch keine Einträge.'}\n\nEINGERICHTET: ${CAT.filter(x=>save.items[x.id]).map(x=>x.n).join(', ')||'noch nichts'}\nFUNDSTÜCKE: ${save.found.length} von ${A.length}\n\nZum Wiederherstellen diese ganze Nachricht im Spiel unter „Online bestellen" → „Wiederherstellen" einfügen. Den Code hier drunter bitte nicht verändern.\n\n##GNM1##${code}##`;
+}
+const flash=(b,t)=>{const o=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o,1600)};
+async function doBackup(btn){
+  const text=backupText();
+  if(navigator.share){try{await navigator.share({text});return}catch(e){if(e&&e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(text);flash(btn,'Kopiert')}
+  catch(e){$('#room').hidden=true;$('#diary').hidden=true;$('#shop').hidden=false;R.away=true;shopShow();$('#rsbox').hidden=false;$('#bktext').value=text;$('#bktext').select();$('#rsmsg').textContent='Teilen geht hier nicht. Markiere den Text und kopiere ihn.'}
+}
+function restore(text){
+  const m=text.replace(/\s+/g,'').match(/##GNM1##([A-Za-z0-9+\/=]+)##/);if(!m)return false;
+  let b;try{b=JSON.parse(decodeURIComponent(escape(atob(m[1]))))}catch(e){return false}
+  if(!b||typeof b!=='object')return false;
+  save.found=[...new Set([...(save.found||[]),...(b.found||[])])].filter(id=>A.some(a=>a.id===id));
+  save.items={...save.items,...(b.items||{})};save.orders={...save.orders,...(b.orders||{})};
+  const key=x=>x.k+'|'+x.q,have=new Set((b.diary||[]).map(key));
+  save.diary=[...(save.diary||[]).filter(x=>!have.has(key(x))),...(b.diary||[])];
+  if(b.played>(save.played||0))save.played=b.played;
+  if(b.kg>(save.kg||0))save.kg=b.kg;if(b.stars)save.stars={...(save.stars||{}),...b.stars};
+  if(b.fit)save.fit=b.fit;
+  if(b.plant)save.plant=b.plant;if(b.bedcol)save.bedcol=b.bedcol;if(b.wall)save.wall=b.wall;if(b.paint)save.paint=b.paint;
+  persist();return true;
+}
+$('#bk').onclick=e=>doBackup(e.currentTarget);
+$('#dybk').onclick=e=>{dyKeep();doBackup(e.currentTarget)};
+$('#rs').onclick=()=>{$('#rsbox').hidden=!$('#rsbox').hidden;$('#rsmsg').textContent=''};
+$('#rsgo').onclick=()=>{const ok=restore($('#bktext').value);$('#rsmsg').textContent=ok?'Wiederhergestellt. Tagebuch, Album und Einrichtung sind zurück.':'Das hat nicht geklappt. Bitte die ganze Nachricht einfügen, samt Code am Ende.';if(ok){$('#bktext').value='';shopShow()}};
+// Datum, dazu das aktuelle Wetter in Berlin, wenn die Abfrage klappt
+const td=$('#today'),dstr=new Date().toLocaleDateString('de-DE',{weekday:'long',day:'numeric',month:'long'});
+td.textContent=dstr;
+fetch('https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.405&current=temperature_2m,weather_code&timezone=Europe%2FBerlin').then(x=>x.json()).then(j=>{
+  const cd=j.current.weather_code,tx=cd===0?'klar':cd<3?'leicht bewölkt':cd===3?'bedeckt':cd<50?'Nebel':cd<60?'Nieselregen':cd<70?'Regen':cd<80?'Schnee':cd<83?'Schauer':cd<87?'Schneeschauer':'Gewitter';
+  td.textContent=`${dstr} · Berlin ${Math.round(j.current.temperature_2m)}°, ${tx}`;
+}).catch(()=>{});
+// Immer erst der Titel: Nacht-Bildschirm oder laufendes Spiel kommen nach dem Runterscrollen
+if(save.sleepUntil&&Date.now()<save.sleepUntil){R.night=true;$('#app').classList.add('pre');$('#room').hidden=true;$('#night').hidden=false}
+else loop();
+</script>
+</body>
+</html>
