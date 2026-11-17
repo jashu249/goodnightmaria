@@ -65,6 +65,19 @@ p{margin:0}
 .avrow .swrow{display:flex;gap:7px;flex-wrap:wrap}.avrow .swb{width:32px;height:32px}.avrow .swb.on{box-shadow:0 0 0 3px #ffd98a}
 #avname{flex:1;font-family:var(--pixel);font-size:18px;padding:8px 10px;border:0;border-radius:10px;background:rgba(255,255,255,.1);color:#fff}
 #avcv{width:96px;height:160px;image-rendering:pixelated;align-self:center;margin:4px 0}
+.sdg{display:grid;grid-template-columns:repeat(9,1fr);background:#fff8e7;border:3px solid #3a2c57;border-radius:10px;overflow:hidden;aspect-ratio:1;width:100%;max-width:420px;align-self:center}
+.sdg div{display:grid;place-items:center;font-family:var(--pixel);font-size:clamp(16px,5vw,22px);color:#7a4fa8;border-right:1px solid #d8cbe8;border-bottom:1px solid #d8cbe8;cursor:pointer}
+.sdg div.g{color:#2a2433;font-weight:700}.sdg div.r3{border-right:2px solid #3a2c57}.sdg div.b3{border-bottom:2px solid #3a2c57}
+.sdg div.sel{background:#ffe9f2}.sdg div.same{background:#f6eefc}.sdg div.bad{color:#e0402a}.sdg.done div{background:#eaf7e8}
+.sdpad{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.sdpad .btn{padding:10px 0;font-size:18px}
+.cwt{font-family:var(--pixel);font-size:15px;color:#cfc4e6;margin:0}
+.cwg{display:grid;gap:2px;align-self:center;width:100%;max-width:420px}
+.cwg .c{position:relative;aspect-ratio:1;background:#fff8e7;border-radius:3px}.cwg .x{aspect-ratio:1}
+.cwg input{position:absolute;inset:0;width:100%;height:100%;border:0;background:none;text-align:center;font-family:var(--pixel);font-size:clamp(13px,4.2vw,19px);text-transform:uppercase;color:#2a2433;padding:0;border-radius:3px;caret-color:transparent}
+.cwg input:focus{outline:none;background:#ffd3e6}.cwg .c.hl input{background:#ffe9f2}.cwg .c.bad input{color:#e0402a}.cwg.done .c{background:#eaf7e8}
+.cwg sup{position:absolute;left:1px;top:0;font-size:8px;line-height:1;color:#7a4fa8;font-family:var(--body);pointer-events:none;z-index:1}
+.cwcur{font-family:var(--pixel);font-size:15px;color:#ffd98a;min-height:20px;margin:0}
+.cwl{font-size:13px;color:#e8e0f5;display:flex;flex-direction:column;gap:3px}.cwl b{font-family:var(--pixel);font-weight:400;color:#ffb3d9;margin-top:6px}.cwl span{cursor:pointer}.cwl span.ok{opacity:.45;text-decoration:line-through}
 .rbmsg{font-family:var(--pixel);font-size:17px;line-height:1.35;min-height:46px}
 .hint svg{display:block;margin:10px auto 0}
 @media (prefers-reduced-motion:no-preference){.hint svg{animation:bob 1.6s ease-in-out infinite}}
@@ -157,7 +170,7 @@ h2{font-size:22px;line-height:1.1}
 .shopitem .btn{width:auto;font-size:15px;padding:8px 10px;flex:none}
 .shopitem .st{font-family:var(--pixel);font-size:15px;color:var(--accent);text-align:right;flex:none;max-width:40%}
 /* tagebuch */
-#diary,#kiosk,#rub,#sea,#avatar{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+#diary,#kiosk,#rub,#sea,#avatar,#sudoku,#cross{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
 .page{background:var(--page);color:var(--ink);border:3px solid #fff;padding:14px;display:flex;flex-direction:column;gap:8px}
 .dydate{font-family:var(--pixel);font-size:15px;color:var(--muted)}
 .dyq{font-family:var(--pixel);font-weight:700;font-size:21px;line-height:1.15}
@@ -218,7 +231,7 @@ h2{font-size:22px;line-height:1.1}
 #ncv{position:absolute;inset:0;width:100%;height:100%}
 #dream{position:absolute;left:50%;top:calc(47% + 46px);transform:translateX(-50%);width:min(30ch,82%);margin:0;text-align:center;font-family:var(--pixel);opacity:0;animation:none;transition:opacity 2.5s}
 #dream.on{opacity:1}
-#letter,#hello{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
+#letter,#hello,#story{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding-inline:16px;padding-block:12px;color:#fff;overflow-y:auto}
 .letter{gap:16px;padding:8px 2px;background:none;border:0;color:var(--accent)}
 .letter p{font-family:var(--pixel);font-size:20px;line-height:1.4}
 .heart{vertical-align:-4px;margin-left:4px}
@@ -370,6 +383,26 @@ h2{font-size:22px;line-height:1.1}
     <div class="avrow"><span>Pants</span><div class="swrow" data-k="P"></div></div>
     <div class="avrow"><span>Name</span><input id="avname" maxlength="9" autocomplete="off" placeholder="Your name"></div>
     <button class="btn main" id="avgo">Let's go</button>
+  </section>
+  <section id="sudoku" hidden>
+    <div class="djtop"><span>Sudoku</span><button class="btn" id="sdx" aria-label="Zeitung weglegen">×</button></div>
+    <div class="sdg" id="sdg"></div>
+    <div class="sdpad" id="sdpad"></div>
+    <p class="rbmsg" id="sdmsg"></p>
+  </section>
+  <section id="cross" hidden>
+    <div class="djtop"><span>Kreuzworträtsel</span><button class="btn" id="cwx" aria-label="Zeitung weglegen">×</button></div>
+    <p class="cwt" id="cwt"></p>
+    <div class="cwg" id="cwg"></div>
+    <p class="cwcur" id="cwcur"></p>
+    <div class="row2"><button class="btn" id="cwchk">Prüfen</button></div>
+    <p class="rbmsg" id="cwmsg"></p>
+    <div class="cwl" id="cwl"></div>
+  </section>
+  <section id="story" hidden>
+    <div class="djtop"><span id="sttl"></span></div>
+    <div class="page letter" id="stp"></div>
+    <div class="stack" id="stopt"></div>
   </section>
   <section id="night" hidden><canvas id="ncv" role="img" aria-label="Schlaf gut :)"></canvas><p id="dream"></p></section>
   <section id="dj" hidden>
@@ -819,6 +852,8 @@ const SPOTS=[
  {id:'cafeout',sc:'cafe',x0:114,x1:128,at:114,label:'Rausgehen'},
  {id:'barista',sc:'cafe',x0:8,x1:42,at:30,label:'Etwas bestellen'},
  {id:'kiosk',sc:'street',x0:128,x1:144,at:131,label:()=>TX('enter1')},
+ {id:'officein',sc:'street',x0:346,x1:362,at:350,label:()=>JT.officein,on:()=>LOC()==='berlin'},
+ {id:'officeout',sc:'office',x0:118,x1:130,at:116,label:()=>JT.officeout},
  {id:'spout',sc:'spaeti',x0:98,x1:108,at:96,label:'Rausgehen'},
  {id:'kasse',sc:'spaeti',x0:8,x1:40,at:30,label:'Zur Kasse'},
  {id:'phone',x0:-29,x1:-25,at:-33,label:'Telefon'},
@@ -835,8 +870,8 @@ const SPOTS=[
  {id:'diary',x0:146,x1:166,at:150,label:'Tagebuch öffnen'}
 ];
 const WW=186,VW=84,WX0=-122,KX=-34; // links von x=0 liegt die Küche
-const SCB=()=>R.sc==='street'?[0,ST]:R.sc==='cafe'?[0,CW]:R.sc==='spaeti'?[0,110]:[WX0,WW];
-const R={dv:{street:9,cafe:100,spaeti:80},sc:'room',cam:0,x:40,tx:null,dir:1,todo:null,hold:0,t:0,sleep:false,raf:0};
+const SCB=()=>R.sc==='office'?[0,134]:R.sc==='street'?[0,ST]:R.sc==='cafe'?[0,CW]:R.sc==='spaeti'?[0,110]:[WX0,WW];
+const R={dv:{street:9,cafe:100,spaeti:80,office:60},sc:'room',cam:0,x:40,tx:null,dir:1,todo:null,hold:0,t:0,sleep:false,raf:0};
 let sayT=0;const say2=t=>{dlg.textContent=t;clearTimeout(sayT);if(t)sayT=setTimeout(()=>dlg.textContent='',4500)};
 const r=(col,x,y,w,h)=>{c.fillStyle=col;c.fillRect(x,y,w,h)};
 // Figur wird einmal in Originalgröße vorgezeichnet und dann als Ganzes skaliert, damit keine Fugen zwischen den Pixeln entstehen
@@ -851,6 +886,9 @@ function hairRows(){const st=save.hs||'lang';return SPR.map((row,ry)=>{let a=[..
   if(st==='pony'&&ry===3)a=[...'.HHHHHHHHHH.'];
   return a.join('')})}
 function tripCheck(){const tr=save.trip;if(!tr||dayNum()<=tr.day)return;save.loc=tr.to;delete save.trip;save.arr=save.loc;persist();R.sc='room'}
+function openStory(){away('#story');$('#sttl').textContent=JT.story.title;$('#stp').innerHTML=JT.story.p.map(x=>`<p>${NMs(x)}</p>`).join('');
+  $('#stopt').innerHTML=Object.entries(JT.perks).map(([k,v])=>`<button class="btn" data-p="${k}">${v[0]}</button>`).join('');
+  $('#stopt').onclick=e=>{const b=e.target.closest('[data-p]');if(!b)return;save.job={stage:'office',perk:b.dataset.p,perkDc:save.dc||1};persist();back('#story');say2(NMs(JT.perkok))}}
 function hairCheck(){const o=save.hairOrder;if(!o)return;const d=dayNum()-o.day;if(d>1||(d===1&&hourNow()>=15)){save.hs=o.st;save.hc=o.col;delete save.hairOrder;persist();for(const k in SPC)delete SPC[k]}}
 function spriteCv(dir,frame,noArm,closed){
   const fit=FITS[save.fit]||{},key=dir+'_'+frame+'_'+(save.fit||'')+(noArm?'_n':'')+(closed?'_c':'');let o=SPC[key];
@@ -968,7 +1006,7 @@ function bedAsk(){
   $('#slyes').onclick=()=>{const w=new Date();if(w.getHours()>=6)w.setDate(w.getDate()+1);w.setHours(6,0,0,0);save.sleepUntil=w.getTime();persist();unsnap();
     dlg.textContent='';
     if(matchMedia('(prefers-reduced-motion: reduce)').matches){showNight();return}
-    $('#room').classList.add('dreaming');R.tx=null;R.todo=null;R.hold=0;R.sa={st:0,f:0};return;
+    $('#room').classList.add('dreaming');R.tx=null;R.todo=null;R.hold=0;R.sa={st:0,f:0};setTimeout(()=>{if(!R.night){R.sa=null;showNight()}},20000);return;
     // das Zimmer wird zur Gedankenwolke, schrumpft und verblasst
     dreamAnim()};
 }
@@ -980,9 +1018,12 @@ const RECIPES=[['Pasta mit Zitrone und Parmesan', 'Zitronen', 'Spaghetti', 'Parm
 const NEWS=['Igel überquert erstmals unfallfrei die Sonnenallee','Ringbahn fährt eine Extrarunde nur für Verliebte','Späti in Kreuzberg verkauft jetzt auch Umarmungen','Tempelhofer Feld: Drachen bleibt drei Tage in der Luft','Fernsehturm bekommt zum Geburtstag eine Lichterkette','BVG entschuldigt sich bei allen. Einfach so.','Studie: Berliner lächeln öfter, als sie zugeben','Katze wird Ehrenmitglied im Schrebergartenverein','Spree heute besonders glitzernd, sagen Experten','Ältester Plattenladen der Stadt feiert mit Gratis-Tee','Club öffnet sonntags jetzt auch für Omas','Döner-Preis bleibt stabil, ganz Berlin atmet auf','Eichhörnchen erobert Bibliothek in Pankow','Mauerpark-Karaoke: Taube singt mit','Bezirksamt antwortet innerhalb eines Tages – Ermittlungen laufen','Erste Kirschblüte am Landwehrkanal gesichtet','Straßenmusiker in der U8 bekommt Standing Ovations','Kiezküche Wedding kocht Rekordportion Linsensuppe','Fahrradklingel-Orchester probt im Görlitzer Park','Wetterdienst verspricht: Morgen wird alles ein bisschen schöner'];
 function doSpot(id){
   R.todo=null;
-  if(id==='pc'){if(playedToday()){say2('Genug gespielt für heute. Morgen wartet wieder was Schönes.');return}
-    clearTimeout(sayT);dlg.innerHTML='Was machst du?<div class="swrow"><button class="btn" id="pck">Kleinanzeigen</button><button class="btn" id="pcs">Schiffe versenken</button></div>';
-    $('#pck').onclick=()=>{dlg.textContent='';openPC()};$('#pcs').onclick=()=>{dlg.textContent='';openSea()}}
+  if(id==='pc'){const j=save.job||{},canJob=j.stage==='office'&&j.perkDc<(save.dc||1)&&LOC()==='berlin',pl=playedToday();
+    if(pl&&!canJob){say2('Genug gespielt für heute. Morgen wartet wieder was Schönes.');return}
+    clearTimeout(sayT);dlg.innerHTML=JT.pick+'<div class="swrow">'+(pl?'':`<button class="btn" id="pck">${JT.ads}</button><button class="btn" id="pcs">${JT.sea}</button>`)+(canJob?`<button class="btn" id="pcj">${JT.jobbtn}</button>`:'')+'</div>';
+    if(!pl){$('#pck').onclick=()=>{dlg.textContent='';openPC()};$('#pcs').onclick=()=>{dlg.textContent='';openSea()}}
+    if(canJob)$('#pcj').onclick=()=>{dlg.innerHTML=NMs(JT.jobq)+'<div class="swrow">'+Object.entries(JT.jobs).map(([k,v])=>`<button class="btn" data-j="${k}">${v[0]}</button>`).join('')+'</div>';
+      dlg.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{Object.assign(j,{stage:'hunt',job:b.dataset.j,start:(save.dc||1)+7});save.job=j;persist();say2(NMs(JT.applied))})}}
   else if(id==='dj')openDJ();
   else if(id==='cake'){cancelAnimationFrame(R.raf);R.hold=0;R.away=true;$('#room').hidden=true;$('#letter').hidden=false}
   else if(id==='diary')openDiary();
@@ -1008,8 +1049,14 @@ function doSpot(id){
   else if(id==='kiosk'){R.sc='spaeti';if(R.day){R.dv.spaeti=80;return}R.x=94;R.dir=-1;R.tx=null;say2(TX('in1'))}
   else if(id==='spout'){R.sc='street';if(R.day){R.dv.street=132;return}R.x=131;R.dir=1;R.tx=null}
   else if(id==='kasse')openKiosk();
+  else if(id==='officein'){R.sc='office';if(R.day){R.dv.office=60;return}R.x=112;R.dir=-1;R.tx=null;say2(NMs(JT.closed))}
+  else if(id==='officeout'){R.sc='street';if(R.day){R.dv.street=352;return}R.x=350;R.dir=1;R.tx=null}
   else if(id==='fridge'){const rc=RECIPES[dayNum()%RECIPES.length];say2(`Im Kühlschrank sind ${rc[1]}, ${rc[2]} und ${rc[3]}. Du könntest heute ${rc[0]} kochen!`)}
-  else if(id==='paper'){const L=LOC();if(L==='berlin')say2('In der Zeitung steht: „'+NEWS[dayNum()%NEWS.length]+'“');else say2(TXT.paper[L]+TXT.facts[L][dayNum()%TXT.facts[L].length]+'“')}
+  else if(id==='paper'){const L=LOC(),txt=L==='berlin'?'In der Zeitung steht: „'+NEWS[dayNum()%NEWS.length]+'“':TXT.paper[L]+TXT.facts[L][dayNum()%TXT.facts[L].length]+'“';
+    if(R.day){say2(txt);return}
+    clearTimeout(sayT);dlg.innerHTML='';dlg.append(txt);dlg.insertAdjacentHTML('beforeend','<div class="swrow"><button class="btn" id="pzs">'+'Sudoku'+'</button><button class="btn" id="pzc">'+'Kreuzworträtsel'+'</button></div>');
+    const go=k=>{dlg.textContent='';R.carry=k;R.tx=129;R.todo='sitpuz'};$('#pzs').onclick=()=>go('sd');$('#pzc').onclick=()=>go('cw')}
+  else if(id==='sitpuz'){R.sit=true;R.dir=1;const k=R.carry;setTimeout(()=>{if(R.sit&&!R.away)k==='sd'?openSudoku():openCross()},700)}
   else if(id==='phone')phoneCall();
   else if(id==='bed')bedAsk();
   else if(id==='plant')plantSay();
@@ -1019,8 +1066,24 @@ function doSpot(id){
 const isDay=()=>{if(isBday())return false;const h=hourNow();return h>=7&&h<19};
 const TXT={"arrive": {"tokyo": "Ohayō! Maria ist in Tokyo aufgewacht. Draußen rattert die grüne Yamanote-Linie vorbei.", "land": "Maria ist auf dem Land aufgewacht. Draußen muht eine Kuh. Endlich Ruhe.", "berlin": "Wieder zu Hause in Berlin. Der Fernsehturm blinkt zur Begrüßung."}, "agency": "„Reisebüro Fernweh, hallo! Wohin soll es gehen?“", "booked": "„Gebucht! Morgen früh bist du da. Gute Reise!“", "blind": "„Blind Booking, wie aufregend! Wohin es geht, siehst du morgen früh.“", "pending": "Die Reise ist gebucht. Morgen früh geht es los!", "who": "Wen rufst du an?", "hair": "Friseur", "travel": "Reisebüro", "dest": {"tokyo": "Tokyo", "land": "Ich krieg zu viel hier!", "blind": "Blind booking!", "berlin": "Zurück nach Berlin"}, "place": {"berlin": "im Café", "tokyo": "in der Izakaya", "land": "im Gasthof"}, "shop": {"berlin": "Spätkauf am Eck", "tokyo": "Konbini", "land": "Dorfladen"}, "enter1": {"berlin": "Rein in den Spätkauf", "tokyo": "In den Konbini", "land": "In den Dorfladen"}, "enter2": {"berlin": "Ins Café", "tokyo": "In die Izakaya", "land": "In den Gasthof"}, "in1": {"berlin": "Es summt der Getränkekühlschrank. Hinter der Kasse läuft leise Radio.", "tokyo": "Irasshaimase! Eine kleine Melodie begrüßt dich. Es riecht nach Oden.", "land": "Die Ladenglocke bimmelt. Es riecht nach frischem Brot und Heu."}, "in2": {"berlin": "Drinnen riecht es nach Kaffee und Zimt. Leise läuft eine Platte.", "tokyo": "Rote Laternen, Stimmengewirr, irgendwo klirren Gläser. Kanpai!", "land": "Der Kachelofen bollert. Am Stammtisch wird Karten gespielt."}, "out": {"berlin": "Draußen ist es kühl und still. Rechts leuchtet der Spätkauf.", "tokyo": "Draußen summen die Getränkeautomaten. Rechts leuchtet der Konbini.", "land": "Draußen ist nur Wiese, Berge und Kuhglocken."}, "paper": {"tokyo": "Aus dem Reiseführer: „", "land": "Im Dorfblatt steht: „"}, "explore": {"tokyo": "Maria erkundet Tokyo.", "land": "Maria wandert durch die Berge."}, "orders": {"tokyo": "„Irasshaimase!“ Du nimmst ", "land": "Du nimmst "}, "order": {"tokyo": ["ein Onigiri mit Lachs.", "eine heiße Dose Maistee aus dem Automaten.", "einen Matcha-Latte.", "ein paar Mochi.", "eine Schale Ramen. Du schlürfst laut, das gehört sich so."], "land": ["ein Glas Honig vom Imker nebenan.", "frische Eier, noch warm.", "ein Stück Bergkäse.", "einen Apfelstrudel.", "eine heiße Milch mit Honig."]}, "facts": {"tokyo": ["In Japan zieht man vor der Wohnung die Schuhe aus – dafür gibt es den Genkan, eine kleine Stufe am Eingang.", "Die Yamanote-Linie fährt in etwa einer Stunde einmal im Kreis um die Innenstadt.", "Vor dem Essen sagt man „Itadakimasu“ – danke für das Essen.", "Ramen laut zu schlürfen ist nicht unhöflich, sondern ein Kompliment.", "Trinkgeld gibt man in Japan nicht. Gute Arbeit ist selbstverständlich.", "An Getränkeautomaten gibt es im Winter auch heiße Dosen, zum Beispiel Maistee.", "Im Konbini kann man Rechnungen bezahlen, Pakete abgeben und Onigiri kaufen.", "Im Frühling picknicken alle unter den Kirschblüten. Das heißt Hanami.", "Auf Rolltreppen steht man in Tokyo links und lässt rechts frei.", "Zur Begrüßung verbeugt man sich – je tiefer, desto respektvoller.", "Im Onsen, dem heißen Bad, wäscht man sich vorher gründlich im Sitzen.", "An vielen Bahnhöfen spielt eine eigene kleine Melodie, wenn die Türen schließen."], "land": ["Kühe haben beste Freundinnen und sind gestresst, wenn man sie trennt.", "Beim Almabtrieb im Herbst kommen die Kühe mit Blumen geschmückt vom Berg.", "Eier gibt es aus der Kiste neben der Tür. Bezahlt wird mit Vertrauen.", "Heu riecht so gut, weil beim Trocknen Cumarin entsteht.", "Beim Wandern grüßt man sich hier. Immer.", "Ein Kachelofen speichert die Wärme und gibt sie stundenlang ab.", "Nachts sieht man hier die Milchstraße, weil keine Stadt das Licht verschluckt.", "Der Hahn kräht nicht nur morgens, sondern wann er will.", "Holz hacken wärmt zweimal: beim Hacken und beim Heizen.", "Bergkäse reift monatelang in kühlen Kellern."]}, "city": {"berlin": "Berlin", "tokyo": "Tokyo", "land": "Allgäu"}};
 const LOC=()=>save.loc||'berlin',TX=k=>TXT[k][LOC()];
+const SUDOKU=[["010002000000073020704059300050000001981020756400000090006730905070940000000200070", "319682547568473129724159368652897431981324756437561892246738915175946283893215674"], ["020003050000040008904070016800600003006421900100008002480060709500090000090300060", "628913457715246398934875216842659173376421985159738642481562739563197824297384561"], ["008035060050860300060200108082000000090080070000000840705008090009041080040570600", "278135964951864327364297158482716539596483271137952846715628493629341785843579612"], ["800209000900000583604003070005090320000402000029030700090600205536000004000308007", "853279461972146583614583972465791328387462159129835746798614235536927814241358697"], ["800035900720100060150600004000400050001060800040009000200007095030002087005810003", "864235971723194568159678234687421359591763842342589716218347695436952187975816423"], ["040000000070530006600900403010240079003060100460019020806001002100072080000000060", "345186297972534816681927453518243679293765148467819325856491732139672584724358961"], ["410000503009046800600500000090082000300719002000650090000008007007320900803000026", "412897563539246871678531249796482315354719682281653794925168437167324958843975126"], ["009403000720086409500000000600307018000020000290501007000000004802940036000602900", "169453872723186459584279163645397218371824695298561347936718524812945736457632981"], ["104700900600008745803000000016050020090000070040080310000000403587400002001009607", "154762938629318745873594261716953824398241576245687319962175483587436192431829657"], ["900050870000309006002800040809270000250000087000098402020003100100904000097010008", "964152873578349216312867549849275631256431987731698452625783194183924765497516328"]];
+const CWS=[{"W":11,"H":11,"words":[{"w":"CURRYWURST","x":0,"y":1,"d":"a","n":2,"c":"Wurst mit Soße und Gewürz"},{"w":"RINGBAHN","x":7,"y":1,"d":"d","n":3,"c":"Fährt im Kreis um die Innenstadt"},{"w":"KREUZBERG","x":2,"y":0,"d":"d","n":1,"c":"Bezirk mit Kotti"},{"w":"SPAETI","x":5,"y":6,"d":"a","n":9,"c":"Kiosk, der lange offen hat (ohne Ä)"},{"w":"TURM","x":9,"y":1,"d":"d","n":4,"c":"Fernseh..."},{"w":"BAER","x":0,"y":6,"d":"a","n":8,"c":"Wappentier (ohne Ä)"},{"w":"KIEZ","x":10,"y":5,"d":"d","n":7,"c":"Berliner Wort für Viertel"},{"w":"DOENER","x":4,"y":3,"d":"a","n":6,"c":"Beliebtes Essen im Fladenbrot (ohne Ö)"},{"w":"CLUB","x":0,"y":3,"d":"d","n":5,"c":"Ort zum Tanzen bis morgens"},{"w":"SPREE","x":5,"y":6,"d":"d","n":9,"c":"Fluss durch Berlin"},{"w":"BVG","x":0,"y":8,"d":"a","n":10,"c":"Gelbe Bahnen und Busse"},{"w":"MAUER","x":2,"y":10,"d":"a","n":11,"c":"Fiel 1989"}],"t":"Berlin"},{"W":10,"H":11,"words":[{"w":"KNOBLAUCH","x":1,"y":4,"d":"a","n":4,"c":"Riecht stark, schützt vor Vampiren"},{"w":"NUDELN","x":2,"y":4,"d":"d","n":5,"c":"Pasta auf Deutsch"},{"w":"PFANNE","x":6,"y":2,"d":"d","n":3,"c":"Für Spiegeleier"},{"w":"ZWIEBEL","x":4,"y":0,"d":"d","n":2,"c":"Bringt einen zum Weinen"},{"w":"SALZ","x":0,"y":8,"d":"a","n":10,"c":"Weißes Gewürz"},{"w":"TEE","x":5,"y":7,"d":"a","n":8,"c":"Heißes Getränk aus Blättern"},{"w":"TOPF","x":5,"y":7,"d":"d","n":8,"c":"Darin kocht die Suppe"},{"w":"OFEN","x":4,"y":10,"d":"a","n":11,"c":"Darin backt der Kuchen"},{"w":"MESSER","x":0,"y":5,"d":"d","n":7,"c":"Zum Schneiden"},{"w":"REZEPT","x":2,"y":0,"d":"a","n":1,"c":"Anleitung zum Kochen"},{"w":"EI","x":7,"y":7,"d":"d","n":9,"c":"Zum Frühstück, weich oder hart"},{"w":"HONIG","x":9,"y":4,"d":"d","n":6,"c":"Süß, von Bienen"}],"t":"Küche"},{"W":10,"H":10,"words":[{"w":"GITARRE","x":0,"y":1,"d":"a","n":4,"c":"Sechs Saiten"},{"w":"TAKT","x":3,"y":0,"d":"d","n":2,"c":"Rhythmus-Einheit"},{"w":"LIED","x":1,"y":0,"d":"d","n":1,"c":"Song auf Deutsch"},{"w":"TECHNO","x":6,"y":0,"d":"d","n":3,"c":"Berliner Clubmusik"},{"w":"MELODIE","x":3,"y":5,"d":"a","n":8,"c":"Was man summt"},{"w":"BEAT","x":9,"y":4,"d":"d","n":7,"c":"Herzschlag eines Tracks"},{"w":"CHOR","x":6,"y":2,"d":"a","n":5,"c":"Viele singen zusammen"},{"w":"REMIX","x":4,"y":4,"d":"d","n":6,"c":"Neue Version eines Songs"},{"w":"DJ","x":7,"y":5,"d":"d","n":9,"c":"Legt Platten auf"},{"w":"KLAVIER","x":0,"y":7,"d":"a","n":11,"c":"Schwarze und weiße Tasten"},{"w":"BASS","x":2,"y":6,"d":"d","n":10,"c":"Tiefe Töne"}],"t":"Musik"},{"W":11,"H":9,"words":[{"w":"FLUSS","x":3,"y":8,"d":"a","n":10,"c":"Fließt ins Meer"},{"w":"NEBEL","x":4,"y":4,"d":"d","n":8,"c":"Morgens grau und dicht"},{"w":"MOOS","x":6,"y":5,"d":"d","n":9,"c":"Weicher, grüner Teppich im Wald"},{"w":"STERN","x":0,"y":4,"d":"a","n":7,"c":"Leuchtet nachts"},{"w":"EICHE","x":2,"y":0,"d":"d","n":1,"c":"Baum mit Eicheln"},{"w":"WIESE","x":1,"y":1,"d":"a","n":3,"c":"Grün, mit Blumen"},{"w":"MOND","x":6,"y":5,"d":"a","n":9,"c":"Nachts am Himmel"},{"w":"BERG","x":5,"y":0,"d":"d","n":2,"c":"Hoch, oft mit Schnee"},{"w":"SEE","x":0,"y":4,"d":"d","n":7,"c":"Stehendes Gewässer"},{"w":"REGEN","x":8,"y":1,"d":"d","n":4,"c":"Fällt aus Wolken"},{"w":"IGEL","x":7,"y":3,"d":"a","n":6,"c":"Stacheliges Tier"},{"w":"WALD","x":10,"y":1,"d":"d","n":5,"c":"Viele Bäume"}],"t":"Natur"},{"W":11,"H":11,"words":[{"w":"POSTKARTE","x":2,"y":8,"d":"a","n":10,"c":"Gruß aus dem Urlaub"},{"w":"TICKET","x":5,"y":3,"d":"d","n":5,"c":"Fahrkarte, englisch"},{"w":"TOKYO","x":3,"y":4,"d":"d","n":7,"c":"Hauptstadt Japans"},{"w":"KOFFER","x":10,"y":4,"d":"d","n":8,"c":"Gepäck mit Rollen"},{"w":"ZELT","x":0,"y":4,"d":"a","n":6,"c":"Haus aus Stoff"},{"w":"INSEL","x":2,"y":0,"d":"d","n":1,"c":"Land im Wasser"},{"w":"KARTE","x":8,"y":6,"d":"d","n":9,"c":"Zeigt den Weg"},{"w":"ZUG","x":0,"y":4,"d":"d","n":6,"c":"Fährt auf Schienen"},{"w":"WANDERN","x":0,"y":1,"d":"a","n":2,"c":"Zu Fuß durch die Berge"},{"w":"MEER","x":6,"y":10,"d":"a","n":11,"c":"Salzwasser bis zum Horizont"},{"w":"STRAND","x":4,"y":3,"d":"a","n":4,"c":"Sand am Meer"},{"w":"PASS","x":7,"y":2,"d":"d","n":3,"c":"Ausweis für Reisen"}],"t":"Reisen"},{"W":10,"H":11,"words":[{"w":"SCHNECKE","x":0,"y":7,"d":"a","n":9,"c":"Trägt ihr Haus"},{"w":"BIENE","x":7,"y":3,"d":"d","n":5,"c":"Macht Honig"},{"w":"KUH","x":6,"y":7,"d":"d","n":11,"c":"Gibt Milch"},{"w":"HASE","x":2,"y":7,"d":"d","n":10,"c":"Hat lange Ohren"},{"w":"EULE","x":2,"y":10,"d":"a","n":13,"c":"Nachtvogel"},{"w":"HUND","x":6,"y":9,"d":"a","n":12,"c":"Bellt"},{"w":"OTTER","x":4,"y":4,"d":"d","n":6,"c":"Hält beim Schlafen Händchen"},{"w":"ENTE","x":2,"y":5,"d":"a","n":7,"c":"Quakt"},{"w":"FUCHS","x":0,"y":3,"d":"d","n":4,"c":"Schlau und rot"},{"w":"PANDA","x":9,"y":6,"d":"d","n":8,"c":"Schwarz-weißer Bär"},{"w":"KATZE","x":2,"y":1,"d":"d","n":2,"c":"Schnurrt"},{"w":"AMSEL","x":2,"y":2,"d":"a","n":3,"c":"Singt morgens im Garten"},{"w":"WAL","x":6,"y":0,"d":"d","n":1,"c":"Größtes Tier im Meer"}],"t":"Tiere"},{"W":10,"H":11,"words":[{"w":"REGENTAG","x":2,"y":5,"d":"a","n":7,"c":"Perfekt für drinnen"},{"w":"DECKE","x":5,"y":4,"d":"d","n":6,"c":"Zum Einkuscheln"},{"w":"SCHLAF","x":8,"y":1,"d":"d","n":3,"c":"Nachts, mit Träumen"},{"w":"SOCKEN","x":2,"y":7,"d":"a","n":8,"c":"Warme Füße"},{"w":"SOFA","x":2,"y":7,"d":"d","n":8,"c":"Couch"},{"w":"BUCH","x":6,"y":2,"d":"a","n":5,"c":"Zum Lesen"},{"w":"PUZZLE","x":3,"y":0,"d":"d","n":2,"c":"Viele kleine Teile"},{"w":"KERZE","x":0,"y":2,"d":"a","n":4,"c":"Kleines Licht mit Flamme"},{"w":"KAKAO","x":1,"y":10,"d":"a","n":9,"c":"Heiße Schokolade"},{"w":"LAMPE","x":0,"y":0,"d":"a","n":1,"c":"Gibt warmes Licht"},{"w":"KAMIN","x":0,"y":2,"d":"d","n":4,"c":"Feuer im Haus"}],"t":"Gemütlich"},{"W":11,"H":11,"words":[{"w":"BAENDCHEN","x":2,"y":7,"d":"a","n":8,"c":"Eintritt am Handgelenk (ohne Ä)"},{"w":"MATSCH","x":8,"y":2,"d":"d","n":4,"c":"Wenn es regnet"},{"w":"BUEHNE","x":4,"y":2,"d":"d","n":3,"c":"Dort spielt die Band (ohne Ü)"},{"w":"FUSION","x":10,"y":2,"d":"d","n":5,"c":"Festival in Lärz"},{"w":"LINEUP","x":0,"y":3,"d":"a","n":6,"c":"Liste aller Acts"},{"w":"GLITZER","x":0,"y":2,"d":"d","n":2,"c":"Funkelt im Gesicht"},{"w":"BIER","x":2,"y":7,"d":"d","n":8,"c":"Getränk im Becher"},{"w":"SONNE","x":2,"y":0,"d":"d","n":1,"c":"Scheint hoffentlich"},{"w":"BAND","x":6,"y":4,"d":"d","n":7,"c":"Spielt live"},{"w":"SOUND","x":2,"y":0,"d":"a","n":1,"c":"Klang aus den Boxen"},{"w":"FREUNDE","x":1,"y":10,"d":"a","n":9,"c":"Mit denen geht man hin"}],"t":"Festival"},{"W":11,"H":10,"words":[{"w":"REGENBOGEN","x":0,"y":4,"d":"a","n":7,"c":"Bunt nach dem Regen"},{"w":"WIND","x":4,"y":2,"d":"d","n":5,"c":"Bewegt die Blätter"},{"w":"HITZE","x":1,"y":0,"d":"d","n":1,"c":"Im Hochsommer"},{"w":"SONNE","x":6,"y":3,"d":"d","n":6,"c":"Scheint am Tag"},{"w":"GEWITTER","x":0,"y":7,"d":"a","n":9,"c":"Mit Blitz und Donner"},{"w":"WOLKE","x":8,"y":0,"d":"d","n":2,"c":"Weiß oder grau am Himmel"},{"w":"NEBEL","x":9,"y":4,"d":"d","n":8,"c":"Man sieht kaum etwas"},{"w":"FROST","x":6,"y":1,"d":"a","n":3,"c":"Unter null Grad"},{"w":"EIS","x":1,"y":7,"d":"d","n":10,"c":"Gefrorenes Wasser"},{"w":"SCHNEE","x":1,"y":9,"d":"a","n":11,"c":"Weiß und kalt"},{"w":"TAU","x":10,"y":1,"d":"d","n":4,"c":"Morgens auf dem Gras"},{"w":"HAGEL","x":1,"y":0,"d":"a","n":1,"c":"Eiskörner vom Himmel"}],"t":"Wetter"},{"W":11,"H":10,"words":[{"w":"KOMOEDIE","x":0,"y":5,"d":"a","n":5,"c":"Lustiger Film (ohne Ö)"},{"w":"SZENE","x":7,"y":3,"d":"d","n":4,"c":"Ausschnitt eines Films"},{"w":"SAAL","x":7,"y":3,"d":"a","n":4,"c":"Raum mit vielen Sitzen"},{"w":"REGIE","x":6,"y":7,"d":"a","n":8,"c":"Führt beim Film"},{"w":"TRAILER","x":4,"y":0,"d":"d","n":1,"c":"Vorschau"},{"w":"TICKET","x":4,"y":0,"d":"a","n":1,"c":"Eintrittskarte"},{"w":"STAR","x":1,"y":1,"d":"a","n":2,"c":"Berühmte Schauspielerin"},{"w":"ROLLE","x":10,"y":1,"d":"d","n":3,"c":"Figur, die man spielt"},{"w":"OSCAR","x":1,"y":5,"d":"d","n":6,"c":"Goldener Filmpreis"},{"w":"FILM","x":9,"y":6,"d":"d","n":7,"c":"Läuft auf der Leinwand"},{"w":"DRAMA","x":6,"y":9,"d":"a","n":10,"c":"Ernster Film"},{"w":"KAMERA","x":0,"y":8,"d":"a","n":9,"c":"Nimmt alles auf"}],"t":"Kino"}];
+const JT={"office": "Maria ist im Büro.", "homeoffice": "Maria arbeitet heute im Homeoffice.", "story": {"title": "Feierabend", "p": ["Die Tür fällt ins Schloss. Maria lässt die Tasche fallen und sich gleich hinterher, aufs Bett.", "Im Büro von Halcyon ist alles weiß, das Licht summt, und die Zahlen auf dem Bildschirm sortieren sich nie von allein. Ein langer Tag.", "Was könnte morgen ein kleines bisschen schöner machen?"]}, "perks": {"plant": ["Eine kleine Pflanze für den Schreibtisch", "Die kleine Pflanze auf dem Schreibtisch hat den grauen Bürotag ein bisschen grüner gemacht."], "music": ["Kopfhörer mit der Lieblingsplaylist", "Mit Kopfhörern und Lieblingsmusik sind die Zahlen heute wie von selbst gelaufen."], "walk": ["Mittagspause draußen im Park", "Die Mittagspause im Park hat gutgetan. Frische Luft und eine Ente, die sehr bestimmt war."], "coffee": ["Eine Kollegin auf einen Kaffee einladen", "Beim Kaffee mit der Kollegin wurde viel gelacht. Plötzlich fühlt sich das Büro weniger einsam an."], "sleep": ["Heute einfach früh schlafen gehen", "Ausgeschlafen ist alles leichter. Sogar der Montagmorgen-Teamcall."]}, "perkok": "Gute Idee. Morgen probiert Maria das aus.", "hint": "Psst: Am Computer kannst du jetzt auch nach einem ganz neuen Job suchen.", "jobbtn": "Jobsuche", "jobq": "Was möchte Maria lieber machen?", "applied": "Bewerbung ist raus! In einer Woche kann es losgehen. Bis dahin wird fleißig vorbereitet.", "pick": "Was machst du?", "ads": "Kleinanzeigen", "sea": "Schiffe versenken", "jobs": {"florist": ["Floristin", "Maria bindet Sträuße im Blumenladen.", "away"], "sound": ["Tontechnikerin", "Maria mischt Sound im Studio.", "away"], "barista": ["Barista", "Maria steht hinter der Theke im Café.", "cafe"], "illu": ["Illustratorin", "Maria zeichnet am Computer an neuen Illustrationen.", "home"], "garden": ["Gärtnerin", "Maria pflanzt Tulpen im Stadtpark.", "away"], "teacher": ["Lehrerin", "Maria unterrichtet eine Grundschulklasse.", "away"], "zoo": ["Tierpflegerin", "Maria füttert im Tierpark die Pandas.", "away"], "cake": ["Konditorin", "Maria verziert Torten in der Konditorei.", "away"], "radio": ["Radiomoderatorin", "Maria moderiert die Nachmittagssendung im Radio.", "away"], "startup": ["Eigenes Startup", "Maria arbeitet zu Hause an ihrem Startup.", "home"]}, "hunt": ["Maria schreibt Bewerbungen.", "Maria übt für das Vorstellungsgespräch.", "Maria hat heute ein Vorstellungsgespräch.", "Maria telefoniert mit ihrer zukünftigen Chefin.", "Maria liest sich in den neuen Job ein."], "huntstart": ["Maria schreibt einen Businessplan.", "Maria bastelt am Logo für ihr Startup.", "Maria pitcht bei einer Investorin.", "Maria erledigt den Gründungs-Papierkram.", "Maria baut die erste Version ihrer Website."], "firstday": "Erster Arbeitstag als {job}! Maria kommt nach Hause und strahlt.", "evening": ["Ein ruhiger Arbeitstag. Jetzt ist Feierabend.", "Heute lief es richtig gut bei der Arbeit.", "Ein bisschen müde, aber zufrieden."], "officein": "Ins Büro", "officeout": "Rausgehen", "inoffice": "Lange Flure, weißes Licht. Es riecht nach Teppich und Druckertoner.", "closed": "Das Büro ist um diese Zeit leer. Nur die Notbeleuchtung summt.", "leave": "Maria macht sich auf den Weg zur Arbeit.", "home": "Maria kommt von der Arbeit nach Hause. Puh.", "lunch": "Maria macht Mittagspause im Park.", "farewell": "Letzter Tag bei Halcyon. Die Kolleginnen haben eine Karte geschrieben und sogar ein bisschen geweint.", "officeeve": ["Heute im Büro: Der Drucker hat geseufzt. Niemand weiß, warum.", "Heute im Büro: Eine Zahl auf dem Bildschirm sah aus wie ein kleiner Hund.", "Heute im Büro: Der Flur war wieder ein bisschen länger als gestern. Oder?", "Heute im Büro: Meeting über das nächste Meeting.", "Heute im Büro: Jemand hat Kuchen mitgebracht. Ein Lichtblick.", "Heute im Büro: Die Neonröhre über dem Tisch hat den ganzen Tag geflackert.", "Heute im Büro: Eine Kollegin hat leise gesummt. Es war schön.", "Heute im Büro: Die Uhr ist um 15 Uhr einfach stehen geblieben. Gefühlt."], "eve": {"florist": ["Heute hat eine Kundin geweint vor Freude über einen Strauß.", "Die Hände riechen nach Eukalyptus. Schöner Tag.", "Eine Hochzeit, drei Sträuße, null Stress."], "sound": ["Heute klang die Band zum ersten Mal richtig gut.", "Ohren müde, Herz voll.", "Ein Synthesizer hat heute Faxen gemacht. Gezähmt!"], "barista": ["Heute die schönste Latte Art bisher: ein Schwan.", "Ein Stammgast hat 'wie immer' gesagt. Sie wusste, was er meint.", "Es riecht noch nach Kaffee an den Händen."], "illu": ["Eine neue Zeichnung ist fertig. Sie ist ziemlich gut geworden.", "Heute ein Auftrag für ein Kinderbuch!", "Der Stift lag gut in der Hand heute."], "garden": ["Die ersten Krokusse sind da. Sie haben gewinkt.", "Erde unter den Fingernägeln, Sonne im Gesicht.", "Ein Eichhörnchen hat beim Pflanzen zugeschaut."], "teacher": ["Ein Kind hat heute zum ersten Mal ein ganzes Buch gelesen.", "Heute gab es ein selbstgemaltes Bild als Geschenk.", "Laut, wild, aber herzlich."], "zoo": ["Der kleine Panda hat heute zum ersten Mal Bambus probiert.", "Die Otter haben Händchen gehalten. Ein sehr guter Tag.", "Ein Kind hat gefragt, ob Pinguine Knie haben. Haben sie."], "cake": ["Heute eine Torte mit sieben Etagen. Sie stand!", "Der Ofen hat heute alles richtig gemacht.", "Zimt überall. Wirklich überall."], "radio": ["Heute hat jemand angerufen und sich ein Lied gewünscht. Es war ihr Lieblingslied.", "Live-Sendung ohne Versprecher!", "Die Hörerinnen haben heute Tiergeschichten erzählt."], "startup": ["Heute hat sich die erste zahlende Kundin angemeldet!", "Ein Investor hat 'interessant' gesagt. Das ist gut, oder?", "Die Website ist online. Nervös und stolz."]}};
 const SUNDAY=['feiern','tanzen','im Kino','auf einem Konzert','mit Freunden unterwegs','auf einer Geburtstagsparty','beim Karaoke','am Quatschen mit ihrer besten Freundin','auf einem Rave','am Lesen'];
 const paperIn=()=>{const h=hourNow(),sun=new Date(Date.now()+(TEST||SIM!==null?864e5:0)).getDay()===0;return h>=(sun?11.25:7.25)};
+// ---------- Job: ab dem 6. gespielten Tag Büro (Halcyon), Feierabend-Geschichte, Jobsuche, neuer Job ----------
+const NMs=s=>s.split('Maria').join(NM());
+function jobState(){const j=save.job||{};if(j.stage==='hunt'&&(save.dc||1)>=j.start){j.stage='new';j.first=1;save.job=j;persist()}return save.job||{}}
+const workToday=wd=>LOC()==='berlin'&&(save.dc||1)>=6&&((save.dc||1)===6||(wd>=1&&wd<=5));
+function workKind(rnd){const j=jobState();if(j.stage==='new')return JT.jobs[j.job][2]==='home'?'home':'away';return rnd(3)<35?'home':'away'}
+function commutePlan(h,rnd,wd){if(!workToday(wd)||workKind(rnd)!=='away')return null;
+  if(h>=8.75&&h<9)return{s:'chill',txt:NMs(JT.leave),x:-103,dir:-1};if(h>=17&&h<17.2)return{s:'chill',txt:NMs(JT.home),x:-80,dir:1};return null}
+function workPlan(h,rnd){const j=jobState();
+  if(j.stage==='new'){const J=JT.jobs[j.job];return J[2]==='home'?{s:'homeoffice',txt:NMs(J[1]),x:86,dir:1}:J[2]==='cafe'?{s:'away',barista:1,txt:NMs(J[1])}:{s:'away',txt:NMs(J[1])}}
+  if(j.stage==='hunt'&&h>=13){const L=j.job==='startup'?JT.huntstart:JT.hunt,t=L[(save.dc||1)%L.length];return t.includes('Vorstellungsgespräch hat')||t.includes('pitcht')||t.includes('interview today')||t.includes('pitching')?{s:'away',txt:NMs(t)}:{s:'homeoffice',txt:NMs(t),x:86,dir:1}}
+  if(workKind(rnd)==='home')return{s:'homeoffice',txt:NMs(JT.homeoffice),x:86,dir:1};
+  if(j.perk==='walk'&&h>=12&&h<13)return{s:'away',txt:NMs(JT.lunch)};
+  return{s:'away',office:1,txt:NMs(JT.office)}}
 function dayPlan(){
   {const o=save.hairOrder,h=hourNow();if(o&&dayNum()===o.day+1&&h>=13&&h<15)return{s:'away',salon:1,txt:'Maria ist beim Friseur.'}}
   {const h=hourNow(),sun=new Date(Date.now()+(TEST||SIM!==null?864e5:0)).getDay()===0,w0=sun?11:7;
@@ -1029,12 +1092,14 @@ function dayPlan(){
   const ps=paintState();if(ps&&ps.w>0)return{s:'paint',txt:'Maria streicht gerade die Wand.',x:WX0+(WW-WX0)*(ps.w<1?ps.w:ps.c)-14,dir:1};
   const h=hourNow(),d=dayNum(),wd=new Date(Date.now()+(TEST||SIM!==null?864e5:0)).getDay(),rnd=n=>((d*7919+n*104729)>>>0)%100;
   const cook=txt=>({s:'cook',txt,x:-75,dir:-1}),away=txt=>({s:'away',txt}),chill={s:'chill',txt:'Maria macht es sich gemütlich.',x:140,dir:1};
+  {const cp=commutePlan(h,rnd,wd);if(cp)return cp}
   if(h<9)return cook('Maria macht Frühstück.');
   const cafe=sl=>{const n=1+rnd(20+sl)%3,g=rnd(30+sl)%2;return{s:'away',cafe:n,seed:d*11+sl,txt:(n>1?(n===2?'Maria sitzt mit zwei Freunden ':'Maria sitzt mit drei Freunden '):g?'Maria trifft einen Freund ':'Maria trifft eine Freundin ')+TX('place')+'.'}};
   if(LOC()!=='berlin'){if(h<9)return cook('Maria macht Frühstück.');const k=rnd(h/2|0);if(h<17)return k<40?{s:'away',txt:TX('explore').split('Maria').join(NM())}:k<62?cafe(h/2|0):k<80?cook('Maria kocht etwas Leckeres.'):chill;return k<45?cafe(9):k<75?cook('Maria kocht Abendessen.'):chill}
   const clean={s:'clean',txt:'Maria putzt.',x:Math.round(-40+140*(.5+.5*Math.sin(R.t/700))),dir:Math.cos(R.t/700)>0?1:-1};
-  if(h<17){if(wd>=1&&wd<=5)return away('Maria ist bei der Arbeit.');const k=rnd(h/3|0);if(k<25)return cafe(h/3|0);return k<42?away('Maria ist einkaufen.'):k<62?clean:k<78?cook('Maria kocht etwas Leckeres.'):chill}
-  if(h<18&&wd>=1&&wd<=5&&rnd(5)<50)return away('Maria ist einkaufen.');
+  if(h>=9&&h<17&&workToday(wd))return workPlan(h,rnd);
+  if(h<17){const k=rnd(h/3|0);if(k<25)return cafe(h/3|0);return k<42?away('Maria ist einkaufen.'):k<62?clean:k<78?cook('Maria kocht etwas Leckeres.'):chill}
+  if(h<18&&workToday(wd)&&rnd(5)<50)return away('Maria ist einkaufen.');
   const k=rnd(9);return k<35?away('Maria ist auf ein Bier draußen.'):k<75?cook('Maria kocht Abendessen.'):chill;
 }
 function updateDay(){
@@ -1046,11 +1111,18 @@ function updateDay(){
   if(R.t>(R.dmsg||0)&&dlg.dataset.day!==pl.txt){clearTimeout(sayT);dlg.textContent=pl.txt;dlg.dataset.day=pl.txt;R.dshow=R.t}
   else if(dlg.textContent===pl.txt&&R.t-(R.dshow||0)>480)dlg.textContent='';
   // tagsüber: Kamera frei bewegen; Kühlschrank und Zeitung kann man trotzdem anschauen
-  {const DAYOK=['fridge','paper','out','home','cafein','cafeout','kiosk','spout'],cx=(R.sc==='room'?R.dc:R.dv[R.sc])+6,f=R.df=SPOTS.find(s=>DAYOK.includes(s.id)&&(s.sc||'room')===R.sc&&(!s.on||s.on())&&cx>=s.x0-8&&cx<=s.x1+8),lab=f?LB(f):'Ab 19 Uhr bist du dran';
+  {const DAYOK=['fridge','paper','out','home','cafein','cafeout','kiosk','spout','officein','officeout'],cx=(R.sc==='room'?R.dc:R.dv[R.sc])+6,f=R.df=SPOTS.find(s=>DAYOK.includes(s.id)&&(s.sc||'room')===R.sc&&(!s.on||s.on())&&cx>=s.x0-8&&cx<=s.x1+8),lab=f?LB(f):'Ab 19 Uhr bist du dran';
     if(act.textContent!==lab)act.textContent=lab;if(act.disabled!==!f)act.disabled=!f}
 }
 function update(){
   if(R.t%120===0){hairCheck();tripCheck()}
+  if($('#intro').hidden&&R.t>90&&!R.day&&R.sc==='room'&&!R.post&&!R.sa&&!R.away&&!dlg.innerHTML&&save.q!==1&&LOC()==='berlin'){const j=save.job||{},dc=save.dc||1;
+    if(dc>=6&&!j.stage)openStory();
+    else if(j.stage==='office'&&j.perkDc<dc&&!j.perkSaid){j.perkSaid=1;persist();say2(NMs(JT.perks[j.perk][1]))}
+    else if(j.stage==='office'&&j.perkDc<dc&&!j.hint&&R.t>700){j.hint=1;persist();say2(NMs(JT.hint))}
+    else if(j.stage==='new'&&j.first){delete j.first;persist();say2(NMs(JT.firstday.replace('{job}',JT.jobs[j.job][0])))}
+    else if(j.stage==='hunt'&&dc===j.start-1&&j.bye!==dc){j.bye=dc;persist();say2(NMs(JT.farewell))}
+    else if(j.stage&&j.eve!==dayNum()&&R.t>500&&workToday(new Date().getDay())){j.eve=dayNum();persist();const L=j.stage==='new'?JT.eve[j.job]:JT.officeeve;say2(NMs(L[(dayNum()*7)%L.length]))}}
   if(save.arr&&$('#intro').hidden&&R.t>60&&!dlg.innerHTML&&!R.day){say2(TXT.arrive[save.arr].split('Maria').join(NM()));delete save.arr;persist()}
   R.t++;
   // Einschlafen von vorn: ans Bett gehen, auf die Matratze steigen, sich hinlegen (Kopf aufs Kissen), Decke hochziehen, Schlafblase, Traumwolke
@@ -1059,7 +1131,7 @@ function update(){
     else if(a.st===1){a.f++;const u=ez(Math.min(1,a.f/26));a.pose={x:R.x+6,y:72-H/2-13*u-Math.sin(u*Math.PI)*3,r:0,cov:0};if(a.f>=30){a.st=2;a.f=0}}
     else if(a.st===2){a.f++;const u=ez(Math.min(1,a.f/44));a.pose={x:23+(20.5-23)*u,y:(59-H/2)+((57-6*S)-(59-H/2))*u,r:-Math.PI/2*u,cov:0,closed:u>.8};if(a.f>=50){a.st=3;a.f=0}}
     else if(a.st===3){a.f++;a.pose.closed=true;a.pose.cov=ez(Math.min(1,a.f/46));if(a.f>=54){a.st=4;a.f=0}}
-    else{a.f++;if(a.f>=190){R.sa=null;R.asleep=a.pose;dreamAnim()}}
+    else{a.f++;if(a.f>=190){R.sa=null;R.asleep=a.pose;try{dreamAnim()}catch(e){showNight()}setTimeout(()=>{if(!R.night)showNight()},9000)}}
     return}
   if(!R.bd&&(save.q===undefined||save.q===3)&&R.t>(R.bdw||0)&&$('#intro').hidden&&isBday()){R.bd=1;say2('Links in der Küche duftet es nach Kuchen …')}
   if(isDay()){updateDay();return}
@@ -1067,6 +1139,7 @@ function update(){
   if(save.q===1&&!R.post&&!dlg.innerHTML)dlg.textContent='Klopf, klopf … ganz links, neben der Küche, steht jemand vor der Haustür.';
   {const tp=!!(R.post||R.qt);if(dlg.classList.contains('top')!==tp)dlg.classList.toggle('top',tp)}
   let moving=false;
+  if(R.sit&&(R.hold||R.tx!==null&&R.todo!=='sitpuz')){R.sit=false;R.carry=null;R.x=129}
   if(R.hold){R.x+=R.hold*.6;R.dir=R.hold;R.tx=null;R.todo=null;moving=true}
   else if(R.tx!==null){
     const d=R.tx-R.x;
@@ -1093,6 +1166,7 @@ function draw(){
   if(R.sc==='street'){drawStreet(t,VH,YO,hl);return}
   if(R.sc==='cafe'){drawCafe(t,VH,YO,hl);return}
   if(R.sc==='spaeti'){drawSpaeti(t,VH,YO,hl);return}
+  if(R.sc==='office'){drawOffice(t,VH,YO,hl);return}
   const ps=paintState(),WC=wallCol(save.wall),CE=Math.round(YO*.75);
   const WL=WW-WX0;r(WC,WX0,-YO,WL,72+YO);
   if(ps){if(ps.w>0)r('#f3efe6',WX0,-YO,WL*ps.w,72+YO);if(ps.c>0)r(wallCol(save.paint.to),WX0,-YO,WL*ps.c,72+YO)}
@@ -1231,6 +1305,19 @@ function draw(){
   r('#c0c0c0',96,43,8,5);r('#000080',96,43,8,1);if((t/30|0)%2)r('#f5cb1f',99,45,2,2);
   r('#b5ae9c',98,53,5,3);r('#e8e3d5',93,55,12,1);
   });r('#fff',111,52,3,4);
+  // Homeoffice: Tabelle auf dem Bildschirm, Kaffee, Zettel
+  if(R.day&&R.plan&&R.plan.s==='homeoffice'){r('#f3f6f4',94,41,13,9);for(let y=43;y<50;y+=1.6)r('#9fc2b0',95,y,11,.4);for(let x=97;x<106;x+=3)r('#9fc2b0',x,42,.4,7.5);r('#7ee0a0',95,42,3,1);
+    r('#fff',112,52,3,4);for(let h=0;h<5;h+=.5)r(`rgba(255,255,255,${.3*Math.sin(Math.PI*h/5)})`,113+Math.sin(h-t/30)*.5,51-h,.5,.5);r('#efe2c4',88,55,5,1);r('#e9e4f0',89,54.4,4,.6)}
+  // Mitbringsel vom neuen Job
+  {const j=save.job||{};if(j.stage==='new'){const k=j.job;
+    if(k==='florist'){r('#bfe3f5',88,51,3,5);[[87,48,'#e2557f'],[89.5,47,'#f5cb1f'],[91,48.5,'#ff8fc4'],[88.5,49.5,'#fff']].forEach(([x,y,col])=>r(col,x,y,1.6,1.6));r('#5f7d5a',88.6,49,.6,2.4);r('#5f7d5a',90,48.6,.6,2.6)}
+    if(k==='sound'){r('#5a3b2e',82,33,.8,.8);r('#2a2433',79,34,7,1);r('#2a2433',78.6,34.6,1.4,4.4);r('#2a2433',84.6,34.6,1.4,4.4);r('#e2557f',78.8,36.4,1,2.4);r('#e2557f',84.8,36.4,1,2.4)}
+    if(k==='barista'||k==='cake'){c.save();c.translate(KX,0);if(k==='barista'){r('#aeb4c4',-22,47,7,7);r('#8d93a3',-22,47,7,1);r('#2a2433',-20.5,52,4,1);r('#fff',-20,53,2,1.4);r('#c96b3c',-17,49,1,1)}else{r('#e8e3d5',-23,53.5,8,.5);r('#fff8e7',-22,49,6,4.5);r('#ff8fc4',-22,49,6,1.5);r('#e2557f',-19.4,47.4,1,1.6)}c.restore()}
+    if(k==='illu'||k==='teacher'){r('#fff8e7',79,30,7,9);if(k==='illu'){r('#7b2cbf',80,32,2,2);r('#e2557f',82.5,33,2,3);r('#3e6b56',80,36,5,1)}else{r('#f5cb1f',80,31,2.4,2.4);for(let a=0;a<6;a++)r('#f5cb1f',81.2+Math.cos(a)*2.4,32.2+Math.sin(a)*2.4,.6,.6);r('#3e7a3a',79.5,37,6,1.2);r('#e2557f',83,34,1.6,2.6)}r('#e2557f',82.2,29.6,.8,.8)}
+    if(k==='garden'){r('#c96b3c',120,66,4,6);[[120,62,'#e2557f'],[122.5,61,'#f5cb1f'],[121.3,63,'#ff8fc4']].forEach(([x,y,col])=>{r('#3e7a3a',x+.5,y+1.4,.5,3);r(col,x,y,1.4,1.6)})}
+    if(k==='zoo'){const x=27,y=50;r('#1a1a24',x-.4,y+.6,6.8,5.2);r('#fff',x,y+1,6,4.4);r('#1a1a24',x-.6,y,2,1.6);r('#1a1a24',x+4.6,y,2,1.6);r('#1a1a24',x+1,y+2,1.4,1.2);r('#1a1a24',x+3.6,y+2,1.4,1.2);r('#1a1a24',x+2.4,y+3.6,1.2,.6)}
+    if(k==='radio'){r('#2a2433',89,49,.6,7);r('#2a2433',89,49,3,.6);r('#8d93a3',91,47,2,3);r('#e2557f',91.2,49.6,1.6,.5)}
+    if(k==='startup'){r('#f3f6f4',78,28,9,11);r('#aeb4c4',78,28,9,.6);[[79,30,'#f5cb1f'],[82,30,'#ff8fc4'],[79,33.4,'#7ee0d0'],[82,33.4,'#f5cb1f'],[84.6,31.6,'#b9a2e8']].forEach(([x,y,col])=>r(col,x,y,2,2));r('#3e6b56',79,37,7,.5)}}}
   // Malerzeug an der Farbkante, solange gestrichen wird
   if(ps&&ps.w>0){const first=ps.w<1,ex=WX0+WL*(first?ps.w:ps.c),col=first?'#f3efe6':wallCol(save.paint.to),ry=28+Math.sin(t/45)*20;
     if(ex>WX0+2&&ex<WW-2){r('#aeb4c4',ex+5,66,6,6);r(col,ex+5.5,66,5,1.5)}}
@@ -1253,6 +1340,7 @@ function draw(){
       r('#c9a36a',hx+.4,hy-3,.6,3.6);r('#fff',hx-1.2,hy-5.6,4.4,2.6);r(col,hx-1.2,hy-5.1,4.4,1.6)}
     else{r('#c9a36a',x0+11.2*S,y0+12.5*S,.6,5);r('#fff',x0+11.2*S-1.8,y0+12.5*S+5,4.4,2.6);r(col,x0+11.2*S-1.8,y0+12.5*S+5.5,4.4,1.6);
       const pf=(t/22|0)%4;if(pf<2)r('rgba(255,255,255,.55)',x0+11*S+1+pf,y0+7.6*S-pf*.5,1,.5)}}
+  else if(R.sit&&!R.day){R.jy=3.5;sprite(127,0,1,0);R.jy=0;r('#f3efe6',134,55.5,5,4);r('#8d93a3',134.6,56.5,3.6,.4);r('#8d93a3',134.6,57.7,2.6,.4)}
   else if(!R.sleep&&!R.lying&&!(R.day&&R.plan&&R.plan.s==='away')){sprite(Math.round(R.x),0,R.dir,R.moving?(t/8|0)%2:0);
     if(R.day&&R.plan&&R.plan.s==='clean'){const bx=Math.round(R.x)+(R.dir>0?11:1),sw=Math.sin(t/14)*.8;for(let k=0;k<9;k++)r('#a8834f',bx+R.dir*(k*.35)+sw*k/9,59+k*1.3,.6,1.3);r('#e2557f',bx+R.dir*3.2+sw-1.5,70,4,2)}}
   c.save();c.translate(-8,0);
@@ -1260,14 +1348,14 @@ function draw(){
   r('#6e4c36',-71,63,21,9);r('#5f3f2c',-71,63,21,1);r('#5f3f2c',-64,64,.5,8);r('#5f3f2c',-57,64,.5,8);r('#d9b25a',-66,67,1,1);r('#d9b25a',-59,67,1,1);r('#d9b25a',-52.5,67,1,1);r('#4a3124',-71,71,21,1);
   r('#f6ead0',-73,61,25,2);r('#d9c9a6',-73,62.5,25,.5);
   r('#c96b3c',-70,59,4,2);r('#e2557f',-69.5,58.2,1.2,1.2);r('#f5cb1f',-68,58.4,1.2,1.2);r('#8fb39a',-67.6,57.8,1,1);
-  if(paperIn())hl('paper',()=>{r('#f3efe6',-60,60,7,1);r('#e2ddd0',-60,59.4,6,.6);r('#8d93a3',-59,60.2,3,.3);r('#8d93a3',-55.5,60.2,2,.3)});
+  if(paperIn()&&!R.carry)hl('paper',()=>{r('#f3efe6',-60,60,7,1);r('#e2ddd0',-60,59.4,6,.6);r('#8d93a3',-59,60.2,3,.3);r('#8d93a3',-55.5,60.2,2,.3)});
   c.restore();
   // Marker
   if(boxItem())hl('box',()=>{r('#c9a36a',100,74,10,8);r('#a8834f',100,74,10,1);r('#efe2c4',104,74,2,8)});
   if(R.sleep)r('rgba(8,6,26,.6)',0,0,120,90);
 }
 // ---------- Straße mit Kiosk ----------
-const ST=320,CW=130,GL={B:'110101110101110',Z:'111001010100111',M:'101111111101101',H:'101101111101101',D:'110101101101110',Y:'101101010010010',U:'101101101101111',N:'111101101101101',P:'110101110100100',R:'110101110101101',C:'111100100100111',F:'111100110100100',E:'111100110100111',K:'101101110101101',I:'111010010010111',O:'111101101101111',S:'111100111001111',L:'100100100100111',T:'111010010010010',A:'010101111101101',G:'111100101101111'};
+const ST=384,CW=130,GL={X:'101101010101101',B:'110101110101110',Z:'111001010100111',M:'101111111101101',H:'101101111101101',D:'110101101101110',Y:'101101010010010',U:'101101101101111',N:'111101101101101',P:'110101110100100',R:'110101110101101',C:'111100100100111',F:'111100110100100',E:'111100110100111',K:'101101110101101',I:'111010010010111',O:'111101101101111',S:'111100111001111',L:'100100100100111',T:'111010010010010',A:'010101111101101',G:'111100101101111'};
 function word(w,x,y,col,p=1){[...w].forEach((ch,i)=>{const g=GL[ch];for(let k=0;k<15;k++)if(g[k]==='1')r(col,x+i*4*p+(k%3)*p,y+(k/3|0)*p,p,p)})}
 // ---------- Reiseziele: Tokyo und das Land ----------
 const dkNow=()=>Math.max(0,Math.min(1,Math.min((hourNow()-6)/2,(20-hourNow())/2)));
@@ -1544,6 +1632,10 @@ function drawStreet(t,VH,YO,hl){
   hl('cafein',()=>{r('#3a2a20',198,40,10,32);r('#8a5a3c',199,41,8,31);r('#ffcf8a',200,43,6,10);r('#f5cb1f',205,57,1,2)});
   r('#2b2b2b',209,58,6,10);r('#efe2c4',209.8,59,4.4,.5);r('#efe2c4',209.8,61,3,.5);r('#efe2c4',209.8,63,4,.5);r('#5a3b2e',209,68,1,4);r('#5a3b2e',214,68,1,4);
   c.restore();
+  // Halcyon: weißes Bürogebäude mit grünen Fenstern
+  {const N=dkNow()<.5;r('#e9ecea',326,-YO+6,54,78+YO);for(let y=-YO+10;y<64;y+=6)for(let x=330;x<376;x+=7)r(N?((x*3+y)%5?'#1d2b26':'#cfe8d8'):'#9fc2b0',x,y,5,4);
+    r('#2f3a36',334,32,38,6);word('HALCYON',336,33.4,'#e9ecea',.75);r('#cfd6d2',326,64,54,8);
+    hl('officein',()=>{r('#2f3a36',346,48,14,24);r(N?'#cfe8d8':'#9fc2b0',347,49,12,23);r('#2f3a36',352.8,49,.4,23)})}
   // Friseur noch weiter rechts: Pastellfassade, Ringelstange, Spiegel und Stuhl
   c.save();c.translate(20,0);
   {const on=R.day&&R.plan&&R.plan.salon,DKs=Math.max(0,Math.min(1,Math.min((hourNow()-6)/2,(20-hourNow())/2)));
@@ -1581,7 +1673,7 @@ function drawCafe(t,VH,YO,hl){
   // Plattenspieler auf Sideboard
   r('#5a3b2e',92,52,18,8);r('#3d281f',92,52,18,1);r('#7a5238',94,46,14,6);r('#141020',96,46.5,8,3);{const a=t/40;r('#e2557f',100+Math.cos(a)*2,48+Math.sin(a)*.8,.6,.6)}r('#aeb4c4',105,46.5,.5,3);
   // Theke mit Siebträger, Kuchenglocke und Barista
-  drawGuest(18,47,1,4242);
+  if(R.day&&R.plan&&R.plan.barista){const o=spriteCv(1,0,false,false);c.imageSmoothingEnabled=false;c.drawImage(o,18,47,12*1.15,20*1.15)}else drawGuest(18,47,1,4242);
   r('#3a2a20',6,58,38,2);r('#7a5238',6,60,38,12);for(let x=8;x<44;x+=6)r('#6b4a35',x,61,.5,11);r('#c9a36a',6,60,38,.5);
   hl('barista',()=>{r('#aeb4c4',9,51,8,7);r('#8d93a3',9,51,8,1);r('#2a2433',11,56,4,1);r(((t/50|0)%2)?'#ff5f6d':'#7a2a33',15.5,52.5,.8,.8);
     r('#efe2c4',32,56,8,2);c.fillStyle='rgba(220,240,255,.45)';c.fillRect(32.5,50.5,7,5.5);r('#fff',33,50.5,6,.5);r('#c96b3c',34,54,4,2);r('#fff8e7',34,53.4,4,.6)});
@@ -1744,6 +1836,72 @@ function seaEnd(win){const S=SEA;S.over=true;if(!isBday()){save.played=dayNum();
 $('#seactl').onclick=e=>{const b=e.target.closest('[data-s]');if(!b)return;const k=b.dataset.s;
   if(k==='shuffle'){SEA.me=placeShips();seaDraw()}else if(k==='again')newSea();else{SEA=null;back('#sea')}};
 $('#sex').onclick=()=>{SEA=null;back('#sea')};
+// Büro innen: endlose weiße Flure, grüner Teppich, Arbeitsinsel mit Röhrenmonitoren (bewusst steril)
+function drawOffice(t,VH,YO,hl){const W=134,on=R.day&&R.plan&&R.plan.office,lit=R.day,j=save.job||{},days=Math.max(0,(save.dc||1)-(j.perkDc||99));
+  r(lit?'#eef1ef':'#3c4441',0,-YO,W,72+YO);
+  // Deckenplatten und Neonröhren
+  for(let x=0;x<W;x+=12)r(lit?'#e2e7e4':'#343b38',x,-YO,.5,YO-8);for(let y=-YO;y<-8;y+=8)r(lit?'#e2e7e4':'#343b38',0,y,W,.5);
+  [10,40,70,100].forEach((x,k)=>{const fl=lit&&!(k===1&&(t/9|0)%23===0);r(fl?'#ffffff':'#5a625e',x,-YO+3,16,1.6);if(fl){c.fillStyle='rgba(255,255,255,.14)';c.beginPath();c.moveTo(x,-YO+5);c.lineTo(x+16,-YO+5);c.lineTo(x+22,72);c.lineTo(x-6,72);c.closePath();c.fill()}});
+  // Flur in die Tiefe (rechts)
+  r(lit?'#dfe5e2':'#2e3532',100,20,16,52);c.fillStyle=lit?'#e8ece9':'#343b38';c.beginPath();c.moveTo(100,20);c.lineTo(106,30);c.lineTo(110,30);c.lineTo(116,20);c.closePath();c.fill();
+  r(lit?'#c9d2cd':'#252b29',106,30,4,30);r(lit?'#3e6b56':'#24382e',100,60,16,12);c.fillStyle=lit?'#36604c':'#1e3027';c.beginPath();c.moveTo(106,60);c.lineTo(110,60);c.lineTo(116,72);c.lineTo(100,72);c.closePath();c.fill();
+  r('#2f3a36',107,40,2,14);if(!lit){c.save();c.shadowColor='#5fd38a';c.shadowBlur=(R.s||2)*2;r('#2a8f4e',104,22,8,3);word('EXIT',104.6,22.6,'#c8ffd8',.4);c.restore()}
+  // Wand: Gemälde (sanfte Hügel, sehr beruhigend) und Uhr
+  r('#c9b48a',8,14,22,15);r(lit?'#cfe3ef':'#4a5a66',9.5,15.5,19,12);c.fillStyle=lit?'#7fa592':'#3a4a42';c.beginPath();c.moveTo(9.5,27.5);c.quadraticCurveTo(15,19,20,24);c.quadraticCurveTo(24,20,28.5,25);c.lineTo(28.5,27.5);c.closePath();c.fill();r(lit?'#f5cb1f':'#7a6a3a',23,18,2.4,2.4);
+  {const H=hourNow(),cx=42,cy=20;r('#2f3a36',cx-4,cy-4,8,8);r('#f3f6f4',cx-3.2,cy-3.2,6.4,6.4);const a1=(H%12)/12*Math.PI*2-Math.PI/2,a2=(H%1)*Math.PI*2-Math.PI/2;
+    for(let k=0;k<3;k++){r('#2f3a36',cx-.3+Math.cos(a1)*k*.8,cy-.3+Math.sin(a1)*k*.8,.6,.6);r('#2f3a36',cx-.3+Math.cos(a2)*k*1.1,cy-.3+Math.sin(a2)*k*1.1,.5,.5)}}
+  // Wasserspender
+  r('#cfe8f5',93,38,6,8);r('#9fc2df',93,38,6,1);if(lit&&(t/40|0)%7===0)r('#fff',95.4,42-(t%40)/10,.8,.8);r('#c9d2cd',92,46,8,26);r('#9aa5a0',94,50,4,1);
+  // Arbeitsinsel: vier Plätze, Trennwände, Röhrenmonitore
+  const seats=[[20,1],[44,-1],[60,1],[84,-1]];
+  seats.forEach(([x,dir],k)=>{if(!lit)return;const me=on&&k===0;if(me){const o=spriteCv(1,0,false,false),bob=j.perk==='music'?Math.round(Math.sin(t/12))*.4:0;c.imageSmoothingEnabled=false;c.drawImage(o,x-6,46+bob,12*1.15,20*1.15);if(j.perk==='music'){r('#2a2433',x-2.4,45.6,8,.7);r('#e2557f',x-3,47,1.4,2.4);r('#e2557f',x+5,47,1.4,2.4)}}
+    else drawGuest(x-6,46,dir,700+k*13)});
+  r('#cfd6d2',10,56,82,1.6);r('#aab4af',10,57.6,82,14.4);for(let x=10;x<92;x+=6)r('#9aa5a0',x,58,.5,14);
+  r('#e9ecea',51.4,42,1.2,14);r('#e9ecea',29,47,1,9);r('#e9ecea',73,47,1,9);
+  seats.forEach(([x,dir],k)=>{const mx=x+(dir>0?6:-13);r('#d8cfb8',mx,48,7,7.4);r('#c4b99f',mx,55,7,1);r('#b5ab90',mx+2,55.4,3,.8);r('#0f1a16',mx+.8,49,5.4,5);
+    if(lit){const me=k===0&&on;for(let i=0;i<8;i++){const v=((t/18|0)+i*7+k*3)%6;if(v)r(me&&i===((t/40|0)%8)?'#f5cb1f':'#7ee0a0',mx+1.2+(i%4)*1.25,49.6+(i/4|0)*1.9,.8,1.1)}if(me){const pr=((save.dc||1)*13+(t/300|0))%100/100;r('#1d2b26',mx+.8,53.4,5.4,.6);r('#7ee0a0',mx+.8,53.4,5.4*pr,.6)}}
+    r('#d8cfb8',mx-1,55.4,9,1)});
+  if(on){if(j.perk==='plant'){const st=Math.min(3,days),px=11;r('#c96b3c',px,52.4,2.4,3.6);r('#5f7d5a',px+.6,51-st,1,1.6+st);if(st>0)r('#7fa592',px-.8,51.4-st*.6,1.4,1);if(st>1)r('#7fa592',px+1.6,50.6-st*.6,1.4,1);if(st>2)r('#e2557f',px+.4,48.6-st*.6,1.2,1.2)}
+    if(j.perk==='coffee'){r('#fff',34.4,53.6,1.8,2);r('#fff',38.6,53.6,1.8,2);r('#c96b3c',34.6,53.8,1.4,.4);r('#c96b3c',38.8,53.8,1.4,.4)}
+    if(j.stage==='hunt')r('#fff8e7',22,55,3.6,1.4)}
+  hl('officeout',()=>{r('#2f3a36',120,36,12,36);r(lit?'#cfe8d8':'#3a4a42',121,37,10,35);r('#9aa5a0',129,54,1,2)});
+  r(lit?'#3e6b56':'#24382e',0,72,W,VH-YO-72);for(let y=74;y<VH-YO;y+=3)for(let x=((y/3|0)%2)*3;x<W;x+=6)r(lit?'#36604c':'#1e3027',x,y,3,.6);
+  if(!R.day)sprite(Math.round(R.x),0,R.dir,R.moving?(t/8|0)%2:0);
+}
+// ---------- Zeitungsrätsel: Sudoku und Kreuzworträtsel (jeden Tag ein anderes von 10) ----------
+const backPuz=id=>{back(id);R.carry=null};
+let SD=null;
+function openSudoku(){away('#sudoku');const i=dayNum()%SUDOKU.length,[p,sol]=SUDOKU[i];if(!save.sd||save.sd.i!==i||save.sd.d!==dayNum())save.sd={i,d:dayNum(),v:p};SD={p,sol,sel:-1};sdDraw()}
+function sdDraw(){const {p,sol}=SD,v=save.sd.v,g=$('#sdg'),done=v===sol;g.classList.toggle('done',done);
+  g.innerHTML=[...v].map((ch,k)=>{const r=k/9|0,c=k%9,cls=[p[k]!=='0'?'g':'',c%3===2&&c<8?'r3':'',r%3===2&&r<8?'b3':'',k===SD.sel?'sel':'',SD.sel>=0&&ch!=='0'&&v[SD.sel]===ch&&k!==SD.sel?'same':'',ch!=='0'&&p[k]==='0'&&ch!==sol[k]&&save.sd.chk?'bad':''].join(' ');return`<div data-k="${k}" class="${cls}">${ch==='0'?'':ch}</div>`}).join('');
+  $('#sdpad').innerHTML=[1,2,3,4,5,6,7,8,9].map(n=>`<button class="btn" data-n="${n}">${n}</button>`).join('')+'<button class="btn" data-n="0">✕</button>';
+  $('#sdmsg').textContent=done?'Geschafft! Die Zahlen sitzen alle.':''}
+$('#sdg').onclick=e=>{const d=e.target.closest('[data-k]');if(!d)return;SD.sel=+d.dataset.k;sdDraw()};
+$('#sdpad').onclick=e=>{const b=e.target.closest('[data-n]');if(!b||SD.sel<0||SD.p[SD.sel]!=='0'||save.sd.v===SD.sol)return;const v=[...save.sd.v];v[SD.sel]=b.dataset.n;save.sd.v=v.join('');save.sd.chk=true;persist();sdDraw()};
+$('#sdx').onclick=()=>{SD=null;backPuz('#sudoku')};
+let CX=null;
+function openCross(){away('#cross');const i=dayNum()%CWS.length,P=CWS[i];if(!save.cw||save.cw.i!==i||save.cw.d!==dayNum())save.cw={i,d:dayNum(),v:{}};
+  const cells={};P.words.forEach((w,wi)=>[...w.w].forEach((ch,j)=>{const x=w.d==='a'?w.x+j:w.x,y=w.d==='a'?w.y:w.y+j,k=x+','+y;(cells[k]=cells[k]||{ch,ws:[]}).ws.push(wi)}));
+  CX={P,cells,cur:0};$('#cwt').textContent=P.t;const g=$('#cwg');g.style.gridTemplateColumns=`repeat(${P.W},1fr)`;
+  const nums={};P.words.forEach(w=>nums[w.x+','+w.y]=w.n);let h='';
+  for(let y=0;y<P.H;y++)for(let x=0;x<P.W;x++){const k=x+','+y;h+=cells[k]?`<div class="c" data-k="${k}">${nums[k]?`<sup>${nums[k]}</sup>`:''}<input maxlength="2" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${save.cw.v[k]||''}"></div>`:'<div class="x"></div>'}
+  g.innerHTML=h;
+  const L=d=>P.words.map((w,wi)=>[w,wi]).filter(([w])=>w.d===d).sort((a,b)=>a[0].n-b[0].n).map(([w,wi])=>`<span data-w="${wi}">${w.n}. ${w.c} (${w.w.length})</span>`).join('');
+  $('#cwl').innerHTML='<b>'+'Waagerecht'+'</b>'+L('a')+'<b>'+'Senkrecht'+'</b>'+L('d');cwMark();cwHL()}
+function cwHL(){const w=CX.P.words[CX.cur];$('#cwcur').textContent=w.n+(w.d==='a'?' → ':' ↓ ')+w.c;
+  $('#cwg').querySelectorAll('.c').forEach(el=>el.classList.toggle('hl',CX.cells[el.dataset.k].ws.includes(CX.cur)))}
+function cwMark(){const v=save.cw.v,done=Object.entries(CX.cells).every(([k,c])=>(v[k]||'')===c.ch);$('#cwg').classList.toggle('done',done);$('#cwmsg').textContent=done?'Geschafft! Alle Wörter stimmen.':'';
+  $('#cwl').querySelectorAll('[data-w]').forEach(el=>{const w=CX.P.words[+el.dataset.w];el.classList.toggle('ok',[...w.w].every((ch,j)=>(v[w.d==='a'?(w.x+j)+','+w.y:w.x+','+(w.y+j)]||'')===ch))})}
+function cwFocus(wi,j=0){CX.cur=wi;const w=CX.P.words[wi],k=w.d==='a'?(w.x+j)+','+w.y:w.x+','+(w.y+j);cwHL();const el=$('#cwg').querySelector(`[data-k="${k}"] input`);el&&el.focus()}
+$('#cwg').addEventListener('focusin',e=>{const c=e.target.closest('.c');if(!c)return;const ws=CX.cells[c.dataset.k].ws;if(!ws.includes(CX.cur)){CX.cur=ws[0];cwHL()}});
+$('#cwg').addEventListener('click',e=>{const c=e.target.closest('.c');if(!c)return;const ws=CX.cells[c.dataset.k].ws;if(ws.length>1&&document.activeElement===c.querySelector('input')&&CX.lastK===c.dataset.k){CX.cur=ws.find(x=>x!==CX.cur);cwHL()}CX.lastK=c.dataset.k});
+$('#cwg').addEventListener('input',e=>{const c=e.target.closest('.c');if(!c)return;let ch=(e.target.value||'').toUpperCase().replace(/[^A-ZÄÖÜß]/g,'');ch=ch.slice(-1);e.target.value=ch;
+  if(ch)save.cw.v[c.dataset.k]=ch;else delete save.cw.v[c.dataset.k];c.classList.remove('bad');persist();cwMark();
+  if(ch){const w=CX.P.words[CX.cur],[x,y]=c.dataset.k.split(',').map(Number),j=w.d==='a'?x-w.x:y-w.y;if(j+1<w.w.length)cwFocus(CX.cur,j+1)}});
+$('#cwg').addEventListener('keydown',e=>{if(e.key!=='Backspace')return;const c=e.target.closest('.c');if(!c||e.target.value)return;const w=CX.P.words[CX.cur],[x,y]=c.dataset.k.split(',').map(Number),j=w.d==='a'?x-w.x:y-w.y;if(j>0){e.preventDefault();cwFocus(CX.cur,j-1)}});
+$('#cwl').onclick=e=>{const s=e.target.closest('[data-w]');if(s)cwFocus(+s.dataset.w)};
+$('#cwchk').onclick=()=>{const v=save.cw.v;$('#cwg').querySelectorAll('.c').forEach(el=>{const k=el.dataset.k;el.classList.toggle('bad',!!v[k]&&v[k]!==CX.cells[k].ch)})};
+$('#cwx').onclick=()=>{CX=null;backPuz('#cross')};
 function loop(){if(R.night||R.away)return;update();if(R.night||R.away)return;draw();R.raf=requestAnimationFrame(loop)}
 cv.addEventListener('pointerdown',e=>{
   if(R.day)return;
